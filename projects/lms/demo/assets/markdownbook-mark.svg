@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">MarkdownBook sample illustration</title>
+  <desc id="desc">A stylized open book with interactive learning blocks.</desc>
+  <rect width="640" height="360" rx="24" fill="#dceedf"/>
+  <rect x="72" y="64" width="224" height="232" rx="14" fill="#fffaf0" stroke="#2c6e5f" stroke-width="6"/>
+  <rect x="344" y="64" width="224" height="232" rx="14" fill="#fffaf0" stroke="#2c6e5f" stroke-width="6"/>
+  <path d="M320 78v224" stroke="#2c6e5f" stroke-width="8" stroke-linecap="round"/>
+  <path d="M112 116h132M112 148h104M112 180h132M112 212h84" stroke="#6f6050" stroke-width="12" stroke-linecap="round"/>
+  <rect x="384" y="108" width="144" height="44" rx="8" fill="#dceedf" stroke="#2c6e5f" stroke-width="4"/>
+  <circle cx="408" cy="130" r="10" fill="#2c6e5f"/>
+  <path d="M430 130h72" stroke="#2c6e5f" stroke-width="8" stroke-linecap="round"/>
+  <rect x="384" y="176" width="144" height="68" rx="8" fill="#f0dbc9" stroke="#8f5236" stroke-width="4"/>
+  <path d="M408 202h96M408 222h62" stroke="#8f5236" stroke-width="8" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,46 @@
+# Dependencies and generated build/cache directories
+node_modules/
+elm-stuff/
+test-results/
+playwright-report/
+blob-report/
+coverage/
+dist/
+.dist-*/
+
+# Local credentials and environment variables
+.env
+.env.*
+!.env.example
+!.env.*.example
+!.env.sample
+.npmrc
+.aws/
+.ssh/
+credentials.json
+service-account*.json
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+
+# Local assistant and editor state
+.agents/
+.codex/
+.vscode/
+.idea/
+
+# Python caches, logs, and temporary editor files
+__pycache__/
+*.py[cod]
+*.log
+*.swp
+*.swo
+*~
+
+# Operating-system metadata
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini

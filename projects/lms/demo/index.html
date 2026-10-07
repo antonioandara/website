@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarkdownBook</title>
+    <link rel="icon" href="assets/markdownbook-mark.svg" type="image/svg+xml">
+    <meta name="theme-color" content="#11171c">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/styles.css">
+    <link rel="stylesheet" href="preview.css">
+    <script>
+        try { document.documentElement.dataset.theme = localStorage.getItem('manual-theme') === 'light' ? 'light' : 'dark'; } catch (_) {}
+    </script>
+<meta name="description" content="Try Antonio Andara’s MarkdownBook LMS: two short interactive lessons in binary and logic, built in Elm.">
+</head>
+<body>
+    <noscript>This preview needs JavaScript. <a href="../../../index.html#lms">Back to Antonio Andara</a>.</noscript>
+    <main id="app"></main>
+    <script src="elm.js"></script>
+    <script>
+        const app = Elm.Main.init({
+            node: document.getElementById("app"),
+            flags: { theme: document.documentElement.dataset.theme || 'dark', narrow: innerWidth <= 760 }
+        });
+        function applyTheme(theme) {
+            document.documentElement.dataset.theme = theme;
+            document.querySelector('meta[name="theme-color"]').content = theme === 'light' ? '#fbfaf4' : '#11171c';
+        }
+        applyTheme(document.documentElement.dataset.theme || 'dark');
+        app.ports.persistTheme.subscribe(theme => {
+            applyTheme(theme);
+            try { localStorage.setItem('manual-theme', theme); } catch (_) {}
+        });
+        addEventListener('storage', event => {
+            if (event.key === 'manual-theme' || event.key === null) {
+                const theme = event.newValue === 'light' ? 'light' : 'dark';
+                applyTheme(theme);
+                app.ports.themeChanged.send(theme);
+            }
+        });
+    </script>
+</body>
+</html>

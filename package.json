@@ -1,0 +1,29 @@
+{
+  "name": "antonio-andara-field-manual",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Antonio Andara \u2014 engineering, open source, experiments, and magic.",
+  "scripts": {
+    "build": "elm make src/Main.elm --optimize --output=assets/elm.js && elm make src/LibraryPage.elm --optimize --output=assets/library.js && npm run build:three-color && npm run build:lms",
+    "start": "python3 scripts/serve.py",
+    "test": "node tests/site.cjs",
+    "test:all": "npm test && npm run test:404 && npm run test:three-color && npm run test:lms && npm run test:lab",
+    "build:three-color": "node experiments/build/generate-default.mjs && cd experiments && elm make src/FormulaMosaic.elm --optimize --output=three-color-mosaic.js",
+    "build:lab": "cd illustration-lab && elm make src/Lab.elm --optimize --output=lab.js",
+    "test:lab": "node tests/lab.cjs",
+    "test:three-color": "node tests/three-color.cjs",
+    "build:lms": "cd projects/lms/demo && node scripts/generate-book.mjs && elm make src/Main.elm --optimize --output=elm.js",
+    "test:lms": "node tests/lms.cjs",
+    "test:404": "node tests/not-found.cjs",
+    "build:production": "npm run build && node scripts/package-site.mjs",
+    "test:production": "node scripts/test-production.cjs",
+    "start:production": "python3 scripts/serve.py --directory dist --pages"
+  },
+  "devDependencies": {
+    "elm": "0.19.1-6",
+    "playwright": "1.59.1"
+  },
+  "engines": {
+    "node": "22.23.2"
+  }
+}

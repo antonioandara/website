@@ -1,0 +1,11 @@
+# Local preview route map, read by scripts/serve.py.
+# GitHub Pages does not consume this file. Retired paths on GitHub Pages
+# fall through to the custom 404 page unless redirect pages are added later.
+
+/experiments/three-color.html        /experiments/three-color-mosaic.html   301
+/experiments/formula-comparison.html /experiments/three-color-mosaic.html   301
+/experiments/map-drawing-puzzle.html /experiments/three-color-mosaic.html   301
+/projects/lms/index.html             /projects/lms/demo/index.html         301
+
+/experiments/ascii-automata.html     /404.html                             404
+/*                                   /404.html                             404

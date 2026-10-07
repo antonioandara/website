@@ -1,0 +1,16 @@
+html,body,#app{height:100%}
+body{background:var(--paper);margin:0}
+.course-sidebar,.reader-topbar{font-family:var(--mono)!important}
+.course-sidebar{overflow-y:auto!important;flex-shrink:0!important}
+.reader-topbar{min-height:44px;flex-wrap:wrap!important}
+.lesson-reader{min-width:0}
+.lesson-reader pre{overflow:auto;max-width:100%}
+:focus-visible{outline:2px solid var(--blue)!important;outline-offset:3px}
+@media(max-width:760px){
+.course-sidebar{position:fixed!important;inset:0 auto 0 0!important;z-index:20!important;max-width:calc(100vw - 48px)!important}
+.sidebar-toggle{z-index:30!important}
+.reader-topbar{padding-left:48px!important;gap:10px!important}
+.lesson-reader>div{padding-left:18px!important;padding-right:18px!important;padding-top:28px!important}
+.demo-theme-toggle{margin-left:auto!important}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
