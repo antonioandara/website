@@ -16,6 +16,11 @@ const server=http.createServer((q,r)=>{
   const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];
   page.on('pageerror',e=>errors.push(e.message));
   const base='http://127.0.0.1:'+server.address().port;
+  // Theme ports can update the document before Elm renders the switch.
+  async function assertThemeSwitch(expected){
+   await page.waitForFunction(value=>document.querySelector('[role=switch]')?.getAttribute('aria-checked')===value,expected);
+   assert.equal(await page.getByRole('switch',{name:'Light mode'}).getAttribute('aria-checked'),expected);
+  }
   await page.goto(base+'/index.html#lms');
   assert.equal(await page.locator('#lms').count(),1);
   assert.equal(await page.locator('#lms .text-links a').count(),1);
@@ -25,7 +30,7 @@ const server=http.createServer((q,r)=>{
   await page.locator('#lms').getByRole('link',{name:'Try a sample lesson ↗',exact:true}).click();
   assert.equal(new URL(page.url()).pathname,'/projects/lms/demo/index.html');
   await page.getByRole('switch',{name:'Light mode'}).waitFor();
-  assert.equal(await page.getByRole('switch',{name:'Light mode'}).getAttribute('aria-checked'),'false');
+  await assertThemeSwitch('false');
   assert.equal(await page.getByText('Theme studio',{exact:true}).count(),0);
   assert.equal(await page.getByText('Lesson styles',{exact:true}).count(),0);
   assert.equal(await page.locator('.course-sidebar').getByRole('button').count(),2);
@@ -54,21 +59,21 @@ const server=http.createServer((q,r)=>{
   const themeSwitch=page.getByRole('switch',{name:'Light mode'});
   await themeSwitch.click();
   await page.waitForFunction(()=>document.documentElement.dataset.theme==='light');
-  assert.equal(await themeSwitch.getAttribute('aria-checked'),'true');
+  await assertThemeSwitch('true');
   assert.equal(await page.evaluate(()=>localStorage.getItem('manual-theme')),'light');
   assert.equal(await page.evaluate(()=>getComputedStyle(document.body).backgroundColor),'rgb(251, 250, 244)');
   await page.reload();
-  assert.equal(await themeSwitch.getAttribute('aria-checked'),'true');
+  await assertThemeSwitch('true');
   await page.getByRole('link',{name:'← Antonio Andara',exact:true}).click();
   await page.waitForFunction(()=>document.documentElement.dataset.theme==='light');
   await page.locator('.reading-header .theme-toggle').click();
   await page.waitForFunction(()=>document.documentElement.dataset.theme==='dark');
   await page.goto(base+'/projects/lms/demo/index.html');
-  assert.equal(await themeSwitch.getAttribute('aria-checked'),'false');
+  await assertThemeSwitch('false');
   // Existing full-app preferences must not restore the removed settings.
   await page.evaluate(()=>localStorage.setItem('antonio:lms-preview:preferences:v1',JSON.stringify({theme:{baseTheme:'botanical'},activeSlug:'a-book-you-can-build-on'})));
   await page.reload();
-  assert.equal(await themeSwitch.getAttribute('aria-checked'),'false');
+  await assertThemeSwitch('false');
   await page.getByLabel('A decimal',{exact:true}).waitFor();
   for(const width of [390,768,1440]){
    await page.setViewportSize({width,height:900});
