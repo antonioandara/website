@@ -59,7 +59,8 @@ body =
         , chapter "experiments" "03" "An open workbench." "SOME EXPERIMENTS & SMALL EXPLORATIONS"
             [ p [ class "section-intro" ] [ text "These are experiments on different interesting topics. There is no real structure behind them, more like a stream of consciousness." ]
             , div [ class "experiment-grid" ]
-                [ experiment "01" "Three-color formula tiles" "Connected logic tiles. Toggle an input and watch shared-border constraints carry the change toward the output." "experiments/three-color-mosaic.html" PersonalArtwork.formulaMosaic ]]
+                [ experiment "01" "Three-color formula tiles" "Connected logic tiles. Toggle an input and watch shared-border constraints carry the change toward the output." "experiments/three-color-mosaic.html" PersonalArtwork.formulaMosaic
+                , experiment "02" "Formula parser & AST explorer" "Step through a Boolean formula, watch its syntax tree grow, and explore how inputs change the result." "experiments/formula-parser.html" PersonalArtwork.formulaParser ]]
         , chapter "lms" "04" "Experimental." "MARKDOWNBOOK / LEARNING SOFTWARE"
             [ LmsProject.view ]
         , chapter "magic" "05" "Magic exists in the mind" "MAGIC & THE HUMAN SIDE"

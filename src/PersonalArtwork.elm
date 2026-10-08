@@ -1,5 +1,6 @@
-module PersonalArtwork exposing (cards, video, mapStudy, formulaMosaic)
+module PersonalArtwork exposing (cards, video, mapStudy, formulaMosaic, formulaParser)
 
+import FieldManual.Illustrations as Ink
 import Html exposing (Html)
 import Svg exposing (svg, g, rect, path, circle, text_, text)
 import Svg.Attributes exposing (viewBox, class, x, y, width, height, rx, d, transform, cx, cy, r)
@@ -65,3 +66,8 @@ formulaMosaic =
         , text_ [ class "svg-label", x "140", y "182" ] [ text "OUT=1" ]
         , text_ [ class "svg-label", x "123", y "244" ] [ text "!(a & b)" ]
         ]
+
+
+formulaParser : Html msg
+formulaParser =
+    Ink.formulaParser

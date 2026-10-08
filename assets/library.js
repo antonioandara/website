@@ -6784,6 +6784,156 @@ var $author$project$FieldManual$Illustrations$cube = A3(
 			A2($author$project$FieldManual$Illustrations$path, 'soft', 'M50 216 L160 248 M302 92 V174'),
 			A3($author$project$FieldManual$Illustrations$svgLabel, '24', '28', 'SOLID / ISOMETRIC')
 		]));
+var $author$project$FieldManual$Illustrations$formulaParser = function () {
+	var centered = F3(
+		function (x, y, label) {
+			return A3(
+				$author$project$FieldManual$Illustrations$svgEl,
+				'text',
+				_List_fromArray(
+					[
+						_Utils_Tuple2('class', 'svg-label'),
+						_Utils_Tuple2(
+						'x',
+						$elm$core$String$fromInt(x)),
+						_Utils_Tuple2(
+						'y',
+						$elm$core$String$fromInt(y)),
+						_Utils_Tuple2('text-anchor', 'middle')
+					]),
+				_List_fromArray(
+					[
+						$elm$svg$Svg$text(label)
+					]));
+		});
+	var leaf = F4(
+		function (x, y, name, state) {
+			return _List_fromArray(
+				[
+					A3(
+					$author$project$FieldManual$Illustrations$svgEl,
+					'rect',
+					_List_fromArray(
+						[
+							_Utils_Tuple2('class', 'line fill-paper'),
+							_Utils_Tuple2(
+							'x',
+							$elm$core$String$fromInt(x - 23)),
+							_Utils_Tuple2(
+							'y',
+							$elm$core$String$fromInt(y - 14)),
+							_Utils_Tuple2('width', '46'),
+							_Utils_Tuple2('height', '28'),
+							_Utils_Tuple2('rx', '3')
+						]),
+					_List_Nil),
+					A3(centered, x, y + 4, name + ('=' + state))
+				]);
+		});
+	var operator = F4(
+		function (x, y, symbol, filled) {
+			return _List_fromArray(
+				[
+					A4(
+					$author$project$FieldManual$Illustrations$circle,
+					filled ? 'fill-blue' : 'fill-paper',
+					x,
+					y,
+					18),
+					A3(centered, x, y + 4, symbol)
+				]);
+		});
+	var token = F4(
+		function (x, width, label, filled) {
+			return _List_fromArray(
+				[
+					A3(
+					$author$project$FieldManual$Illustrations$svgEl,
+					'rect',
+					_List_fromArray(
+						[
+							_Utils_Tuple2(
+							'class',
+							'line ' + (filled ? 'fill-blue' : 'fill-paper')),
+							_Utils_Tuple2(
+							'x',
+							$elm$core$String$fromInt(x)),
+							_Utils_Tuple2('y', '45'),
+							_Utils_Tuple2(
+							'width',
+							$elm$core$String$fromInt(width)),
+							_Utils_Tuple2('height', '28'),
+							_Utils_Tuple2('rx', '3')
+						]),
+					_List_Nil),
+					A3(centered, x + ((width / 2) | 0), 63, label)
+				]);
+		});
+	return A3(
+		$author$project$FieldManual$Illustrations$svgRoot,
+		'diagram formula-parser',
+		'0 0 360 330',
+		_Utils_ap(
+			_List_fromArray(
+				[
+					A3($author$project$FieldManual$Illustrations$svgLabel, '20', '24', 'FORMULA / STRUCTURE / VALUE'),
+					A2($author$project$FieldManual$Illustrations$path, 'soft dash', 'M20 89 H340 M240 108 V267'),
+					A2($author$project$FieldManual$Illustrations$path, 'soft', 'M63 77 V81 H191 V77'),
+					A4($author$project$FieldManual$Illustrations$flowArrow, 127, 89, 127, 108),
+					A2($author$project$FieldManual$Illustrations$path, 'thick', 'M153 146 V160 H100 V171'),
+					A2($author$project$FieldManual$Illustrations$path, 'soft', 'M153 160 H203 V233'),
+					A2($author$project$FieldManual$Illustrations$path, 'thick', 'M100 207 V216'),
+					A2($author$project$FieldManual$Illustrations$path, 'soft', 'M100 252 V263 H56 V268 M100 263 H144 V268'),
+					A2($author$project$FieldManual$Illustrations$path, 'soft dash', 'M172 128 H256'),
+					A3($author$project$FieldManual$Illustrations$svgLabel, '259', '120', 'RESULT'),
+					A3(
+					$author$project$FieldManual$Illustrations$svgEl,
+					'rect',
+					_List_fromArray(
+						[
+							_Utils_Tuple2('class', 'line fill-blue'),
+							_Utils_Tuple2('x', '258'),
+							_Utils_Tuple2('y', '134'),
+							_Utils_Tuple2('width', '78'),
+							_Utils_Tuple2('height', '36'),
+							_Utils_Tuple2('rx', '3')
+						]),
+					_List_Nil),
+					A3(centered, 297, 157, 'TRUE / 1'),
+					A3($author$project$FieldManual$Illustrations$svgLabel, '258', '199', 'a=0  b=1'),
+					A3($author$project$FieldManual$Illustrations$svgLabel, '258', '219', 'c=0'),
+					A3($author$project$FieldManual$Illustrations$svgLabel, '258', '252', 'LEAVES'),
+					A4($author$project$FieldManual$Illustrations$flowArrow, 298, 241, 298, 229),
+					A3($author$project$FieldManual$Illustrations$svgLabel, '21', '322', 'PARSE DOWN / EVALUATE UP')
+				]),
+			_Utils_ap(
+				A4(token, 20, 26, '!', true),
+				_Utils_ap(
+					A4(token, 50, 22, '(', false),
+					_Utils_ap(
+						A4(token, 76, 26, 'a', false),
+						_Utils_ap(
+							A4(token, 106, 26, '&', true),
+							_Utils_ap(
+								A4(token, 136, 26, 'b', false),
+								_Utils_ap(
+									A4(token, 166, 22, ')', false),
+									_Utils_ap(
+										A4(token, 192, 26, '|', true),
+										_Utils_ap(
+											A4(token, 222, 26, 'c', false),
+											_Utils_ap(
+												A4(operator, 153, 128, 'OR', true),
+												_Utils_ap(
+													A4(operator, 100, 189, 'NOT', true),
+													_Utils_ap(
+														A4(operator, 100, 234, 'AND', false),
+														_Utils_ap(
+															A4(leaf, 203, 247, 'c', '0'),
+															_Utils_ap(
+																A4(leaf, 56, 282, 'a', '0'),
+																A4(leaf, 144, 282, 'b', '1'))))))))))))))));
+}();
 var $author$project$FieldManual$Illustrations$fractal = function (requestedDepth) {
 	var point = function (_v2) {
 		var x = _v2.a;
@@ -7545,6 +7695,8 @@ var $author$project$FieldManual$Library$drawing = function (key) {
 			return $author$project$FieldManual$Illustrations$composable;
 		case 'fractal':
 			return $author$project$FieldManual$Illustrations$fractal(4);
+		case 'formula-parser':
+			return $author$project$FieldManual$Illustrations$formulaParser;
 		case 'turing':
 			return $author$project$FieldManual$Illustrations$turingMachine;
 		default:
@@ -7678,6 +7830,7 @@ var $author$project$FieldManual$Library$specimens = _List_fromArray(
 		{a: 'A pure function: square the input, with no hidden state.', Y: 'Concepts', b: 'Ink.functional', c: 'functional', aA: 'Functional'},
 		{a: 'Follow A into f, B into g, and C out. The same pipeline becomes one reusable function.', Y: 'Concepts', b: 'Ink.composable', c: 'composable', aA: 'Composable'},
 		{a: 'A Sierpiński triangle repeats the same structure at smaller scales.', Y: 'Patterns', b: 'Ink.fractal 4', c: 'fractal', aA: 'Fractal'},
+		{a: 'Tokens become a syntax tree: NOT wraps AND, OR joins the branches, and input values evaluate toward the root.', Y: 'Concepts', b: 'Ink.formulaParser', c: 'formula-parser', aA: 'Formula parser & AST'},
 		{a: 'A tape, a state, and a head. Read a symbol, write a symbol, then move.', Y: 'Concepts', b: 'Ink.turingMachine', c: 'turing', aA: 'Turing machine'}
 	]);
 var $elm$html$Html$summary = _VirtualDom_node('summary');
@@ -8485,7 +8638,7 @@ var $author$project$LibraryPage$main = A3(
 							]),
 						_List_fromArray(
 							[
-								$elm$html$Html$text('Eighteen drawings in a shared visual language. Filter the collection or open an Elm recipe to see how a figure can be reused.')
+								$elm$html$Html$text('Nineteen drawings in a shared visual language. Filter the collection or open an Elm recipe to see how a figure can be reused.')
 							])),
 						A3($author$project$FieldManual$Library$view, model.Y, $author$project$FieldManual$Reader$SelectCategory, $author$project$FieldManual$Reader$Measure)
 					])),

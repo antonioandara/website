@@ -4,7 +4,7 @@
   "private": true,
   "description": "Antonio Andara \u2014 engineering, open source, experiments, and magic.",
   "scripts": {
-    "build": "elm make src/Main.elm --optimize --output=assets/elm.js && elm make src/LibraryPage.elm --optimize --output=assets/library.js && npm run build:three-color && npm run build:lms",
+    "build": "elm make src/Main.elm --optimize --output=assets/elm.js && elm make src/LibraryPage.elm --optimize --output=assets/library.js && npm run build:three-color && npm run build:parser && npm run build:lms",
     "start": "python3 scripts/serve.py",
     "test": "node tests/site.cjs",
     "test:all": "npm test && npm run test:404 && npm run test:three-color && npm run test:lms && npm run test:lab",
@@ -17,7 +17,8 @@
     "test:404": "node tests/not-found.cjs",
     "build:production": "npm run build && node scripts/package-site.mjs",
     "test:production": "node scripts/test-production.cjs",
-    "start:production": "python3 scripts/serve.py --directory dist --pages"
+    "start:production": "python3 scripts/serve.py --directory dist --pages",
+    "build:parser": "cd experiments && elm make src/Minimal.elm --optimize --output=formula-parser.js"
   },
   "devDependencies": {
     "elm": "0.19.1-6",

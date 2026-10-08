@@ -1,6 +1,6 @@
 # Three-color tile map
 
-The only published experiment is `/experiments/three-color-mosaic.html`, linked
+The three-color experiment is `/experiments/three-color-mosaic.html`, linked
 from the homepage. It explores Boolean formulas using connected logic-gadget
 tiles, with input toggles and animated local constraint repairs.
 
@@ -79,3 +79,12 @@ logic contacts, all truth-table rows, causal recoloring, and curved outlines
 without interior overlaps or escaped labels. Labels are checked against samples
 of the final quadratic contours and relocated to a clear interior point when
 a junction changes their original position.
+
+## Formula parser & AST explorer
+
+`formula-parser.html` hosts `src/Minimal.elm`, adapted from the same Elm port.
+It shares `FormulaParser.elm` with the mosaic and uses `ParsingTrace.elm` for
+the step-by-step walkthrough. Styles live in `formula-parser.css` and follow
+the site's light/dark theme. Build with `npm run build:parser` (included in
+`npm run build`); `npm test` checks editing, parse errors, AST completion,
+input switches, and responsive layouts.

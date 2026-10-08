@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore Boolean formulas, step through a recursive-descent parser, and watch an abstract syntax tree grow.">
+  <title>Formula Parser · Antonio Andara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="stylesheet" href="color-experiments.css">
+  <link rel="stylesheet" href="formula-parser.css">
+  <script>try { document.documentElement.dataset.theme = localStorage.getItem('manual-theme') || 'dark'; } catch (_) {}</script>
+</head>
+<body class="color-experiment">
+  <a class="skip-link" href="#experiment">Skip to experiment</a>
+  <header class="experiment-header">
+    <a href="../index.html#experiments">← Antonio Andara / Experiments</a>
+    <button type="button" id="experiment-theme" aria-label="Switch color theme">Switch theme</button>
+  </header>
+  <main id="experiment" tabindex="-1"><div id="elm"></div></main>
+  <footer class="experiment-footer">Antonio Andara · Maps, logic, and small experiments in understanding.</footer>
+  <script src="formula-parser.js"></script>
+  <script>Elm.Minimal.init({ node: document.getElementById('elm') });
+  document.getElementById('experiment-theme').addEventListener('click', function () {
+    const theme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = theme;
+    try { localStorage.setItem('manual-theme', theme); } catch (_) {}
+  });</script>
+</body></html>

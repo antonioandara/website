@@ -102,8 +102,8 @@ const server = http.createServer((req, res) => {
     await page.screenshot({path:'/tmp/antonio-andara-mobile.png',fullPage:true});
     await page.goto(base + '/library.html#library');
     await waitActive('library');
-    assert.equal(await page.locator('.library-item').count(),18);
-    for(const [category,count] of [['Concepts',3],['Patterns',3],['All',18]]) {
+    assert.equal(await page.locator('.library-item').count(),19);
+    for(const [category,count] of [['Concepts',4],['Patterns',3],['All',19]]) {
       await page.locator(`[data-filter="${category}"]`).click();
       await page.waitForFunction(expected => [...document.querySelectorAll('.library-item')].filter(node => !node.hidden).length === expected, count);
       assert.equal(await page.locator('.library-item:visible').count(),count);
@@ -115,7 +115,35 @@ const server = http.createServer((req, res) => {
     await page.goto(base + '/experiments/three-color-mosaic.html');
     await checkLinks();
     assert.ok(await page.locator('h1').count());
+    await page.goto(base + '/index.html#experiments');
+    await page.locator('a[href="experiments/formula-parser.html"]').click();
+    await page.waitForURL('**/experiments/formula-parser.html');
+    await checkLinks();
+    assert.match(await page.locator('h1').innerText(), /Formula Parser/);
+    assert.equal(await page.locator('.truth-table tbody tr').count(), 8);
+    await page.getByRole('button', { name: 'Next →', exact: true }).click();
+    await page.waitForFunction(() => document.querySelector('[role=progressbar]').getAttribute('aria-valuenow') === '2');
+    await page.getByRole('button', { name: 'Finish', exact: true }).click();
+    await page.waitForFunction(() => document.querySelector('.ast-map-caption').textContent.includes('TREE COMPLETE'));
+    assert.match(await page.locator('.source-shape').innerText(), /Or \(Not \(And/);
+    const previousRow = await page.locator('.current-row').innerText();
+    await page.getByRole('switch', { name: 'Input a', exact: true }).check();
+    await page.waitForFunction(previous => document.querySelector('.current-row').innerText !== previous, previousRow);
+    await page.locator('.formula-input').fill('a &');
+    await page.locator('.notice.error').waitFor();
+    assert.match(await page.locator('.notice.error').innerText(), /Parser stopped/i);
+    await page.getByRole('button', { name: 'Precedence', exact: false }).click();
+    await page.getByRole('button', { name: 'Finish', exact: true }).click();
+    await page.waitForFunction(() => document.querySelector('.ast-map-caption').textContent.includes('TREE COMPLETE'));
+    assert.match(await page.locator('.source-shape').innerText(), /Or \(Var "a"\) \(And/);
+    for (const theme of ['light', 'dark']) {
+      await page.evaluate(theme => { document.documentElement.dataset.theme = theme; }, theme);
+      for (const width of [375, 768, 1440]) {
+        await page.setViewportSize({ width, height: 1000 });
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Parser overflow at ${width} in ${theme}`);
+      }
+    }
     assert.deepEqual(errors,[]);
-    console.log('PASS: identity, four profile URLs, eight sections, themes/persistence, navigation/focus, journal state, library, bundled experiment, local links, five responsive widths, no runtime errors.');
+    console.log('PASS: identity, four profile URLs, eight sections, themes/persistence, navigation/focus, journal state, library, bundled experiments and parser interactions, local links, five responsive widths, no runtime errors.');
   } finally { await browser.close(); await new Promise(resolve => server.close(resolve)); }
 })().catch(error => { console.error(error); server.close(); process.exitCode = 1; });

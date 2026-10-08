@@ -1,4 +1,4 @@
-module FieldManual.Illustrations exposing (processorStack, computerStack, explodedStackDiagram, cellularAutomaton, gameOfLife, functional, composable, fractal, turingMachine, touchDiagram, kernelDiagram, bezierDiagram, rasterDiagram, signal, orbit, chip, cube, network, contours)
+module FieldManual.Illustrations exposing (processorStack, computerStack, explodedStackDiagram, cellularAutomaton, gameOfLife, functional, composable, fractal, turingMachine, touchDiagram, kernelDiagram, bezierDiagram, rasterDiagram, signal, orbit, chip, cube, network, contours, formulaParser)
 
 import Bitwise
 import Set exposing (Set)
@@ -523,3 +523,66 @@ pixel x y size =
 box : Int -> Int -> Int -> Int -> Svg msg
 box x y width height =
     svgEl "rect" [ ( "class", "line fill-faint" ), ( "x", String.fromInt x ), ( "y", String.fromInt y ), ( "width", String.fromInt width ), ( "height", String.fromInt height ) ] []
+
+
+{-| A Boolean formula becomes a syntax tree, then evaluates from leaves to root. -}
+formulaParser : Html msg
+formulaParser =
+    let
+        centered x y label =
+            svgEl "text"
+                [ ( "class", "svg-label" ), ( "x", String.fromInt x ), ( "y", String.fromInt y ), ( "text-anchor", "middle" ) ]
+                [ Svg.text label ]
+
+        operator x y symbol filled =
+            [ circle (if filled then "fill-blue" else "fill-paper") x y 18
+            , centered x (y + 4) symbol
+            ]
+
+        leaf x y name state =
+            [ svgEl "rect"
+                [ ( "class", "line fill-paper" ), ( "x", String.fromInt (x - 23) ), ( "y", String.fromInt (y - 14) ), ( "width", "46" ), ( "height", "28" ), ( "rx", "3" ) ] []
+            , centered x (y + 4) (name ++ "=" ++ state)
+            ]
+
+        token x width label filled =
+            [ svgEl "rect"
+                [ ( "class", "line " ++ (if filled then "fill-blue" else "fill-paper") ), ( "x", String.fromInt x ), ( "y", "45" ), ( "width", String.fromInt width ), ( "height", "28" ), ( "rx", "3" ) ] []
+            , centered (x + width // 2) 63 label
+            ]
+    in
+    svgRoot "diagram formula-parser" "0 0 360 330"
+        ([ svgLabel "20" "24" "FORMULA / STRUCTURE / VALUE"
+         , path "soft dash" "M20 89 H340 M240 108 V267"
+         , path "soft" "M63 77 V81 H191 V77"
+         , flowArrow 127 89 127 108
+         -- The expression !(a & b) | c: NOT wraps AND; OR is the root.
+         , path "thick" "M153 146 V160 H100 V171"
+         , path "soft" "M153 160 H203 V233"
+         , path "thick" "M100 207 V216"
+         , path "soft" "M100 252 V263 H56 V268 M100 263 H144 V268"
+         , path "soft dash" "M172 128 H256"
+         , svgLabel "259" "120" "RESULT"
+         , svgEl "rect" [ ( "class", "line fill-blue" ), ( "x", "258" ), ( "y", "134" ), ( "width", "78" ), ( "height", "36" ), ( "rx", "3" ) ] []
+         , centered 297 157 "TRUE / 1"
+         , svgLabel "258" "199" "a=0  b=1"
+         , svgLabel "258" "219" "c=0"
+         , svgLabel "258" "252" "LEAVES"
+         , flowArrow 298 241 298 229
+         , svgLabel "21" "322" "PARSE DOWN / EVALUATE UP"
+         ]
+            ++ token 20 26 "!" True
+            ++ token 50 22 "(" False
+            ++ token 76 26 "a" False
+            ++ token 106 26 "&" True
+            ++ token 136 26 "b" False
+            ++ token 166 22 ")" False
+            ++ token 192 26 "|" True
+            ++ token 222 26 "c" False
+            ++ operator 153 128 "OR" True
+            ++ operator 100 189 "NOT" True
+            ++ operator 100 234 "AND" False
+            ++ leaf 203 247 "c" "0"
+            ++ leaf 56 282 "a" "0"
+            ++ leaf 144 282 "b" "1"
+        )

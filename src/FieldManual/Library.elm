@@ -31,6 +31,7 @@ specimens =
     , { key = "functional", title = "Functional", category = "Concepts", caption = "A pure function: square the input, with no hidden state.", example = "Ink.functional" }
     , { key = "composable", title = "Composable", category = "Concepts", caption = "Follow A into f, B into g, and C out. The same pipeline becomes one reusable function.", example = "Ink.composable" }
     , { key = "fractal", title = "Fractal", category = "Patterns", caption = "A Sierpiński triangle repeats the same structure at smaller scales.", example = "Ink.fractal 4" }
+    , { key = "formula-parser", title = "Formula parser & AST", category = "Concepts", caption = "Tokens become a syntax tree: NOT wraps AND, OR joins the branches, and input values evaluate toward the root.", example = "Ink.formulaParser" }
     , { key = "turing", title = "Turing machine", category = "Concepts", caption = "A tape, a state, and a head. Read a symbol, write a symbol, then move.", example = "Ink.turingMachine" }
     ]
 
@@ -54,6 +55,7 @@ drawing key =
         "functional" -> Ink.functional
         "composable" -> Ink.composable
         "fractal" -> Ink.fractal 4
+        "formula-parser" -> Ink.formulaParser
         "turing" -> Ink.turingMachine
         _ -> Ink.rasterDiagram
 

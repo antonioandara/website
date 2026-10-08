@@ -13,6 +13,6 @@ main =
         (\model -> SiteShell.view True [ ( "01", "library", "Drawing catalogue" ) ]
             (section [ class "chapter", id "library", tabindex -1 ]
                 [ chapterHeading "01" "A cabinet of mechanisms." "REUSABLE DRAWINGS"
-                , p [ class "section-intro" ] [ text "Eighteen drawings in a shared visual language. Filter the collection or open an Elm recipe to see how a figure can be reused." ]
+                , p [ class "section-intro" ] [ text "Nineteen drawings in a shared visual language. Filter the collection or open an Elm recipe to see how a figure can be reused." ]
                 , Library.view model.category SelectCategory Measure
                 ]) model)

@@ -519,11 +519,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.T.C === region._.C)
+	if (region.dp.aj === region.a6.aj)
 	{
-		return 'on line ' + region.T.C;
+		return 'on line ' + region.dp.aj;
 	}
-	return 'on lines ' + region.T.C + ' through ' + region._.C;
+	return 'on lines ' + region.dp.aj + ' through ' + region.a6.aj;
 }
 
 
@@ -1861,9 +1861,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aN,
-		impl.aU,
-		impl.aT,
+		impl.cQ,
+		impl.dN,
+		impl.dt,
 		function() { return function() {} }
 	);
 });
@@ -2727,9 +2727,9 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		o: func(record.o),
-		U: record.U,
-		R: record.R
+		K: func(record.K),
+		aV: record.aV,
+		aQ: record.aQ
 	}
 });
 
@@ -2997,11 +2997,11 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.o;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.U;
+		var message = !tag ? value : tag < 3 ? value.a : value.K;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.aV;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.R) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.aQ) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3951,11 +3951,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aN,
-		impl.aU,
-		impl.aT,
+		impl.cQ,
+		impl.dN,
+		impl.dt,
 		function(sendToApp, initialModel) {
-			var view = impl.aV;
+			var view = impl.dO;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3987,12 +3987,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aN,
-		impl.aU,
-		impl.aT,
+		impl.cQ,
+		impl.dN,
+		impl.dt,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.S && impl.S(sendToApp)
-			var view = impl.aV;
+			var divertHrefToApp = impl.aU && impl.aU(sendToApp)
+			var view = impl.dO;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -4000,12 +4000,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aF);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.ce);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.ay) && (_VirtualDom_doc.title = title = doc.ay);
+				(title !== doc.dI) && (_VirtualDom_doc.title = title = doc.dI);
 			});
 		}
 	);
@@ -4061,12 +4061,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aO;
-	var onUrlRequest = impl.aP;
+	var onUrlChange = impl.c4;
+	var onUrlRequest = impl.c5;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		S: function(sendToApp)
+		aU: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4082,9 +4082,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.ar === next.ar
-							&& curr.ac === next.ac
-							&& curr.ao.a === next.ao.a
+							&& curr.bD === next.bD
+							&& curr.bi === next.bi
+							&& curr.bz.a === next.bz.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4092,13 +4092,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aN: function(flags)
+		cQ: function(flags)
 		{
-			return A3(impl.aN, flags, _Browser_getUrl(), key);
+			return A3(impl.cQ, flags, _Browser_getUrl(), key);
 		},
-		aV: impl.aV,
-		aU: impl.aU,
-		aT: impl.aT
+		dO: impl.dO,
+		dN: impl.dN,
+		dt: impl.dt
 	});
 }
 
@@ -4164,17 +4164,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aL: 'hidden', aG: 'visibilitychange' }
+		? { cK: 'hidden', cp: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aL: 'mozHidden', aG: 'mozvisibilitychange' }
+		? { cK: 'mozHidden', cp: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aL: 'msHidden', aG: 'msvisibilitychange' }
+		? { cK: 'msHidden', cp: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aL: 'webkitHidden', aG: 'webkitvisibilitychange' }
-		: { aL: 'hidden', aG: 'visibilitychange' };
+		? { cK: 'webkitHidden', cp: 'webkitvisibilitychange' }
+		: { cK: 'hidden', cp: 'visibilitychange' };
 }
 
 
@@ -4255,12 +4255,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		aS: _Browser_getScene(),
-		N: {
-			aA: _Browser_window.pageXOffset,
-			J: _Browser_window.pageYOffset,
-			az: _Browser_doc.documentElement.clientWidth,
-			M: _Browser_doc.documentElement.clientHeight
+		bI: _Browser_getScene(),
+		bS: {
+			bW: _Browser_window.pageXOffset,
+			bX: _Browser_window.pageYOffset,
+			bT: _Browser_doc.documentElement.clientWidth,
+			be: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4270,8 +4270,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		az: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		M: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		bT: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		be: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4294,15 +4294,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			aS: {
-				az: node.scrollWidth,
-				M: node.scrollHeight
+			bI: {
+				bT: node.scrollWidth,
+				be: node.scrollHeight
 			},
-			N: {
-				aA: node.scrollLeft,
-				J: node.scrollTop,
-				az: node.clientWidth,
-				M: node.clientHeight
+			bS: {
+				bW: node.scrollLeft,
+				bX: node.scrollTop,
+				bT: node.clientWidth,
+				be: node.clientHeight
 			}
 		};
 	});
@@ -4332,18 +4332,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			aS: _Browser_getScene(),
-			N: {
-				aA: x,
-				J: y,
-				az: _Browser_doc.documentElement.clientWidth,
-				M: _Browser_doc.documentElement.clientHeight
+			bI: _Browser_getScene(),
+			bS: {
+				bW: x,
+				bX: y,
+				bT: _Browser_doc.documentElement.clientWidth,
+				be: _Browser_doc.documentElement.clientHeight
 			},
-			L: {
-				aA: x + rect.left,
-				J: y + rect.top,
-				az: rect.width,
-				M: rect.height
+			cD: {
+				bW: x + rect.left,
+				bX: y + rect.top,
+				bT: rect.width,
+				be: rect.height
 			}
 		};
 	});
@@ -4380,22 +4380,134 @@ function _Browser_load(url)
 }
 
 
-function _Url_percentEncode(string)
-{
-	return encodeURIComponent(string);
-}
 
-function _Url_percentDecode(string)
+
+// STRINGS
+
+
+var _Parser_isSubString = F5(function(smallString, offset, row, col, bigString)
 {
-	try
+	var smallLength = smallString.length;
+	var isGood = offset + smallLength <= bigString.length;
+
+	for (var i = 0; isGood && i < smallLength; )
 	{
-		return $elm$core$Maybe$Just(decodeURIComponent(string));
+		var code = bigString.charCodeAt(offset);
+		isGood =
+			smallString[i++] === bigString[offset++]
+			&& (
+				code === 0x000A /* \n */
+					? ( row++, col=1 )
+					: ( col++, (code & 0xF800) === 0xD800 ? smallString[i++] === bigString[offset++] : 1 )
+			)
 	}
-	catch (e)
+
+	return _Utils_Tuple3(isGood ? offset : -1, row, col);
+});
+
+
+
+// CHARS
+
+
+var _Parser_isSubChar = F3(function(predicate, offset, string)
+{
+	return (
+		string.length <= offset
+			? -1
+			:
+		(string.charCodeAt(offset) & 0xF800) === 0xD800
+			? (predicate(_Utils_chr(string.substr(offset, 2))) ? offset + 2 : -1)
+			:
+		(predicate(_Utils_chr(string[offset]))
+			? ((string[offset] === '\n') ? -2 : (offset + 1))
+			: -1
+		)
+	);
+});
+
+
+var _Parser_isAsciiCode = F3(function(code, offset, string)
+{
+	return string.charCodeAt(offset) === code;
+});
+
+
+
+// NUMBERS
+
+
+var _Parser_chompBase10 = F2(function(offset, string)
+{
+	for (; offset < string.length; offset++)
 	{
-		return $elm$core$Maybe$Nothing;
+		var code = string.charCodeAt(offset);
+		if (code < 0x30 || 0x39 < code)
+		{
+			return offset;
+		}
 	}
-}var $elm$core$Basics$False = 1;
+	return offset;
+});
+
+
+var _Parser_consumeBase = F3(function(base, offset, string)
+{
+	for (var total = 0; offset < string.length; offset++)
+	{
+		var digit = string.charCodeAt(offset) - 0x30;
+		if (digit < 0 || base <= digit) break;
+		total = base * total + digit;
+	}
+	return _Utils_Tuple2(offset, total);
+});
+
+
+var _Parser_consumeBase16 = F2(function(offset, string)
+{
+	for (var total = 0; offset < string.length; offset++)
+	{
+		var code = string.charCodeAt(offset);
+		if (0x30 <= code && code <= 0x39)
+		{
+			total = 16 * total + code - 0x30;
+		}
+		else if (0x41 <= code && code <= 0x46)
+		{
+			total = 16 * total + code - 55;
+		}
+		else if (0x61 <= code && code <= 0x66)
+		{
+			total = 16 * total + code - 87;
+		}
+		else
+		{
+			break;
+		}
+	}
+	return _Utils_Tuple2(offset, total);
+});
+
+
+
+// FIND STRING
+
+
+var _Parser_findSubString = F5(function(smallString, offset, row, col, bigString)
+{
+	var newOffset = bigString.indexOf(smallString, offset);
+	var target = newOffset < 0 ? bigString.length : newOffset + smallString.length;
+
+	while (offset < target)
+	{
+		var code = bigString.charCodeAt(offset++);
+		code === 0x000A /* \n */
+			? ( col=1, row++ )
+			: ( col++, (code & 0xF800) === 0xD800 && offset++ )
+	}
+
+	return _Utils_Tuple3(newOffset, row, col);
+});
 var $elm$core$List$cons = _List_cons;
 var $elm$core$Elm$JsArray$foldr = _JsArray_foldr;
 var $elm$core$Array$foldr = F3(
@@ -4476,6 +4588,161 @@ var $elm$core$Set$toList = function (_v0) {
 var $elm$core$Basics$EQ = 1;
 var $elm$core$Basics$GT = 2;
 var $elm$core$Basics$LT = 0;
+var $elm$core$Basics$False = 1;
+var $elm$core$Basics$True = 0;
+var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
+var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
+var $elm$core$List$foldl = F3(
+	function (func, acc, list) {
+		foldl:
+		while (true) {
+			if (!list.b) {
+				return acc;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				var $temp$func = func,
+					$temp$acc = A2(func, x, acc),
+					$temp$list = xs;
+				func = $temp$func;
+				acc = $temp$acc;
+				list = $temp$list;
+				continue foldl;
+			}
+		}
+	});
+var $elm$core$Dict$Black = 1;
+var $elm$core$Dict$RBNode_elm_builtin = F5(
+	function (a, b, c, d, e) {
+		return {$: -1, a: a, b: b, c: c, d: d, e: e};
+	});
+var $elm$core$Dict$Red = 0;
+var $elm$core$Dict$balance = F5(
+	function (color, key, value, left, right) {
+		if ((right.$ === -1) && (!right.a)) {
+			var _v1 = right.a;
+			var rK = right.b;
+			var rV = right.c;
+			var rLeft = right.d;
+			var rRight = right.e;
+			if ((left.$ === -1) && (!left.a)) {
+				var _v3 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var lLeft = left.d;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					0,
+					key,
+					value,
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, lK, lV, lLeft, lRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, rK, rV, rLeft, rRight));
+			} else {
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					color,
+					rK,
+					rV,
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, left, rLeft),
+					rRight);
+			}
+		} else {
+			if ((((left.$ === -1) && (!left.a)) && (left.d.$ === -1)) && (!left.d.a)) {
+				var _v5 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var _v6 = left.d;
+				var _v7 = _v6.a;
+				var llK = _v6.b;
+				var llV = _v6.c;
+				var llLeft = _v6.d;
+				var llRight = _v6.e;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					0,
+					lK,
+					lV,
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, llK, llV, llLeft, llRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, key, value, lRight, right));
+			} else {
+				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
+			}
+		}
+	});
+var $elm$core$Basics$compare = _Utils_compare;
+var $elm$core$Dict$insertHelp = F3(
+	function (key, value, dict) {
+		if (dict.$ === -2) {
+			return A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
+		} else {
+			var nColor = dict.a;
+			var nKey = dict.b;
+			var nValue = dict.c;
+			var nLeft = dict.d;
+			var nRight = dict.e;
+			var _v1 = A2($elm$core$Basics$compare, key, nKey);
+			switch (_v1) {
+				case 0:
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						A3($elm$core$Dict$insertHelp, key, value, nLeft),
+						nRight);
+				case 1:
+					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
+				default:
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						nLeft,
+						A3($elm$core$Dict$insertHelp, key, value, nRight));
+			}
+		}
+	});
+var $elm$core$Dict$insert = F3(
+	function (key, value, dict) {
+		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
+		if ((_v0.$ === -1) && (!_v0.a)) {
+			var _v1 = _v0.a;
+			var k = _v0.b;
+			var v = _v0.c;
+			var l = _v0.d;
+			var r = _v0.e;
+			return A5($elm$core$Dict$RBNode_elm_builtin, 1, k, v, l, r);
+		} else {
+			var x = _v0;
+			return x;
+		}
+	});
+var $elm$core$Dict$fromList = function (assocs) {
+	return A3(
+		$elm$core$List$foldl,
+		F2(
+			function (_v0, dict) {
+				var key = _v0.a;
+				var value = _v0.b;
+				return A3($elm$core$Dict$insert, key, value, dict);
+			}),
+		$elm$core$Dict$empty,
+		assocs);
+};
+var $author$project$Minimal$init = {
+	a0: $elm$core$Dict$fromList(
+		_List_fromArray(
+			[
+				_Utils_Tuple2('a', false),
+				_Utils_Tuple2('b', true),
+				_Utils_Tuple2('c', false)
+			])),
+	u: '!(a & b) | c',
+	L: 0
+};
 var $elm$core$Result$Err = function (a) {
 	return {$: 1, a: a};
 };
@@ -4525,25 +4792,6 @@ var $elm$json$Json$Decode$indent = function (str) {
 		'\n    ',
 		A2($elm$core$String$split, '\n', str));
 };
-var $elm$core$List$foldl = F3(
-	function (func, acc, list) {
-		foldl:
-		while (true) {
-			if (!list.b) {
-				return acc;
-			} else {
-				var x = list.a;
-				var xs = list.b;
-				var $temp$func = func,
-					$temp$acc = A2(func, x, acc),
-					$temp$list = xs;
-				func = $temp$func;
-				acc = $temp$acc;
-				list = $temp$list;
-				continue foldl;
-			}
-		}
-	});
 var $elm$core$List$length = function (xs) {
 	return A3(
 		$elm$core$List$foldl,
@@ -4801,25 +5049,25 @@ var $elm$core$Array$treeFromBuilder = F2(
 	});
 var $elm$core$Array$builderToArray = F2(
 	function (reverseNodeList, builder) {
-		if (!builder.a) {
+		if (!builder.g) {
 			return A4(
 				$elm$core$Array$Array_elm_builtin,
-				$elm$core$Elm$JsArray$length(builder.c),
+				$elm$core$Elm$JsArray$length(builder.j),
 				$elm$core$Array$shiftStep,
 				$elm$core$Elm$JsArray$empty,
-				builder.c);
+				builder.j);
 		} else {
-			var treeLen = builder.a * $elm$core$Array$branchFactor;
+			var treeLen = builder.g * $elm$core$Array$branchFactor;
 			var depth = $elm$core$Basics$floor(
 				A2($elm$core$Basics$logBase, $elm$core$Array$branchFactor, treeLen - 1));
-			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.d) : builder.d;
-			var tree = A2($elm$core$Array$treeFromBuilder, correctNodeList, builder.a);
+			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.k) : builder.k;
+			var tree = A2($elm$core$Array$treeFromBuilder, correctNodeList, builder.g);
 			return A4(
 				$elm$core$Array$Array_elm_builtin,
-				$elm$core$Elm$JsArray$length(builder.c) + treeLen,
+				$elm$core$Elm$JsArray$length(builder.j) + treeLen,
 				A2($elm$core$Basics$max, 5, depth * $elm$core$Array$shiftStep),
 				tree,
-				builder.c);
+				builder.j);
 		}
 	});
 var $elm$core$Basics$idiv = _Basics_idiv;
@@ -4832,7 +5080,7 @@ var $elm$core$Array$initializeHelp = F5(
 				return A2(
 					$elm$core$Array$builderToArray,
 					false,
-					{d: nodeList, a: (len / $elm$core$Array$branchFactor) | 0, c: tail});
+					{k: nodeList, g: (len / $elm$core$Array$branchFactor) | 0, j: tail});
 			} else {
 				var leaf = $elm$core$Array$Leaf(
 					A3($elm$core$Elm$JsArray$initialize, $elm$core$Array$branchFactor, fromIndex, fn));
@@ -4862,24 +5110,12 @@ var $elm$core$Array$initialize = F2(
 			return A5($elm$core$Array$initializeHelp, fn, initialFromIndex, len, _List_Nil, tail);
 		}
 	});
-var $elm$core$Basics$True = 0;
 var $elm$core$Result$isOk = function (result) {
 	if (!result.$) {
 		return true;
 	} else {
 		return false;
 	}
-};
-var $elm$json$Json$Decode$andThen = _Json_andThen;
-var $author$project$FieldManual$Reader$CloseSidebar = {$: 2};
-var $author$project$FieldManual$Reader$Dark = 0;
-var $author$project$FieldManual$Reader$Light = 1;
-var $author$project$FieldManual$Reader$LinkClicked = function (a) {
-	return {$: 4, a: a};
-};
-var $author$project$FieldManual$Reader$Measure = {$: 6};
-var $author$project$FieldManual$Reader$UrlChanged = function (a) {
-	return {$: 5, a: a};
 };
 var $elm$json$Json$Decode$map = _Json_map1;
 var $elm$json$Json$Decode$map2 = _Json_map2;
@@ -4910,7 +5146,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {aK: fragment, ac: host, am: path, ao: port_, ar: protocol, as: query};
+		return {bc: fragment, bi: host, bx: path, bz: port_, bD: protocol, bE: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5188,51 +5424,258 @@ var $elm$core$Task$perform = F2(
 		return $elm$core$Task$command(
 			A2($elm$core$Task$map, toMessage, task));
 	});
-var $elm$browser$Browser$application = _Browser_application;
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
+var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $elm$core$Platform$Sub$batch = _Platform_batch;
-var $elm$json$Json$Decode$fail = _Json_fail;
-var $elm$json$Json$Decode$field = _Json_decodeField;
-var $author$project$FieldManual$Reader$Measured = function (a) {
-	return {$: 7, a: a};
-};
-var $elm$core$Basics$composeL = F3(
-	function (g, f, x) {
-		return g(
-			f(x));
-	});
-var $elm$core$Task$onError = _Scheduler_onError;
-var $elm$core$Task$attempt = F2(
-	function (resultToMessage, task) {
-		return $elm$core$Task$command(
-			A2(
-				$elm$core$Task$onError,
-				A2(
-					$elm$core$Basics$composeL,
-					A2($elm$core$Basics$composeL, $elm$core$Task$succeed, resultToMessage),
-					$elm$core$Result$Err),
-				A2(
-					$elm$core$Task$andThen,
-					A2(
-						$elm$core$Basics$composeL,
-						A2($elm$core$Basics$composeL, $elm$core$Task$succeed, resultToMessage),
-						$elm$core$Result$Ok),
-					task)));
-	});
-var $elm$core$List$filter = F2(
-	function (isGood, list) {
-		return A3(
-			$elm$core$List$foldr,
-			F2(
-				function (x, xs) {
-					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
+var $elm$browser$Browser$sandbox = function (impl) {
+	return _Browser_element(
+		{
+			cQ: function (_v0) {
+				return _Utils_Tuple2(impl.cQ, $elm$core$Platform$Cmd$none);
+			},
+			dt: function (_v1) {
+				return $elm$core$Platform$Sub$none;
+			},
+			dN: F2(
+				function (msg, model) {
+					return _Utils_Tuple2(
+						A2(impl.dN, msg, model),
+						$elm$core$Platform$Cmd$none);
 				}),
-			_List_Nil,
-			list);
+			dO: impl.dO
+		});
+};
+var $elm$core$Basics$min = F2(
+	function (x, y) {
+		return (_Utils_cmp(x, y) < 0) ? x : y;
 	});
-var $elm$core$Basics$ge = _Utils_ge;
-var $elm$browser$Browser$Dom$getElement = _Browser_getElement;
-var $elm$browser$Browser$Dom$getViewport = _Browser_withWindow(_Browser_getViewport);
+var $author$project$Minimal$GroupToken = function (a) {
+	return {$: 2, a: a};
+};
+var $author$project$Minimal$OperatorToken = function (a) {
+	return {$: 1, a: a};
+};
+var $author$project$Minimal$UnknownToken = function (a) {
+	return {$: 3, a: a};
+};
+var $author$project$Minimal$VariableToken = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$core$String$cons = _String_cons;
+var $elm$core$String$fromChar = function (_char) {
+	return A2($elm$core$String$cons, _char, '');
+};
+var $author$project$Minimal$isWhitespace = function (_char) {
+	return (_char === ' ') || ((_char === '\n') || ((_char === '\t') || (_char === '\u000D')));
+};
+var $author$project$Minimal$spanWhile = F2(
+	function (predicate, source) {
+		var _v0 = $elm$core$String$uncons(source);
+		if (_v0.$ === 1) {
+			return _Utils_Tuple2('', '');
+		} else {
+			var _v1 = _v0.a;
+			var _char = _v1.a;
+			var rest = _v1.b;
+			if (predicate(_char)) {
+				var _v2 = A2($author$project$Minimal$spanWhile, predicate, rest);
+				var taken = _v2.a;
+				var remaining = _v2.b;
+				return _Utils_Tuple2(
+					_Utils_ap(
+						$elm$core$String$fromChar(_char),
+						taken),
+					remaining);
+			} else {
+				return _Utils_Tuple2('', source);
+			}
+		}
+	});
+var $author$project$Minimal$scanTokens = function (source) {
+	scanTokens:
+	while (true) {
+		var _v0 = $elm$core$String$uncons(source);
+		if (_v0.$ === 1) {
+			return _List_Nil;
+		} else {
+			var _v1 = _v0.a;
+			var _char = _v1.a;
+			var rest = _v1.b;
+			if ($author$project$Minimal$isWhitespace(_char)) {
+				var $temp$source = rest;
+				source = $temp$source;
+				continue scanTokens;
+			} else {
+				if ($elm$core$Char$isAlpha(_char)) {
+					var _v2 = A2($author$project$Minimal$spanWhile, $elm$core$Char$isAlpha, rest);
+					var tail = _v2.a;
+					var remaining = _v2.b;
+					return A2(
+						$elm$core$List$cons,
+						$author$project$Minimal$VariableToken(
+							_Utils_ap(
+								$elm$core$String$fromChar(_char),
+								tail)),
+						$author$project$Minimal$scanTokens(remaining));
+				} else {
+					if ((_char === '!') || ((_char === '&') || (_char === '|'))) {
+						return A2(
+							$elm$core$List$cons,
+							$author$project$Minimal$OperatorToken(
+								$elm$core$String$fromChar(_char)),
+							$author$project$Minimal$scanTokens(rest));
+					} else {
+						if ((_char === '(') || (_char === ')')) {
+							return A2(
+								$elm$core$List$cons,
+								$author$project$Minimal$GroupToken(
+									$elm$core$String$fromChar(_char)),
+								$author$project$Minimal$scanTokens(rest));
+						} else {
+							return A2(
+								$elm$core$List$cons,
+								$author$project$Minimal$UnknownToken(
+									$elm$core$String$fromChar(_char)),
+								$author$project$Minimal$scanTokens(rest));
+						}
+					}
+				}
+			}
+		}
+	}
+};
+var $author$project$Minimal$tokenText = function (token) {
+	switch (token.$) {
+		case 0:
+			var name = token.a;
+			return name;
+		case 1:
+			var symbol = token.a;
+			return symbol;
+		case 2:
+			var symbol = token.a;
+			return symbol;
+		default:
+			var symbol = token.a;
+			return symbol;
+	}
+};
+var $elm$core$List$drop = F2(
+	function (n, list) {
+		drop:
+		while (true) {
+			if (n <= 0) {
+				return list;
+			} else {
+				if (!list.b) {
+					return list;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs;
+					n = $temp$n;
+					list = $temp$list;
+					continue drop;
+				}
+			}
+		}
+	});
+var $author$project$ParsingTrace$emit = F6(
+	function (depth, rule, action, explanation, built, state) {
+		var forest = function () {
+			var _v0 = _Utils_Tuple2(action, built);
+			_v0$4:
+			while (true) {
+				if (!_v0.b.$) {
+					switch (_v0.a) {
+						case 'Read variable':
+							var expr = _v0.b.a;
+							return A2($elm$core$List$cons, expr, state.cH);
+						case 'Build NOT':
+							var expr = _v0.b.a;
+							return A2(
+								$elm$core$List$cons,
+								expr,
+								A2($elm$core$List$drop, 1, state.cH));
+						case 'Build AND':
+							var expr = _v0.b.a;
+							return A2(
+								$elm$core$List$cons,
+								expr,
+								A2($elm$core$List$drop, 2, state.cH));
+						case 'Build OR':
+							var expr = _v0.b.a;
+							return A2(
+								$elm$core$List$cons,
+								expr,
+								A2($elm$core$List$drop, 2, state.cH));
+						default:
+							break _v0$4;
+					}
+				} else {
+					break _v0$4;
+				}
+			}
+			return state.cH;
+		}();
+		return _Utils_update(
+			state,
+			{
+				cH: forest,
+				ak: A2(
+					$elm$core$List$cons,
+					{
+						aD: action,
+						cn: built,
+						cw: state.cw,
+						cz: depth,
+						a9: explanation,
+						cH: $elm$core$List$reverse(forest),
+						aS: rule
+					},
+					state.ak)
+			});
+	});
+var $elm$core$List$isEmpty = function (xs) {
+	if (!xs.b) {
+		return true;
+	} else {
+		return false;
+	}
+};
+var $author$project$FormulaParser$And = F2(
+	function (a, b) {
+		return {$: 2, a: a, b: b};
+	});
+var $author$project$FormulaParser$Not = function (a) {
+	return {$: 1, a: a};
+};
+var $author$project$FormulaParser$Or = F2(
+	function (a, b) {
+		return {$: 3, a: a, b: b};
+	});
+var $author$project$FormulaParser$Var = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$core$Maybe$andThen = F2(
+	function (callback, maybeValue) {
+		if (!maybeValue.$) {
+			var value = maybeValue.a;
+			return callback(value);
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
+	});
+var $author$project$ParsingTrace$consume = function (state) {
+	return _Utils_update(
+		state,
+		{
+			cw: state.cw + 1,
+			z: A2($elm$core$List$drop, 1, state.z)
+		});
+};
 var $elm$core$List$head = function (list) {
 	if (list.b) {
 		var x = list.a;
@@ -5252,48 +5695,6 @@ var $elm$core$Maybe$map = F2(
 			return $elm$core$Maybe$Nothing;
 		}
 	});
-var $elm$core$Tuple$pair = F2(
-	function (a, b) {
-		return _Utils_Tuple2(a, b);
-	});
-var $author$project$FieldManual$Reader$measure = function (chapters) {
-	return A2(
-		$elm$core$Task$attempt,
-		$author$project$FieldManual$Reader$Measured,
-		A2(
-			$elm$core$Task$andThen,
-			function (elements) {
-				return A2(
-					$elm$core$Task$andThen,
-					function (header) {
-						return A2(
-							$elm$core$Task$map,
-							function (viewport) {
-								return ((viewport.N.J > 0) && (_Utils_cmp(viewport.N.J + viewport.N.M, viewport.aS.M - 2) > -1)) ? $elm$core$List$head(
-									$elm$core$List$reverse(chapters)) : A2(
-									$elm$core$Maybe$map,
-									$elm$core$Tuple$first,
-									$elm$core$List$head(
-										$elm$core$List$reverse(
-											A2(
-												$elm$core$List$filter,
-												function (_v0) {
-													var element = _v0.b;
-													return _Utils_cmp(element.L.J, (viewport.N.J + header.L.M) + 80) < 1;
-												},
-												A3($elm$core$List$map2, $elm$core$Tuple$pair, chapters, elements)))));
-							},
-							$elm$browser$Browser$Dom$getViewport);
-					},
-					$elm$browser$Browser$Dom$getElement('reading-header'));
-			},
-			$elm$core$Task$sequence(
-				A2($elm$core$List$map, $elm$browser$Browser$Dom$getElement, chapters))));
-};
-var $elm$browser$Browser$Dom$focus = _Browser_call('focus');
-var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $elm$url$Url$percentDecode = _Url_percentDecode;
-var $elm$browser$Browser$Dom$setViewport = _Browser_setViewport;
 var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
 		if (!maybe.$) {
@@ -5303,194 +5704,217 @@ var $elm$core$Maybe$withDefault = F2(
 			return _default;
 		}
 	});
-var $author$project$FieldManual$Reader$navigate = function (url) {
-	var _v0 = url.aK;
-	if (_v0.$ === 1) {
-		return $elm$core$Platform$Cmd$none;
-	} else {
-		var fragment = _v0.a;
-		var target = A2(
-			$elm$core$Maybe$withDefault,
-			fragment,
-			$elm$url$Url$percentDecode(fragment));
-		return A2(
-			$elm$core$Task$attempt,
-			function (_v2) {
-				return $author$project$FieldManual$Reader$Measure;
+var $author$project$ParsingTrace$nextToken = function (state) {
+	return A2(
+		$elm$core$Maybe$withDefault,
+		'the end',
+		A2(
+			$elm$core$Maybe$map,
+			function (token) {
+				return '“' + (token + '”');
 			},
-			A2(
-				$elm$core$Task$andThen,
-				$elm$browser$Browser$Dom$setViewport(0),
-				A2(
-					$elm$core$Task$andThen,
-					function (element) {
-						return A2(
-							$elm$core$Task$map,
-							function (header) {
-								return A2($elm$core$Basics$max, 0, (element.L.J - header.L.M) - 28);
-							},
-							$elm$browser$Browser$Dom$getElement('reading-header'));
+			$elm$core$List$head(state.z)));
+};
+var $author$project$ParsingTrace$parseBinary = F7(
+	function (depth, rule, symbol, constructor, tighter, recurse, state) {
+		var entered = A6(
+			$author$project$ParsingTrace$emit,
+			depth,
+			rule,
+			'Left side',
+			(symbol === '|') ? 'Read the left side first. AND and NOT bind more tightly than OR.' : 'Read the left side first. NOT binds more tightly than AND.',
+			$elm$core$Maybe$Nothing,
+			state);
+		return A2(
+			$elm$core$Maybe$andThen,
+			function (_v0) {
+				var left = _v0.a;
+				var afterLeft = _v0.b;
+				if (_Utils_eq(
+					$elm$core$List$head(afterLeft.z),
+					$elm$core$Maybe$Just(symbol))) {
+					var found = A6(
+						$author$project$ParsingTrace$emit,
+						depth,
+						rule,
+						'Read operator',
+						'Read ' + (symbol + '. The left side is ready; now read the right side.'),
+						$elm$core$Maybe$Nothing,
+						$author$project$ParsingTrace$consume(afterLeft));
+					return A2(
+						$elm$core$Maybe$map,
+						function (_v1) {
+							var right = _v1.a;
+							var afterRight = _v1.b;
+							var combined = A2(constructor, left, right);
+							return _Utils_Tuple2(
+								combined,
+								A6(
+									$author$project$ParsingTrace$emit,
+									depth,
+									rule,
+									(symbol === '&') ? 'Build AND' : 'Build OR',
+									(symbol === '&') ? 'Join both sides with AND: both must be true.' : 'Join both sides with OR: at least one must be true.',
+									$elm$core$Maybe$Just(combined),
+									afterRight));
+						},
+						A2(recurse, depth + 1, found));
+				} else {
+					return $elm$core$Maybe$Just(
+						_Utils_Tuple2(
+							left,
+							A6(
+								$author$project$ParsingTrace$emit,
+								depth,
+								rule,
+								'Return result',
+								'Next is ' + ($author$project$ParsingTrace$nextToken(afterLeft) + (', not ' + (symbol + '. This part is complete; pass its tree back.'))),
+								$elm$core$Maybe$Just(left),
+								afterLeft)));
+				}
+			},
+			A2(tighter, depth + 1, entered));
+	});
+var $author$project$ParsingTrace$parseAnd = F2(
+	function (depth, state) {
+		return A7($author$project$ParsingTrace$parseBinary, depth, 'andExpr', '&', $author$project$FormulaParser$And, $author$project$ParsingTrace$parseNot, $author$project$ParsingTrace$parseAnd, state);
+	});
+var $author$project$ParsingTrace$parseAtom = F2(
+	function (depth, state) {
+		var _v1 = state.z;
+		if (_v1.b) {
+			if (_v1.a === '(') {
+				return A2(
+					$elm$core$Maybe$andThen,
+					function (_v2) {
+						var inner = _v2.a;
+						var afterInner = _v2.b;
+						return _Utils_eq(
+							$elm$core$List$head(afterInner.z),
+							$elm$core$Maybe$Just(')')) ? $elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								inner,
+								A6(
+									$author$project$ParsingTrace$emit,
+									depth,
+									'atom',
+									'Close group',
+									'Read ). Keep the inner tree; parentheses control grouping, not a new node.',
+									$elm$core$Maybe$Just(inner),
+									$author$project$ParsingTrace$consume(afterInner)))) : $elm$core$Maybe$Nothing;
 					},
 					A2(
-						$elm$core$Task$andThen,
-						function (_v1) {
-							return $elm$browser$Browser$Dom$getElement(target);
-						},
-						$elm$browser$Browser$Dom$focus(target)))));
-	}
-};
-var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
-var $elm$browser$Browser$Events$Document = 0;
-var $elm$browser$Browser$Events$MySub = F3(
-	function (a, b, c) {
-		return {$: 0, a: a, b: b, c: c};
+						$author$project$ParsingTrace$parseOr,
+						depth + 1,
+						A6(
+							$author$project$ParsingTrace$emit,
+							depth,
+							'atom',
+							'Open group',
+							'Read (. Parse everything inside as one unit, starting again at OR.',
+							$elm$core$Maybe$Nothing,
+							$author$project$ParsingTrace$consume(state))));
+			} else {
+				var name = _v1.a;
+				return A2($elm$core$String$all, $elm$core$Char$isAlpha, name) ? $elm$core$Maybe$Just(
+					_Utils_Tuple2(
+						$author$project$FormulaParser$Var(name),
+						A6(
+							$author$project$ParsingTrace$emit,
+							depth,
+							'atom',
+							'Read variable',
+							'Read ' + (name + '. Add a leaf: its truth value will come from the input switch.'),
+							$elm$core$Maybe$Just(
+								$author$project$FormulaParser$Var(name)),
+							$author$project$ParsingTrace$consume(state)))) : $elm$core$Maybe$Nothing;
+			}
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
 	});
-var $elm$browser$Browser$Events$State = F2(
-	function (subs, pids) {
-		return {an: pids, av: subs};
+var $author$project$ParsingTrace$parseNot = F2(
+	function (depth, state) {
+		return _Utils_eq(
+			$elm$core$List$head(state.z),
+			$elm$core$Maybe$Just('!')) ? A2(
+			$elm$core$Maybe$map,
+			function (_v0) {
+				var inner = _v0.a;
+				var afterInner = _v0.b;
+				return _Utils_Tuple2(
+					$author$project$FormulaParser$Not(inner),
+					A6(
+						$author$project$ParsingTrace$emit,
+						depth,
+						'notExpr',
+						'Build NOT',
+						'Add NOT above its child: it reverses that child’s truth value.',
+						$elm$core$Maybe$Just(
+							$author$project$FormulaParser$Not(inner)),
+						afterInner));
+			},
+			A2(
+				$author$project$ParsingTrace$parseNot,
+				depth + 1,
+				A6(
+					$author$project$ParsingTrace$emit,
+					depth,
+					'notExpr',
+					'Read NOT',
+					'Read !. First read what it negates: a variable, a group, or another NOT.',
+					$elm$core$Maybe$Nothing,
+					$author$project$ParsingTrace$consume(state)))) : A2(
+			$author$project$ParsingTrace$parseAtom,
+			depth + 1,
+			A6($author$project$ParsingTrace$emit, depth, 'notExpr', 'Read an atom', 'No ! ahead. Read one unit: a variable or a whole parenthesized group.', $elm$core$Maybe$Nothing, state));
 	});
-var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
-var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
-var $elm$browser$Browser$Events$init = $elm$core$Task$succeed(
-	A2($elm$browser$Browser$Events$State, _List_Nil, $elm$core$Dict$empty));
-var $elm$browser$Browser$Events$nodeToKey = function (node) {
-	if (!node) {
-		return 'd_';
+var $author$project$ParsingTrace$parseOr = F2(
+	function (depth, state) {
+		return A7($author$project$ParsingTrace$parseBinary, depth, 'orExpr', '|', $author$project$FormulaParser$Or, $author$project$ParsingTrace$parseAnd, $author$project$ParsingTrace$parseOr, state);
+	});
+var $author$project$ParsingTrace$walkthrough = function (tokens) {
+	var initial = A6(
+		$author$project$ParsingTrace$emit,
+		0,
+		'exprParser',
+		'Start',
+		'Read the expression. NOT binds first, then AND, then OR; parentheses override that order.',
+		$elm$core$Maybe$Nothing,
+		{cw: 0, cH: _List_Nil, z: tokens, ak: _List_Nil});
+	var _v0 = A2($author$project$ParsingTrace$parseOr, 1, initial);
+	if (!_v0.$) {
+		var _v1 = _v0.a;
+		var ast = _v1.a;
+		var state = _v1.b;
+		return $elm$core$List$isEmpty(state.z) ? $elm$core$List$reverse(
+			A6(
+				$author$project$ParsingTrace$emit,
+				0,
+				'exprParser',
+				'Complete',
+				'No input remains. The finished tree records which operations belong together.',
+				$elm$core$Maybe$Just(ast),
+				state).ak) : _List_Nil;
 	} else {
-		return 'w_';
+		return _List_Nil;
 	}
 };
-var $elm$browser$Browser$Events$addKey = function (sub) {
-	var node = sub.a;
-	var name = sub.b;
-	return _Utils_Tuple2(
-		_Utils_ap(
-			$elm$browser$Browser$Events$nodeToKey(node),
-			name),
-		sub);
+var $author$project$Minimal$parsingSteps = function (formula) {
+	return $author$project$ParsingTrace$walkthrough(
+		A2(
+			$elm$core$List$map,
+			$author$project$Minimal$tokenText,
+			$author$project$Minimal$scanTokens(formula)));
 };
-var $elm$core$Dict$Black = 1;
-var $elm$core$Dict$RBNode_elm_builtin = F5(
-	function (a, b, c, d, e) {
-		return {$: -1, a: a, b: b, c: c, d: d, e: e};
+var $elm$core$Set$Set_elm_builtin = $elm$core$Basics$identity;
+var $elm$core$Dict$singleton = F2(
+	function (key, value) {
+		return A5($elm$core$Dict$RBNode_elm_builtin, 1, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
 	});
-var $elm$core$Dict$Red = 0;
-var $elm$core$Dict$balance = F5(
-	function (color, key, value, left, right) {
-		if ((right.$ === -1) && (!right.a)) {
-			var _v1 = right.a;
-			var rK = right.b;
-			var rV = right.c;
-			var rLeft = right.d;
-			var rRight = right.e;
-			if ((left.$ === -1) && (!left.a)) {
-				var _v3 = left.a;
-				var lK = left.b;
-				var lV = left.c;
-				var lLeft = left.d;
-				var lRight = left.e;
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					0,
-					key,
-					value,
-					A5($elm$core$Dict$RBNode_elm_builtin, 1, lK, lV, lLeft, lRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, 1, rK, rV, rLeft, rRight));
-			} else {
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					color,
-					rK,
-					rV,
-					A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, left, rLeft),
-					rRight);
-			}
-		} else {
-			if ((((left.$ === -1) && (!left.a)) && (left.d.$ === -1)) && (!left.d.a)) {
-				var _v5 = left.a;
-				var lK = left.b;
-				var lV = left.c;
-				var _v6 = left.d;
-				var _v7 = _v6.a;
-				var llK = _v6.b;
-				var llV = _v6.c;
-				var llLeft = _v6.d;
-				var llRight = _v6.e;
-				var lRight = left.e;
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					0,
-					lK,
-					lV,
-					A5($elm$core$Dict$RBNode_elm_builtin, 1, llK, llV, llLeft, llRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, 1, key, value, lRight, right));
-			} else {
-				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
-			}
-		}
-	});
-var $elm$core$Basics$compare = _Utils_compare;
-var $elm$core$Dict$insertHelp = F3(
-	function (key, value, dict) {
-		if (dict.$ === -2) {
-			return A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
-		} else {
-			var nColor = dict.a;
-			var nKey = dict.b;
-			var nValue = dict.c;
-			var nLeft = dict.d;
-			var nRight = dict.e;
-			var _v1 = A2($elm$core$Basics$compare, key, nKey);
-			switch (_v1) {
-				case 0:
-					return A5(
-						$elm$core$Dict$balance,
-						nColor,
-						nKey,
-						nValue,
-						A3($elm$core$Dict$insertHelp, key, value, nLeft),
-						nRight);
-				case 1:
-					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
-				default:
-					return A5(
-						$elm$core$Dict$balance,
-						nColor,
-						nKey,
-						nValue,
-						nLeft,
-						A3($elm$core$Dict$insertHelp, key, value, nRight));
-			}
-		}
-	});
-var $elm$core$Dict$insert = F3(
-	function (key, value, dict) {
-		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
-		if ((_v0.$ === -1) && (!_v0.a)) {
-			var _v1 = _v0.a;
-			var k = _v0.b;
-			var v = _v0.c;
-			var l = _v0.d;
-			var r = _v0.e;
-			return A5($elm$core$Dict$RBNode_elm_builtin, 1, k, v, l, r);
-		} else {
-			var x = _v0;
-			return x;
-		}
-	});
-var $elm$core$Dict$fromList = function (assocs) {
-	return A3(
-		$elm$core$List$foldl,
-		F2(
-			function (_v0, dict) {
-				var key = _v0.a;
-				var value = _v0.b;
-				return A3($elm$core$Dict$insert, key, value, dict);
-			}),
-		$elm$core$Dict$empty,
-		assocs);
+var $elm$core$Set$singleton = function (key) {
+	return A2($elm$core$Dict$singleton, key, 0);
 };
-var $elm$core$Process$kill = _Scheduler_kill;
 var $elm$core$Dict$foldl = F3(
 	function (func, acc, dict) {
 		foldl:
@@ -5516,657 +5940,743 @@ var $elm$core$Dict$foldl = F3(
 			}
 		}
 	});
-var $elm$core$Dict$merge = F6(
-	function (leftStep, bothStep, rightStep, leftDict, rightDict, initialResult) {
-		var stepState = F3(
-			function (rKey, rValue, _v0) {
-				stepState:
-				while (true) {
-					var list = _v0.a;
-					var result = _v0.b;
-					if (!list.b) {
-						return _Utils_Tuple2(
-							list,
-							A3(rightStep, rKey, rValue, result));
-					} else {
-						var _v2 = list.a;
-						var lKey = _v2.a;
-						var lValue = _v2.b;
-						var rest = list.b;
-						if (_Utils_cmp(lKey, rKey) < 0) {
-							var $temp$rKey = rKey,
-								$temp$rValue = rValue,
-								$temp$_v0 = _Utils_Tuple2(
-								rest,
-								A3(leftStep, lKey, lValue, result));
-							rKey = $temp$rKey;
-							rValue = $temp$rValue;
-							_v0 = $temp$_v0;
-							continue stepState;
-						} else {
-							if (_Utils_cmp(lKey, rKey) > 0) {
-								return _Utils_Tuple2(
-									list,
-									A3(rightStep, rKey, rValue, result));
-							} else {
-								return _Utils_Tuple2(
-									rest,
-									A4(bothStep, lKey, lValue, rValue, result));
-							}
-						}
-					}
-				}
-			});
-		var _v3 = A3(
-			$elm$core$Dict$foldl,
-			stepState,
-			_Utils_Tuple2(
-				$elm$core$Dict$toList(leftDict),
-				initialResult),
-			rightDict);
-		var leftovers = _v3.a;
-		var intermediateResult = _v3.b;
-		return A3(
-			$elm$core$List$foldl,
-			F2(
-				function (_v4, result) {
-					var k = _v4.a;
-					var v = _v4.b;
-					return A3(leftStep, k, v, result);
-				}),
-			intermediateResult,
-			leftovers);
-	});
-var $elm$browser$Browser$Events$Event = F2(
-	function (key, event) {
-		return {aa: event, O: key};
-	});
-var $elm$core$Platform$sendToSelf = _Platform_sendToSelf;
-var $elm$browser$Browser$Events$spawn = F3(
-	function (router, key, _v0) {
-		var node = _v0.a;
-		var name = _v0.b;
-		var actualNode = function () {
-			if (!node) {
-				return _Browser_doc;
-			} else {
-				return _Browser_window;
-			}
-		}();
-		return A2(
-			$elm$core$Task$map,
-			function (value) {
-				return _Utils_Tuple2(key, value);
-			},
-			A3(
-				_Browser_on,
-				actualNode,
-				name,
-				function (event) {
-					return A2(
-						$elm$core$Platform$sendToSelf,
-						router,
-						A2($elm$browser$Browser$Events$Event, key, event));
-				}));
-	});
 var $elm$core$Dict$union = F2(
 	function (t1, t2) {
 		return A3($elm$core$Dict$foldl, $elm$core$Dict$insert, t2, t1);
 	});
-var $elm$browser$Browser$Events$onEffects = F3(
-	function (router, subs, state) {
-		var stepRight = F3(
-			function (key, sub, _v6) {
-				var deads = _v6.a;
-				var lives = _v6.b;
-				var news = _v6.c;
-				return _Utils_Tuple3(
-					deads,
-					lives,
-					A2(
-						$elm$core$List$cons,
-						A3($elm$browser$Browser$Events$spawn, router, key, sub),
-						news));
-			});
-		var stepLeft = F3(
-			function (_v4, pid, _v5) {
-				var deads = _v5.a;
-				var lives = _v5.b;
-				var news = _v5.c;
-				return _Utils_Tuple3(
-					A2($elm$core$List$cons, pid, deads),
-					lives,
-					news);
-			});
-		var stepBoth = F4(
-			function (key, pid, _v2, _v3) {
-				var deads = _v3.a;
-				var lives = _v3.b;
-				var news = _v3.c;
-				return _Utils_Tuple3(
-					deads,
-					A3($elm$core$Dict$insert, key, pid, lives),
-					news);
-			});
-		var newSubs = A2($elm$core$List$map, $elm$browser$Browser$Events$addKey, subs);
-		var _v0 = A6(
-			$elm$core$Dict$merge,
-			stepLeft,
-			stepBoth,
-			stepRight,
-			state.an,
-			$elm$core$Dict$fromList(newSubs),
-			_Utils_Tuple3(_List_Nil, $elm$core$Dict$empty, _List_Nil));
-		var deadPids = _v0.a;
-		var livePids = _v0.b;
-		var makeNewPids = _v0.c;
-		return A2(
-			$elm$core$Task$andThen,
-			function (pids) {
-				return $elm$core$Task$succeed(
-					A2(
-						$elm$browser$Browser$Events$State,
-						newSubs,
-						A2(
-							$elm$core$Dict$union,
-							livePids,
-							$elm$core$Dict$fromList(pids))));
-			},
-			A2(
-				$elm$core$Task$andThen,
-				function (_v1) {
-					return $elm$core$Task$sequence(makeNewPids);
-				},
-				$elm$core$Task$sequence(
-					A2($elm$core$List$map, $elm$core$Process$kill, deadPids))));
+var $elm$core$Set$union = F2(
+	function (_v0, _v1) {
+		var dict1 = _v0;
+		var dict2 = _v1;
+		return A2($elm$core$Dict$union, dict1, dict2);
 	});
-var $elm$core$List$maybeCons = F3(
-	function (f, mx, xs) {
-		var _v0 = f(mx);
-		if (!_v0.$) {
-			var x = _v0.a;
-			return A2($elm$core$List$cons, x, xs);
-		} else {
-			return xs;
+var $author$project$FormulaParser$collectVariableSet = function (ast) {
+	collectVariableSet:
+	while (true) {
+		switch (ast.$) {
+			case 0:
+				var name = ast.a;
+				return $elm$core$Set$singleton(name);
+			case 1:
+				var inner = ast.a;
+				var $temp$ast = inner;
+				ast = $temp$ast;
+				continue collectVariableSet;
+			case 2:
+				var left = ast.a;
+				var right = ast.b;
+				return A2(
+					$elm$core$Set$union,
+					$author$project$FormulaParser$collectVariableSet(left),
+					$author$project$FormulaParser$collectVariableSet(right));
+			default:
+				var left = ast.a;
+				var right = ast.b;
+				return A2(
+					$elm$core$Set$union,
+					$author$project$FormulaParser$collectVariableSet(left),
+					$author$project$FormulaParser$collectVariableSet(right));
+		}
+	}
+};
+var $author$project$FormulaParser$collectVariables = function (ast) {
+	return $elm$core$Set$toList(
+		$author$project$FormulaParser$collectVariableSet(ast));
+};
+var $elm$core$Dict$get = F2(
+	function (targetKey, dict) {
+		get:
+		while (true) {
+			if (dict.$ === -2) {
+				return $elm$core$Maybe$Nothing;
+			} else {
+				var key = dict.b;
+				var value = dict.c;
+				var left = dict.d;
+				var right = dict.e;
+				var _v1 = A2($elm$core$Basics$compare, targetKey, key);
+				switch (_v1) {
+					case 0:
+						var $temp$targetKey = targetKey,
+							$temp$dict = left;
+						targetKey = $temp$targetKey;
+						dict = $temp$dict;
+						continue get;
+					case 1:
+						return $elm$core$Maybe$Just(value);
+					default:
+						var $temp$targetKey = targetKey,
+							$temp$dict = right;
+						targetKey = $temp$targetKey;
+						dict = $temp$dict;
+						continue get;
+				}
+			}
 		}
 	});
-var $elm$core$List$filterMap = F2(
-	function (f, xs) {
+var $author$project$Minimal$completeAssignment = F2(
+	function (variables, assignment) {
 		return A3(
-			$elm$core$List$foldr,
-			$elm$core$List$maybeCons(f),
-			_List_Nil,
-			xs);
-	});
-var $elm$browser$Browser$Events$onSelfMsg = F3(
-	function (router, _v0, state) {
-		var key = _v0.O;
-		var event = _v0.aa;
-		var toMessage = function (_v2) {
-			var subKey = _v2.a;
-			var _v3 = _v2.b;
-			var node = _v3.a;
-			var name = _v3.b;
-			var decoder = _v3.c;
-			return _Utils_eq(subKey, key) ? A2(_Browser_decodeEvent, decoder, event) : $elm$core$Maybe$Nothing;
-		};
-		var messages = A2($elm$core$List$filterMap, toMessage, state.av);
-		return A2(
-			$elm$core$Task$andThen,
-			function (_v1) {
-				return $elm$core$Task$succeed(state);
-			},
-			$elm$core$Task$sequence(
-				A2(
-					$elm$core$List$map,
-					$elm$core$Platform$sendToApp(router),
-					messages)));
-	});
-var $elm$browser$Browser$Events$subMap = F2(
-	function (func, _v0) {
-		var node = _v0.a;
-		var name = _v0.b;
-		var decoder = _v0.c;
-		return A3(
-			$elm$browser$Browser$Events$MySub,
-			node,
-			name,
-			A2($elm$json$Json$Decode$map, func, decoder));
-	});
-_Platform_effectManagers['Browser.Events'] = _Platform_createManager($elm$browser$Browser$Events$init, $elm$browser$Browser$Events$onEffects, $elm$browser$Browser$Events$onSelfMsg, 0, $elm$browser$Browser$Events$subMap);
-var $elm$browser$Browser$Events$subscription = _Platform_leaf('Browser.Events');
-var $elm$browser$Browser$Events$on = F3(
-	function (node, name, decoder) {
-		return $elm$browser$Browser$Events$subscription(
-			A3($elm$browser$Browser$Events$MySub, node, name, decoder));
-	});
-var $elm$browser$Browser$Events$onKeyDown = A2($elm$browser$Browser$Events$on, 0, 'keydown');
-var $elm$browser$Browser$Events$Window = 1;
-var $elm$json$Json$Decode$int = _Json_decodeInt;
-var $elm$browser$Browser$Events$onResize = function (func) {
-	return A3(
-		$elm$browser$Browser$Events$on,
-		1,
-		'resize',
-		A2(
-			$elm$json$Json$Decode$field,
-			'target',
-			A3(
-				$elm$json$Json$Decode$map2,
-				func,
-				A2($elm$json$Json$Decode$field, 'innerWidth', $elm$json$Json$Decode$int),
-				A2($elm$json$Json$Decode$field, 'innerHeight', $elm$json$Json$Decode$int))));
-};
-var $author$project$FieldManual$Reader$isLight = function (model) {
-	return model.z === 1;
-};
-var $elm$json$Json$Encode$object = function (pairs) {
-	return _Json_wrap(
-		A3(
 			$elm$core$List$foldl,
 			F2(
-				function (_v0, obj) {
-					var k = _v0.a;
-					var v = _v0.b;
-					return A3(_Json_addField, k, v, obj);
-				}),
-			_Json_emptyObject(0),
-			pairs));
-};
-var $elm$json$Json$Encode$string = _Json_wrap;
-var $author$project$FieldManual$Reader$persistTheme = _Platform_outgoingPort(
-	'persistTheme',
-	function ($) {
-		return $elm$json$Json$Encode$object(
-			_List_fromArray(
-				[
-					_Utils_Tuple2(
-					'color',
-					$elm$json$Json$Encode$string($.Y)),
-					_Utils_Tuple2(
-					'name',
-					$elm$json$Json$Encode$string($.ai))
-				]));
-	});
-var $author$project$FieldManual$Reader$saveTheme = function (model) {
-	return $author$project$FieldManual$Reader$persistTheme(
-		{
-			Y: $author$project$FieldManual$Reader$isLight(model) ? '#fbfaf4' : '#11171c',
-			ai: $author$project$FieldManual$Reader$isLight(model) ? 'light' : 'dark'
-		});
-};
-var $elm$json$Json$Decode$null = _Json_decodeNull;
-var $author$project$FieldManual$Reader$scrollObserved = _Platform_incomingPort(
-	'scrollObserved',
-	$elm$json$Json$Decode$null(0));
-var $elm$json$Json$Decode$string = _Json_decodeString;
-var $author$project$FieldManual$Reader$NoOp = {$: 8};
-var $author$project$FieldManual$Reader$focus = function (target) {
-	return A2(
-		$elm$core$Task$attempt,
-		function (_v0) {
-			return $author$project$FieldManual$Reader$NoOp;
-		},
-		$elm$browser$Browser$Dom$focus(target));
-};
-var $elm$browser$Browser$Navigation$load = _Browser_load;
-var $elm$core$Basics$not = _Basics_not;
-var $elm$browser$Browser$Navigation$pushUrl = _Browser_pushUrl;
-var $author$project$FieldManual$Reader$requestMeasure = A2(
-	$elm$core$Task$perform,
-	function (_v0) {
-		return $author$project$FieldManual$Reader$Measure;
-	},
-	$elm$core$Task$succeed(0));
-var $elm$url$Url$addPort = F2(
-	function (maybePort, starter) {
-		if (maybePort.$ === 1) {
-			return starter;
-		} else {
-			var port_ = maybePort.a;
-			return starter + (':' + $elm$core$String$fromInt(port_));
-		}
-	});
-var $elm$url$Url$addPrefixed = F3(
-	function (prefix, maybeSegment, starter) {
-		if (maybeSegment.$ === 1) {
-			return starter;
-		} else {
-			var segment = maybeSegment.a;
-			return _Utils_ap(
-				starter,
-				_Utils_ap(prefix, segment));
-		}
-	});
-var $elm$url$Url$toString = function (url) {
-	var http = function () {
-		var _v0 = url.ar;
-		if (!_v0) {
-			return 'http://';
-		} else {
-			return 'https://';
-		}
-	}();
-	return A3(
-		$elm$url$Url$addPrefixed,
-		'#',
-		url.aK,
-		A3(
-			$elm$url$Url$addPrefixed,
-			'?',
-			url.as,
-			_Utils_ap(
-				A2(
-					$elm$url$Url$addPort,
-					url.ao,
-					_Utils_ap(http, url.ac)),
-				url.am)));
-};
-var $elm$core$Result$withDefault = F2(
-	function (def, result) {
-		if (!result.$) {
-			var a = result.a;
-			return a;
-		} else {
-			return def;
-		}
-	});
-var $author$project$FieldManual$Reader$update = F3(
-	function (chapters, msg, model) {
-		switch (msg.$) {
-			case 0:
-				var next = _Utils_update(
-					model,
-					{
-						z: $author$project$FieldManual$Reader$isLight(model) ? 0 : 1
-					});
-				return _Utils_Tuple2(
-					next,
-					$author$project$FieldManual$Reader$saveTheme(next));
-			case 1:
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{u: !model.u}),
-					$elm$core$Platform$Cmd$batch(
-						_List_fromArray(
-							[
-								$author$project$FieldManual$Reader$focus(
-								model.u ? 'menu-toggle' : 'sidebar-close'),
-								$author$project$FieldManual$Reader$requestMeasure
-							])));
-			case 2:
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{u: false}),
-					$elm$core$Platform$Cmd$batch(
-						_List_fromArray(
-							[
-								$author$project$FieldManual$Reader$focus('menu-toggle'),
-								$author$project$FieldManual$Reader$requestMeasure
-							])));
-			case 3:
-				var category = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{W: category}),
-					$author$project$FieldManual$Reader$requestMeasure);
-			case 4:
-				var request = msg.a;
-				if (!request.$) {
-					var url = request.a;
-					return (_Utils_eq(url.am, model.I.am) && _Utils_eq(url.as, model.I.as)) ? _Utils_Tuple2(
-						model,
+				function (name, acc) {
+					return A3(
+						$elm$core$Dict$insert,
+						name,
 						A2(
-							$elm$browser$Browser$Navigation$pushUrl,
-							model.O,
-							$elm$url$Url$toString(url))) : _Utils_Tuple2(
-						model,
-						$elm$browser$Browser$Navigation$load(
-							$elm$url$Url$toString(url)));
+							$elm$core$Maybe$withDefault,
+							false,
+							A2($elm$core$Dict$get, name, assignment)),
+						acc);
+				}),
+			$elm$core$Dict$empty,
+			variables);
+	});
+var $elm$parser$Parser$ExpectingEnd = {$: 10};
+var $elm$parser$Parser$Advanced$Bad = F2(
+	function (a, b) {
+		return {$: 1, a: a, b: b};
+	});
+var $elm$parser$Parser$Advanced$Good = F3(
+	function (a, b, c) {
+		return {$: 0, a: a, b: b, c: c};
+	});
+var $elm$parser$Parser$Advanced$Parser = $elm$core$Basics$identity;
+var $elm$parser$Parser$Advanced$AddRight = F2(
+	function (a, b) {
+		return {$: 1, a: a, b: b};
+	});
+var $elm$parser$Parser$Advanced$DeadEnd = F4(
+	function (row, col, problem, contextStack) {
+		return {ct: col, cv: contextStack, bA: problem, dd: row};
+	});
+var $elm$parser$Parser$Advanced$Empty = {$: 0};
+var $elm$parser$Parser$Advanced$fromState = F2(
+	function (s, x) {
+		return A2(
+			$elm$parser$Parser$Advanced$AddRight,
+			$elm$parser$Parser$Advanced$Empty,
+			A4($elm$parser$Parser$Advanced$DeadEnd, s.dd, s.ct, x, s.d));
+	});
+var $elm$parser$Parser$Advanced$end = function (x) {
+	return function (s) {
+		return _Utils_eq(
+			$elm$core$String$length(s.a),
+			s.b) ? A3($elm$parser$Parser$Advanced$Good, false, 0, s) : A2(
+			$elm$parser$Parser$Advanced$Bad,
+			false,
+			A2($elm$parser$Parser$Advanced$fromState, s, x));
+	};
+};
+var $elm$parser$Parser$end = $elm$parser$Parser$Advanced$end($elm$parser$Parser$ExpectingEnd);
+var $elm$core$Basics$always = F2(
+	function (a, _v0) {
+		return a;
+	});
+var $elm$parser$Parser$Advanced$map2 = F3(
+	function (func, _v0, _v1) {
+		var parseA = _v0;
+		var parseB = _v1;
+		return function (s0) {
+			var _v2 = parseA(s0);
+			if (_v2.$ === 1) {
+				var p = _v2.a;
+				var x = _v2.b;
+				return A2($elm$parser$Parser$Advanced$Bad, p, x);
+			} else {
+				var p1 = _v2.a;
+				var a = _v2.b;
+				var s1 = _v2.c;
+				var _v3 = parseB(s1);
+				if (_v3.$ === 1) {
+					var p2 = _v3.a;
+					var x = _v3.b;
+					return A2($elm$parser$Parser$Advanced$Bad, p1 || p2, x);
 				} else {
-					var url = request.a;
-					return _Utils_Tuple2(
-						model,
-						$elm$browser$Browser$Navigation$load(url));
+					var p2 = _v3.a;
+					var b = _v3.b;
+					var s2 = _v3.c;
+					return A3(
+						$elm$parser$Parser$Advanced$Good,
+						p1 || p2,
+						A2(func, a, b),
+						s2);
 				}
-			case 5:
-				var url = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{I: url}),
-					$elm$core$Platform$Cmd$batch(
-						_List_fromArray(
-							[
-								$author$project$FieldManual$Reader$navigate(url),
-								$author$project$FieldManual$Reader$requestMeasure
-							])));
-			case 6:
-				return model.D ? _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{x: true}),
-					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{D: true}),
-					$author$project$FieldManual$Reader$measure(chapters));
-			case 7:
-				var result = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							K: A2($elm$core$Result$withDefault, model.K, result),
-							x: false,
-							D: model.x
-						}),
-					model.x ? $author$project$FieldManual$Reader$measure(chapters) : $elm$core$Platform$Cmd$none);
-			default:
-				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+			}
+		};
+	});
+var $elm$parser$Parser$Advanced$ignorer = F2(
+	function (keepParser, ignoreParser) {
+		return A3($elm$parser$Parser$Advanced$map2, $elm$core$Basics$always, keepParser, ignoreParser);
+	});
+var $elm$parser$Parser$ignorer = $elm$parser$Parser$Advanced$ignorer;
+var $elm$parser$Parser$Advanced$keeper = F2(
+	function (parseFunc, parseArg) {
+		return A3($elm$parser$Parser$Advanced$map2, $elm$core$Basics$apL, parseFunc, parseArg);
+	});
+var $elm$parser$Parser$keeper = $elm$parser$Parser$Advanced$keeper;
+var $elm$parser$Parser$Advanced$lazy = function (thunk) {
+	return function (s) {
+		var _v0 = thunk(0);
+		var parse = _v0;
+		return parse(s);
+	};
+};
+var $elm$parser$Parser$lazy = $elm$parser$Parser$Advanced$lazy;
+var $elm$parser$Parser$Advanced$andThen = F2(
+	function (callback, _v0) {
+		var parseA = _v0;
+		return function (s0) {
+			var _v1 = parseA(s0);
+			if (_v1.$ === 1) {
+				var p = _v1.a;
+				var x = _v1.b;
+				return A2($elm$parser$Parser$Advanced$Bad, p, x);
+			} else {
+				var p1 = _v1.a;
+				var a = _v1.b;
+				var s1 = _v1.c;
+				var _v2 = callback(a);
+				var parseB = _v2;
+				var _v3 = parseB(s1);
+				if (_v3.$ === 1) {
+					var p2 = _v3.a;
+					var x = _v3.b;
+					return A2($elm$parser$Parser$Advanced$Bad, p1 || p2, x);
+				} else {
+					var p2 = _v3.a;
+					var b = _v3.b;
+					var s2 = _v3.c;
+					return A3($elm$parser$Parser$Advanced$Good, p1 || p2, b, s2);
+				}
+			}
+		};
+	});
+var $elm$parser$Parser$andThen = $elm$parser$Parser$Advanced$andThen;
+var $elm$parser$Parser$Advanced$backtrackable = function (_v0) {
+	var parse = _v0;
+	return function (s0) {
+		var _v1 = parse(s0);
+		if (_v1.$ === 1) {
+			var x = _v1.b;
+			return A2($elm$parser$Parser$Advanced$Bad, false, x);
+		} else {
+			var a = _v1.b;
+			var s1 = _v1.c;
+			return A3($elm$parser$Parser$Advanced$Good, false, a, s1);
+		}
+	};
+};
+var $elm$parser$Parser$backtrackable = $elm$parser$Parser$Advanced$backtrackable;
+var $elm$parser$Parser$Advanced$map = F2(
+	function (func, _v0) {
+		var parse = _v0;
+		return function (s0) {
+			var _v1 = parse(s0);
+			if (!_v1.$) {
+				var p = _v1.a;
+				var a = _v1.b;
+				var s1 = _v1.c;
+				return A3(
+					$elm$parser$Parser$Advanced$Good,
+					p,
+					func(a),
+					s1);
+			} else {
+				var p = _v1.a;
+				var x = _v1.b;
+				return A2($elm$parser$Parser$Advanced$Bad, p, x);
+			}
+		};
+	});
+var $elm$parser$Parser$map = $elm$parser$Parser$Advanced$map;
+var $elm$parser$Parser$Advanced$Append = F2(
+	function (a, b) {
+		return {$: 2, a: a, b: b};
+	});
+var $elm$parser$Parser$Advanced$oneOfHelp = F3(
+	function (s0, bag, parsers) {
+		oneOfHelp:
+		while (true) {
+			if (!parsers.b) {
+				return A2($elm$parser$Parser$Advanced$Bad, false, bag);
+			} else {
+				var parse = parsers.a;
+				var remainingParsers = parsers.b;
+				var _v1 = parse(s0);
+				if (!_v1.$) {
+					var step = _v1;
+					return step;
+				} else {
+					var step = _v1;
+					var p = step.a;
+					var x = step.b;
+					if (p) {
+						return step;
+					} else {
+						var $temp$s0 = s0,
+							$temp$bag = A2($elm$parser$Parser$Advanced$Append, bag, x),
+							$temp$parsers = remainingParsers;
+						s0 = $temp$s0;
+						bag = $temp$bag;
+						parsers = $temp$parsers;
+						continue oneOfHelp;
+					}
+				}
+			}
 		}
 	});
-var $author$project$FieldManual$Reader$application = F3(
-	function (title, chapters, view) {
-		return $elm$browser$Browser$application(
-			{
-				aN: F3(
-					function (flags, url, key) {
-						var model = {
-							K: $elm$core$Maybe$Nothing,
-							W: 'All',
-							O: key,
-							x: false,
-							D: true,
-							u: false,
-							z: (flags.z === 'light') ? 1 : 0,
-							I: url
-						};
-						return _Utils_Tuple2(
-							model,
-							$elm$core$Platform$Cmd$batch(
-								_List_fromArray(
-									[
-										$author$project$FieldManual$Reader$saveTheme(model),
-										$author$project$FieldManual$Reader$navigate(url),
-										$author$project$FieldManual$Reader$measure(chapters)
-									])));
-					}),
-				aO: $author$project$FieldManual$Reader$UrlChanged,
-				aP: $author$project$FieldManual$Reader$LinkClicked,
-				aT: function (model) {
-					return $elm$core$Platform$Sub$batch(
+var $elm$parser$Parser$Advanced$oneOf = function (parsers) {
+	return function (s) {
+		return A3($elm$parser$Parser$Advanced$oneOfHelp, s, $elm$parser$Parser$Advanced$Empty, parsers);
+	};
+};
+var $elm$parser$Parser$oneOf = $elm$parser$Parser$Advanced$oneOf;
+var $elm$parser$Parser$Advanced$isSubChar = _Parser_isSubChar;
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var $elm$parser$Parser$Advanced$chompWhileHelp = F5(
+	function (isGood, offset, row, col, s0) {
+		chompWhileHelp:
+		while (true) {
+			var newOffset = A3($elm$parser$Parser$Advanced$isSubChar, isGood, offset, s0.a);
+			if (_Utils_eq(newOffset, -1)) {
+				return A3(
+					$elm$parser$Parser$Advanced$Good,
+					_Utils_cmp(s0.b, offset) < 0,
+					0,
+					{ct: col, d: s0.d, e: s0.e, b: offset, dd: row, a: s0.a});
+			} else {
+				if (_Utils_eq(newOffset, -2)) {
+					var $temp$isGood = isGood,
+						$temp$offset = offset + 1,
+						$temp$row = row + 1,
+						$temp$col = 1,
+						$temp$s0 = s0;
+					isGood = $temp$isGood;
+					offset = $temp$offset;
+					row = $temp$row;
+					col = $temp$col;
+					s0 = $temp$s0;
+					continue chompWhileHelp;
+				} else {
+					var $temp$isGood = isGood,
+						$temp$offset = newOffset,
+						$temp$row = row,
+						$temp$col = col + 1,
+						$temp$s0 = s0;
+					isGood = $temp$isGood;
+					offset = $temp$offset;
+					row = $temp$row;
+					col = $temp$col;
+					s0 = $temp$s0;
+					continue chompWhileHelp;
+				}
+			}
+		}
+	});
+var $elm$parser$Parser$Advanced$chompWhile = function (isGood) {
+	return function (s) {
+		return A5($elm$parser$Parser$Advanced$chompWhileHelp, isGood, s.b, s.dd, s.ct, s);
+	};
+};
+var $elm$parser$Parser$Advanced$spaces = $elm$parser$Parser$Advanced$chompWhile(
+	function (c) {
+		return (c === ' ') || ((c === '\n') || (c === '\r'));
+	});
+var $elm$parser$Parser$spaces = $elm$parser$Parser$Advanced$spaces;
+var $elm$parser$Parser$Advanced$succeed = function (a) {
+	return function (s) {
+		return A3($elm$parser$Parser$Advanced$Good, false, a, s);
+	};
+};
+var $elm$parser$Parser$succeed = $elm$parser$Parser$Advanced$succeed;
+var $elm$parser$Parser$ExpectingSymbol = function (a) {
+	return {$: 8, a: a};
+};
+var $elm$parser$Parser$Advanced$Token = F2(
+	function (a, b) {
+		return {$: 0, a: a, b: b};
+	});
+var $elm$parser$Parser$Advanced$isSubString = _Parser_isSubString;
+var $elm$core$Basics$not = _Basics_not;
+var $elm$parser$Parser$Advanced$token = function (_v0) {
+	var str = _v0.a;
+	var expecting = _v0.b;
+	var progress = !$elm$core$String$isEmpty(str);
+	return function (s) {
+		var _v1 = A5($elm$parser$Parser$Advanced$isSubString, str, s.b, s.dd, s.ct, s.a);
+		var newOffset = _v1.a;
+		var newRow = _v1.b;
+		var newCol = _v1.c;
+		return _Utils_eq(newOffset, -1) ? A2(
+			$elm$parser$Parser$Advanced$Bad,
+			false,
+			A2($elm$parser$Parser$Advanced$fromState, s, expecting)) : A3(
+			$elm$parser$Parser$Advanced$Good,
+			progress,
+			0,
+			{ct: newCol, d: s.d, e: s.e, b: newOffset, dd: newRow, a: s.a});
+	};
+};
+var $elm$parser$Parser$Advanced$symbol = $elm$parser$Parser$Advanced$token;
+var $elm$parser$Parser$symbol = function (str) {
+	return $elm$parser$Parser$Advanced$symbol(
+		A2(
+			$elm$parser$Parser$Advanced$Token,
+			str,
+			$elm$parser$Parser$ExpectingSymbol(str)));
+};
+var $elm$core$Set$empty = $elm$core$Dict$empty;
+var $elm$parser$Parser$ExpectingVariable = {$: 7};
+var $elm$core$Dict$member = F2(
+	function (key, dict) {
+		var _v0 = A2($elm$core$Dict$get, key, dict);
+		if (!_v0.$) {
+			return true;
+		} else {
+			return false;
+		}
+	});
+var $elm$core$Set$member = F2(
+	function (key, _v0) {
+		var dict = _v0;
+		return A2($elm$core$Dict$member, key, dict);
+	});
+var $elm$parser$Parser$Advanced$varHelp = F7(
+	function (isGood, offset, row, col, src, indent, context) {
+		varHelp:
+		while (true) {
+			var newOffset = A3($elm$parser$Parser$Advanced$isSubChar, isGood, offset, src);
+			if (_Utils_eq(newOffset, -1)) {
+				return {ct: col, d: context, e: indent, b: offset, dd: row, a: src};
+			} else {
+				if (_Utils_eq(newOffset, -2)) {
+					var $temp$isGood = isGood,
+						$temp$offset = offset + 1,
+						$temp$row = row + 1,
+						$temp$col = 1,
+						$temp$src = src,
+						$temp$indent = indent,
+						$temp$context = context;
+					isGood = $temp$isGood;
+					offset = $temp$offset;
+					row = $temp$row;
+					col = $temp$col;
+					src = $temp$src;
+					indent = $temp$indent;
+					context = $temp$context;
+					continue varHelp;
+				} else {
+					var $temp$isGood = isGood,
+						$temp$offset = newOffset,
+						$temp$row = row,
+						$temp$col = col + 1,
+						$temp$src = src,
+						$temp$indent = indent,
+						$temp$context = context;
+					isGood = $temp$isGood;
+					offset = $temp$offset;
+					row = $temp$row;
+					col = $temp$col;
+					src = $temp$src;
+					indent = $temp$indent;
+					context = $temp$context;
+					continue varHelp;
+				}
+			}
+		}
+	});
+var $elm$parser$Parser$Advanced$variable = function (i) {
+	return function (s) {
+		var firstOffset = A3($elm$parser$Parser$Advanced$isSubChar, i.dp, s.b, s.a);
+		if (_Utils_eq(firstOffset, -1)) {
+			return A2(
+				$elm$parser$Parser$Advanced$Bad,
+				false,
+				A2($elm$parser$Parser$Advanced$fromState, s, i.a8));
+		} else {
+			var s1 = _Utils_eq(firstOffset, -2) ? A7($elm$parser$Parser$Advanced$varHelp, i.cR, s.b + 1, s.dd + 1, 1, s.a, s.e, s.d) : A7($elm$parser$Parser$Advanced$varHelp, i.cR, firstOffset, s.dd, s.ct + 1, s.a, s.e, s.d);
+			var name = A3($elm$core$String$slice, s.b, s1.b, s.a);
+			return A2($elm$core$Set$member, name, i.c9) ? A2(
+				$elm$parser$Parser$Advanced$Bad,
+				false,
+				A2($elm$parser$Parser$Advanced$fromState, s, i.a8)) : A3($elm$parser$Parser$Advanced$Good, true, name, s1);
+		}
+	};
+};
+var $elm$parser$Parser$variable = function (i) {
+	return $elm$parser$Parser$Advanced$variable(
+		{a8: $elm$parser$Parser$ExpectingVariable, cR: i.cR, c9: i.c9, dp: i.dp});
+};
+var $author$project$FormulaParser$variable = $elm$parser$Parser$variable(
+	{cR: $elm$core$Char$isAlpha, c9: $elm$core$Set$empty, dp: $elm$core$Char$isAlpha});
+function $author$project$FormulaParser$cyclic$andExpr() {
+	return $elm$parser$Parser$lazy(
+		function (_v4) {
+			return A2(
+				$elm$parser$Parser$andThen,
+				function (left) {
+					return $elm$parser$Parser$oneOf(
 						_List_fromArray(
 							[
-								$author$project$FieldManual$Reader$scrollObserved(
-								function (_v0) {
-									return $author$project$FieldManual$Reader$Measure;
-								}),
-								$elm$browser$Browser$Events$onResize(
-								F2(
-									function (_v1, _v2) {
-										return $author$project$FieldManual$Reader$Measure;
-									})),
-								model.u ? $elm$browser$Browser$Events$onKeyDown(
+								$elm$parser$Parser$backtrackable(
 								A2(
-									$elm$json$Json$Decode$andThen,
-									function (key) {
-										return (key === 'Escape') ? $elm$json$Json$Decode$succeed($author$project$FieldManual$Reader$CloseSidebar) : $elm$json$Json$Decode$fail('Not Escape');
-									},
-									A2($elm$json$Json$Decode$field, 'key', $elm$json$Json$Decode$string))) : $elm$core$Platform$Sub$none
+									$elm$parser$Parser$keeper,
+									A2(
+										$elm$parser$Parser$ignorer,
+										A2(
+											$elm$parser$Parser$ignorer,
+											A2(
+												$elm$parser$Parser$ignorer,
+												$elm$parser$Parser$succeed(
+													$author$project$FormulaParser$And(left)),
+												$elm$parser$Parser$spaces),
+											$elm$parser$Parser$symbol('&')),
+										$elm$parser$Parser$spaces),
+									$elm$parser$Parser$lazy(
+										function (_v5) {
+											return $author$project$FormulaParser$cyclic$andExpr();
+										}))),
+								$elm$parser$Parser$succeed(left)
 							]));
 				},
-				aU: $author$project$FieldManual$Reader$update(chapters),
-				aV: function (model) {
-					return {
-						aF: _List_fromArray(
-							[
-								view(model)
-							]),
-						ay: title
-					};
-				}
-			});
-	});
-var $elm$html$Html$a = _VirtualDom_node('a');
-var $elm$html$Html$article = _VirtualDom_node('article');
-var $elm$virtual_dom$VirtualDom$attribute = F2(
-	function (key, value) {
-		return A2(
-			_VirtualDom_attribute,
-			_VirtualDom_noOnOrFormAction(key),
-			_VirtualDom_noJavaScriptOrHtmlUri(value));
-	});
-var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
-var $elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
-var $elm$svg$Svg$circle = $elm$svg$Svg$trustedNode('circle');
-var $elm$svg$Svg$Attributes$class = _VirtualDom_attribute('class');
-var $elm$svg$Svg$Attributes$cx = _VirtualDom_attribute('cx');
-var $elm$svg$Svg$Attributes$cy = _VirtualDom_attribute('cy');
-var $elm$svg$Svg$Attributes$d = _VirtualDom_attribute('d');
-var $elm$svg$Svg$g = $elm$svg$Svg$trustedNode('g');
-var $elm$svg$Svg$Attributes$height = _VirtualDom_attribute('height');
-var $elm$svg$Svg$path = $elm$svg$Svg$trustedNode('path');
-var $elm$svg$Svg$Attributes$r = _VirtualDom_attribute('r');
-var $elm$svg$Svg$rect = $elm$svg$Svg$trustedNode('rect');
-var $elm$svg$Svg$Attributes$rx = _VirtualDom_attribute('rx');
-var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
-var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var $elm$svg$Svg$text = $elm$virtual_dom$VirtualDom$text;
-var $elm$svg$Svg$text_ = $elm$svg$Svg$trustedNode('text');
-var $elm$svg$Svg$Attributes$transform = _VirtualDom_attribute('transform');
-var $elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
-var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
-var $elm$svg$Svg$Attributes$x = _VirtualDom_attribute('x');
-var $elm$svg$Svg$Attributes$y = _VirtualDom_attribute('y');
-var $author$project$PersonalArtwork$cards = function () {
-	var card = function (rotation) {
-		return A2(
-			$elm$svg$Svg$g,
-			_List_fromArray(
-				[
-					$elm$svg$Svg$Attributes$transform('rotate(' + (rotation + ' 180 182)'))
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$elm$svg$Svg$rect,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$class('line fill-paper'),
-							$elm$svg$Svg$Attributes$x('120'),
-							$elm$svg$Svg$Attributes$y('38'),
-							$elm$svg$Svg$Attributes$width('120'),
-							$elm$svg$Svg$Attributes$height('164'),
-							$elm$svg$Svg$Attributes$rx('5')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$rect,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$class('line soft'),
-							$elm$svg$Svg$Attributes$x('128'),
-							$elm$svg$Svg$Attributes$y('46'),
-							$elm$svg$Svg$Attributes$width('104'),
-							$elm$svg$Svg$Attributes$height('148'),
-							$elm$svg$Svg$Attributes$rx('2')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$path,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$class('line fill-blue'),
-							$elm$svg$Svg$Attributes$d('M180 88 L205 120 L180 152 L155 120 Z')
-						]),
-					_List_Nil),
-					A2(
-					$elm$svg$Svg$text_,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$class('svg-label'),
-							$elm$svg$Svg$Attributes$x('137'),
-							$elm$svg$Svg$Attributes$y('66')
-						]),
-					_List_fromArray(
-						[
-							$elm$svg$Svg$text('A')
-						])),
-					A2(
-					$elm$svg$Svg$path,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$class('line'),
-							$elm$svg$Svg$Attributes$d('M140 75 L145 82 L140 89 L135 82 Z')
-						]),
-					_List_Nil)
-				]));
-	};
-	return A2(
-		$elm$svg$Svg$svg,
+				$author$project$FormulaParser$cyclic$notExpr());
+		});
+}
+function $author$project$FormulaParser$cyclic$notExpr() {
+	return $elm$parser$Parser$oneOf(
 		_List_fromArray(
 			[
-				$elm$svg$Svg$Attributes$class('diagram'),
-				$elm$svg$Svg$Attributes$viewBox('0 0 360 260'),
-				A2($elm$html$Html$Attributes$attribute, 'aria-hidden', 'true')
-			]),
-		_List_fromArray(
-			[
-				card('-22'),
-				card('0'),
-				card('22'),
 				A2(
-				$elm$svg$Svg$path,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$class('line soft dash'),
-						$elm$svg$Svg$Attributes$d('M65 228 H295')
-					]),
-				_List_Nil),
+				$elm$parser$Parser$keeper,
 				A2(
-				$elm$svg$Svg$circle,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$class('line fill-blue'),
-						$elm$svg$Svg$Attributes$cx('70'),
-						$elm$svg$Svg$Attributes$cy('48'),
-						$elm$svg$Svg$Attributes$r('3')
-					]),
-				_List_Nil),
-				A2(
-				$elm$svg$Svg$path,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$class('line'),
-						$elm$svg$Svg$Attributes$d('M285 54 V70 M277 62 H293')
-					]),
-				_List_Nil)
+					$elm$parser$Parser$ignorer,
+					A2(
+						$elm$parser$Parser$ignorer,
+						$elm$parser$Parser$succeed($author$project$FormulaParser$Not),
+						$elm$parser$Parser$symbol('!')),
+					$elm$parser$Parser$spaces),
+				$elm$parser$Parser$lazy(
+					function (_v3) {
+						return $author$project$FormulaParser$cyclic$notExpr();
+					})),
+				$author$project$FormulaParser$cyclic$atom()
 			]));
-}();
+}
+function $author$project$FormulaParser$cyclic$atom() {
+	return $elm$parser$Parser$oneOf(
+		_List_fromArray(
+			[
+				A2(
+				$elm$parser$Parser$keeper,
+				A2(
+					$elm$parser$Parser$ignorer,
+					A2(
+						$elm$parser$Parser$ignorer,
+						$elm$parser$Parser$succeed($elm$core$Basics$identity),
+						$elm$parser$Parser$symbol('(')),
+					$elm$parser$Parser$spaces),
+				A2(
+					$elm$parser$Parser$ignorer,
+					A2(
+						$elm$parser$Parser$ignorer,
+						$elm$parser$Parser$lazy(
+							function (_v2) {
+								return $author$project$FormulaParser$cyclic$orExpr();
+							}),
+						$elm$parser$Parser$spaces),
+					$elm$parser$Parser$symbol(')'))),
+				A2($elm$parser$Parser$map, $author$project$FormulaParser$Var, $author$project$FormulaParser$variable)
+			]));
+}
+function $author$project$FormulaParser$cyclic$orExpr() {
+	return $elm$parser$Parser$lazy(
+		function (_v0) {
+			return A2(
+				$elm$parser$Parser$andThen,
+				function (left) {
+					return $elm$parser$Parser$oneOf(
+						_List_fromArray(
+							[
+								$elm$parser$Parser$backtrackable(
+								A2(
+									$elm$parser$Parser$keeper,
+									A2(
+										$elm$parser$Parser$ignorer,
+										A2(
+											$elm$parser$Parser$ignorer,
+											A2(
+												$elm$parser$Parser$ignorer,
+												$elm$parser$Parser$succeed(
+													$author$project$FormulaParser$Or(left)),
+												$elm$parser$Parser$spaces),
+											$elm$parser$Parser$symbol('|')),
+										$elm$parser$Parser$spaces),
+									$elm$parser$Parser$lazy(
+										function (_v1) {
+											return $author$project$FormulaParser$cyclic$orExpr();
+										}))),
+								$elm$parser$Parser$succeed(left)
+							]));
+				},
+				$author$project$FormulaParser$cyclic$andExpr());
+		});
+}
+var $author$project$FormulaParser$andExpr = $author$project$FormulaParser$cyclic$andExpr();
+$author$project$FormulaParser$cyclic$andExpr = function () {
+	return $author$project$FormulaParser$andExpr;
+};
+var $author$project$FormulaParser$notExpr = $author$project$FormulaParser$cyclic$notExpr();
+$author$project$FormulaParser$cyclic$notExpr = function () {
+	return $author$project$FormulaParser$notExpr;
+};
+var $author$project$FormulaParser$atom = $author$project$FormulaParser$cyclic$atom();
+$author$project$FormulaParser$cyclic$atom = function () {
+	return $author$project$FormulaParser$atom;
+};
+var $author$project$FormulaParser$orExpr = $author$project$FormulaParser$cyclic$orExpr();
+$author$project$FormulaParser$cyclic$orExpr = function () {
+	return $author$project$FormulaParser$orExpr;
+};
+var $author$project$FormulaParser$exprParser = A2(
+	$elm$parser$Parser$keeper,
+	A2(
+		$elm$parser$Parser$ignorer,
+		$elm$parser$Parser$succeed($elm$core$Basics$identity),
+		$elm$parser$Parser$spaces),
+	A2(
+		$elm$parser$Parser$ignorer,
+		A2(
+			$elm$parser$Parser$ignorer,
+			$elm$parser$Parser$lazy(
+				function (_v0) {
+					return $author$project$FormulaParser$orExpr;
+				}),
+			$elm$parser$Parser$spaces),
+		$elm$parser$Parser$end));
+var $elm$parser$Parser$DeadEnd = F3(
+	function (row, col, problem) {
+		return {ct: col, bA: problem, dd: row};
+	});
+var $elm$parser$Parser$problemToDeadEnd = function (p) {
+	return A3($elm$parser$Parser$DeadEnd, p.dd, p.ct, p.bA);
+};
+var $elm$parser$Parser$Advanced$bagToList = F2(
+	function (bag, list) {
+		bagToList:
+		while (true) {
+			switch (bag.$) {
+				case 0:
+					return list;
+				case 1:
+					var bag1 = bag.a;
+					var x = bag.b;
+					var $temp$bag = bag1,
+						$temp$list = A2($elm$core$List$cons, x, list);
+					bag = $temp$bag;
+					list = $temp$list;
+					continue bagToList;
+				default:
+					var bag1 = bag.a;
+					var bag2 = bag.b;
+					var $temp$bag = bag1,
+						$temp$list = A2($elm$parser$Parser$Advanced$bagToList, bag2, list);
+					bag = $temp$bag;
+					list = $temp$list;
+					continue bagToList;
+			}
+		}
+	});
+var $elm$parser$Parser$Advanced$run = F2(
+	function (_v0, src) {
+		var parse = _v0;
+		var _v1 = parse(
+			{ct: 1, d: _List_Nil, e: 1, b: 0, dd: 1, a: src});
+		if (!_v1.$) {
+			var value = _v1.b;
+			return $elm$core$Result$Ok(value);
+		} else {
+			var bag = _v1.b;
+			return $elm$core$Result$Err(
+				A2($elm$parser$Parser$Advanced$bagToList, bag, _List_Nil));
+		}
+	});
+var $elm$parser$Parser$run = F2(
+	function (parser, source) {
+		var _v0 = A2($elm$parser$Parser$Advanced$run, parser, source);
+		if (!_v0.$) {
+			var a = _v0.a;
+			return $elm$core$Result$Ok(a);
+		} else {
+			var problems = _v0.a;
+			return $elm$core$Result$Err(
+				A2($elm$core$List$map, $elm$parser$Parser$problemToDeadEnd, problems));
+		}
+	});
+var $author$project$FormulaParser$parse = function (input) {
+	return A2($elm$parser$Parser$run, $author$project$FormulaParser$exprParser, input);
+};
+var $author$project$Minimal$syncAssignment = F2(
+	function (formula, assignment) {
+		var _v0 = $author$project$FormulaParser$parse(formula);
+		if (!_v0.$) {
+			var ast = _v0.a;
+			return A2(
+				$author$project$Minimal$completeAssignment,
+				$author$project$FormulaParser$collectVariables(ast),
+				assignment);
+		} else {
+			return assignment;
+		}
+	});
+var $author$project$Minimal$update = F2(
+	function (msg, model) {
+		switch (msg.$) {
+			case 0:
+				var formula = msg.a;
+				return _Utils_update(
+					model,
+					{
+						a0: A2($author$project$Minimal$syncAssignment, formula, model.a0),
+						u: formula,
+						L: 0
+					});
+			case 1:
+				var formula = msg.a;
+				return _Utils_update(
+					model,
+					{
+						a0: A2($author$project$Minimal$syncAssignment, formula, model.a0),
+						u: formula,
+						L: 0
+					});
+			case 3:
+				var step = msg.a;
+				return _Utils_update(
+					model,
+					{
+						L: A2(
+							$elm$core$Basics$max,
+							0,
+							A2(
+								$elm$core$Basics$min,
+								$elm$core$List$length(
+									$author$project$Minimal$parsingSteps(model.u)) - 1,
+								step))
+					});
+			default:
+				var name = msg.a;
+				var isChecked = msg.b;
+				return _Utils_update(
+					model,
+					{
+						a0: A3($elm$core$Dict$insert, name, isChecked, model.a0)
+					});
+		}
+	});
+var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
 		return A2(
@@ -6177,586 +6687,198 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h2 = _VirtualDom_node('h2');
-var $elm$html$Html$p = _VirtualDom_node('p');
-var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$FieldManual$Components$chapterHeading = F3(
-	function (number, title, subtitle) {
-		return A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('chapter-heading')
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$p,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('eyebrow blue')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text(number + (' / ' + subtitle))
-						])),
-					A2(
-					$elm$html$Html$h2,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text(title)
-						]))
-				]));
-	});
-var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
-var $elm$core$Basics$negate = function (n) {
-	return -n;
-};
-var $elm$html$Html$section = _VirtualDom_node('section');
-var $elm$html$Html$Attributes$tabindex = function (n) {
-	return A2(
-		_VirtualDom_attribute,
-		'tabIndex',
-		$elm$core$String$fromInt(n));
-};
-var $author$project$Main$chapter = F5(
-	function (target, number, heading, subtitle, children) {
-		return A2(
-			$elm$html$Html$section,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('chapter'),
-					$elm$html$Html$Attributes$id(target),
-					$elm$html$Html$Attributes$tabindex(-1)
-				]),
-			A2(
-				$elm$core$List$cons,
-				A3($author$project$FieldManual$Components$chapterHeading, number, heading, subtitle),
-				children));
-	});
-var $elm$virtual_dom$VirtualDom$nodeNS = F2(
-	function (namespace, tag) {
-		return A2(
-			_VirtualDom_nodeNS,
-			namespace,
-			_VirtualDom_noScript(tag));
-	});
-var $elm$svg$Svg$node = $elm$virtual_dom$VirtualDom$nodeNS('http://www.w3.org/2000/svg');
-var $author$project$FieldManual$Illustrations$svgEl = F3(
-	function (tag, attrs, children) {
-		return A3(
-			$elm$svg$Svg$node,
-			tag,
-			A2(
-				$elm$core$List$map,
-				function (_v0) {
-					var key = _v0.a;
-					var value = _v0.b;
-					return A2($elm$html$Html$Attributes$attribute, key, value);
-				},
-				attrs),
-			children);
-	});
-var $author$project$FieldManual$Illustrations$box = F4(
-	function (x, y, width, height) {
-		return A3(
-			$author$project$FieldManual$Illustrations$svgEl,
-			'rect',
-			_List_fromArray(
-				[
-					_Utils_Tuple2('class', 'line fill-faint'),
-					_Utils_Tuple2(
-					'x',
-					$elm$core$String$fromInt(x)),
-					_Utils_Tuple2(
-					'y',
-					$elm$core$String$fromInt(y)),
-					_Utils_Tuple2(
-					'width',
-					$elm$core$String$fromInt(width)),
-					_Utils_Tuple2(
-					'height',
-					$elm$core$String$fromInt(height))
-				]),
-			_List_Nil);
-	});
-var $elm$core$Basics$atan2 = _Basics_atan2;
-var $elm$core$String$fromFloat = _String_fromNumber;
-var $author$project$FieldManual$Illustrations$path = F2(
-	function (style, d) {
-		return A3(
-			$author$project$FieldManual$Illustrations$svgEl,
-			'path',
-			_List_fromArray(
-				[
-					_Utils_Tuple2('class', 'line ' + style),
-					_Utils_Tuple2('d', d)
-				]),
-			_List_Nil);
-	});
-var $elm$core$Basics$pi = _Basics_pi;
-var $author$project$FieldManual$Illustrations$flowArrow = F4(
-	function (x1, y1, x2, y2) {
-		var angle = (A2($elm$core$Basics$atan2, y2 - y1, x2 - x1) * 180) / $elm$core$Basics$pi;
-		return A3(
-			$author$project$FieldManual$Illustrations$svgEl,
-			'g',
-			_List_fromArray(
-				[
-					_Utils_Tuple2('class', 'flow-arrow')
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$author$project$FieldManual$Illustrations$path,
-					'',
-					'M' + ($elm$core$String$fromFloat(x1) + (' ' + ($elm$core$String$fromFloat(y1) + (' L' + ($elm$core$String$fromFloat(x2) + (' ' + $elm$core$String$fromFloat(y2)))))))),
-					A3(
-					$author$project$FieldManual$Illustrations$svgEl,
-					'path',
-					_List_fromArray(
-						[
-							_Utils_Tuple2('class', 'line fill-blue'),
-							_Utils_Tuple2('d', 'M-8 -4 L0 0 L-8 4 L-6 0 Z'),
-							_Utils_Tuple2(
-							'transform',
-							'translate(' + ($elm$core$String$fromFloat(x2) + (' ' + ($elm$core$String$fromFloat(y2) + (') rotate(' + ($elm$core$String$fromFloat(angle) + ')'))))))
-						]),
-					_List_Nil)
-				]));
-	});
-var $author$project$FieldManual$Illustrations$svgLabel = F3(
-	function (x, y, label) {
-		return A2(
-			$elm$svg$Svg$text_,
-			_List_fromArray(
-				[
-					A2($elm$html$Html$Attributes$attribute, 'class', 'svg-label'),
-					A2($elm$html$Html$Attributes$attribute, 'x', x),
-					A2($elm$html$Html$Attributes$attribute, 'y', y)
-				]),
-			_List_fromArray(
-				[
-					$elm$svg$Svg$text(label)
-				]));
-	});
-var $author$project$FieldManual$Illustrations$svgRoot = F3(
-	function (className, viewBox, children) {
-		return A2(
-			$elm$svg$Svg$svg,
-			_List_fromArray(
-				[
-					A2($elm$html$Html$Attributes$attribute, 'class', className),
-					A2($elm$html$Html$Attributes$attribute, 'viewBox', viewBox),
-					A2($elm$html$Html$Attributes$attribute, 'aria-hidden', 'true'),
-					A2($elm$html$Html$Attributes$attribute, 'focusable', 'false')
-				]),
-			children);
-	});
-var $author$project$FieldManual$Illustrations$composable = A3(
-	$author$project$FieldManual$Illustrations$svgRoot,
-	'diagram',
-	'0 0 360 260',
-	_List_fromArray(
-		[
-			A3($author$project$FieldManual$Illustrations$svgLabel, '24', '28', 'COMPOSABLE / FUNCTIONAL'),
-			A4($author$project$FieldManual$Illustrations$box, 75, 76, 70, 64),
-			A4($author$project$FieldManual$Illustrations$box, 215, 76, 70, 64),
-			A3($author$project$FieldManual$Illustrations$svgLabel, '104', '113', 'f'),
-			A3($author$project$FieldManual$Illustrations$svgLabel, '244', '113', 'g'),
-			A4($author$project$FieldManual$Illustrations$flowArrow, 24, 108, 71, 108),
-			A4($author$project$FieldManual$Illustrations$flowArrow, 149, 108, 211, 108),
-			A4($author$project$FieldManual$Illustrations$flowArrow, 289, 108, 336, 108),
-			A3($author$project$FieldManual$Illustrations$svgLabel, '42', '94', 'A'),
-			A3($author$project$FieldManual$Illustrations$svgLabel, '176', '94', 'B'),
-			A3($author$project$FieldManual$Illustrations$svgLabel, '309', '94', 'C'),
-			A2($author$project$FieldManual$Illustrations$path, 'soft', 'M75 155 V170 H285 V155'),
-			A4($author$project$FieldManual$Illustrations$box, 132, 192, 96, 38),
-			A3($author$project$FieldManual$Illustrations$svgLabel, '155', '216', 'g ∘ f'),
-			A4($author$project$FieldManual$Illustrations$flowArrow, 77, 211, 128, 211),
-			A4($author$project$FieldManual$Illustrations$flowArrow, 232, 211, 283, 211),
-			A3($author$project$FieldManual$Illustrations$svgLabel, '60', '216', 'A'),
-			A3($author$project$FieldManual$Illustrations$svgLabel, '295', '216', 'C')
-		]));
-var $elm$html$Html$details = _VirtualDom_node('details');
-var $elm$html$Html$span = _VirtualDom_node('span');
-var $author$project$FieldManual$Components$figurePlate = F4(
-	function (number, title, diagram, captionText) {
-		return A2(
-			$elm$html$Html$article,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('figure-plate')
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('figure-meta')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$span,
-							_List_Nil,
-							_List_fromArray(
-								[
-									$elm$html$Html$text(number)
-								])),
-							A2(
-							$elm$html$Html$span,
-							_List_Nil,
-							_List_fromArray(
-								[
-									$elm$html$Html$text(title)
-								]))
-						])),
-					A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('plate-surface compact')
-						]),
-					_List_fromArray(
-						[diagram])),
-					A2(
-					$elm$html$Html$p,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('caption')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text(captionText)
-						]))
-				]));
-	});
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
-var $elm$html$Html$Attributes$href = function (url) {
+var $elm$html$Html$p = _VirtualDom_node('p');
+var $elm$html$Html$section = _VirtualDom_node('section');
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$html$Html$span = _VirtualDom_node('span');
+var $author$project$Minimal$viewToken = function (token) {
+	var _v0 = function () {
+		switch (token.$) {
+			case 0:
+				var name = token.a;
+				return _Utils_Tuple2(name, 'variable');
+			case 1:
+				var symbol = token.a;
+				return _Utils_Tuple2(symbol, 'operator');
+			case 2:
+				var symbol = token.a;
+				return _Utils_Tuple2(symbol, 'group');
+			default:
+				var symbol = token.a;
+				return _Utils_Tuple2(symbol, 'unknown');
+		}
+	}();
+	var labelText = _v0.a;
+	var kind = _v0.b;
 	return A2(
-		$elm$html$Html$Attributes$stringProperty,
-		'href',
-		_VirtualDom_noJavaScriptUri(url));
+		$elm$html$Html$span,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('token ' + kind)
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text(labelText)
+			]));
 };
-var $author$project$Main$experiment = F5(
-	function (number, heading, description, url, drawing) {
-		return A2(
-			$elm$html$Html$a,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('project-card'),
-					$elm$html$Html$Attributes$href(url)
-				]),
-			_List_fromArray(
-				[
-					A4($author$project$FieldManual$Components$figurePlate, 'EXPERIMENT / ' + number, 'OPEN ↗', drawing, description),
-					A2(
-					$elm$html$Html$h3,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text(heading)
-						]))
-				]));
-	});
-var $author$project$PersonalArtwork$formulaMosaic = A2(
-	$elm$svg$Svg$svg,
-	_List_fromArray(
-		[
-			$elm$svg$Svg$Attributes$class('diagram'),
-			$elm$svg$Svg$Attributes$viewBox('0 0 360 260'),
-			A2($elm$html$Html$Attributes$attribute, 'aria-hidden', 'true')
-		]),
-	_List_fromArray(
-		[
-			A2(
-			$elm$svg$Svg$path,
-			_List_fromArray(
-				[
-					$elm$svg$Svg$Attributes$class('line fill-faint'),
-					$elm$svg$Svg$Attributes$d('M32 58H134L156 109L100 166L32 141Z')
-				]),
-			_List_Nil),
-			A2(
-			$elm$svg$Svg$path,
-			_List_fromArray(
-				[
-					$elm$svg$Svg$Attributes$class('line fill-blue'),
-					$elm$svg$Svg$Attributes$d('M134 58H328V132L252 160L156 109Z')
-				]),
-			_List_Nil),
-			A2(
-			$elm$svg$Svg$path,
-			_List_fromArray(
-				[
-					$elm$svg$Svg$Attributes$class('line fill-paper'),
-					$elm$svg$Svg$Attributes$d('M32 141L100 166L156 109L252 160L233 213H32Z')
-				]),
-			_List_Nil),
-			A2(
-			$elm$svg$Svg$path,
-			_List_fromArray(
-				[
-					$elm$svg$Svg$Attributes$class('line fill-faint'),
-					$elm$svg$Svg$Attributes$d('M252 160L328 132V213H233Z')
-				]),
-			_List_Nil),
-			A2(
-			$elm$svg$Svg$text_,
-			_List_fromArray(
-				[
-					$elm$svg$Svg$Attributes$class('svg-label'),
-					$elm$svg$Svg$Attributes$x('24'),
-					$elm$svg$Svg$Attributes$y('28')
-				]),
-			_List_fromArray(
-				[
-					$elm$svg$Svg$text('BOOLEAN VALUES / IRREGULAR MOSAIC')
-				])),
-			A2(
-			$elm$svg$Svg$text_,
-			_List_fromArray(
-				[
-					$elm$svg$Svg$Attributes$class('svg-label'),
-					$elm$svg$Svg$Attributes$x('66'),
-					$elm$svg$Svg$Attributes$y('114')
-				]),
-			_List_fromArray(
-				[
-					$elm$svg$Svg$text('a=0')
-				])),
-			A2(
-			$elm$svg$Svg$text_,
-			_List_fromArray(
-				[
-					$elm$svg$Svg$Attributes$class('svg-label'),
-					$elm$svg$Svg$Attributes$x('230'),
-					$elm$svg$Svg$Attributes$y('106')
-				]),
-			_List_fromArray(
-				[
-					$elm$svg$Svg$text('b=1')
-				])),
-			A2(
-			$elm$svg$Svg$text_,
-			_List_fromArray(
-				[
-					$elm$svg$Svg$Attributes$class('svg-label'),
-					$elm$svg$Svg$Attributes$x('140'),
-					$elm$svg$Svg$Attributes$y('182')
-				]),
-			_List_fromArray(
-				[
-					$elm$svg$Svg$text('OUT=1')
-				])),
-			A2(
-			$elm$svg$Svg$text_,
-			_List_fromArray(
-				[
-					$elm$svg$Svg$Attributes$class('svg-label'),
-					$elm$svg$Svg$Attributes$x('123'),
-					$elm$svg$Svg$Attributes$y('244')
-				]),
-			_List_fromArray(
-				[
-					$elm$svg$Svg$text('!(a & b)')
-				]))
-		]));
-var $author$project$FieldManual$Illustrations$circle = F4(
-	function (style, x, y, radius) {
-		return A3(
-			$author$project$FieldManual$Illustrations$svgEl,
-			'circle',
-			_List_fromArray(
-				[
-					_Utils_Tuple2('class', 'line ' + style),
-					_Utils_Tuple2(
-					'cx',
-					$elm$core$String$fromInt(x)),
-					_Utils_Tuple2(
-					'cy',
-					$elm$core$String$fromInt(y)),
-					_Utils_Tuple2(
-					'r',
-					$elm$core$String$fromInt(radius))
-				]),
-			_List_Nil);
-	});
-var $author$project$FieldManual$Illustrations$formulaParser = function () {
-	var centered = F3(
-		function (x, y, label) {
-			return A3(
-				$author$project$FieldManual$Illustrations$svgEl,
-				'text',
+var $author$project$Minimal$viewTokens = function (formula) {
+	var tokens = $author$project$Minimal$scanTokens(formula);
+	return $elm$core$List$isEmpty(tokens) ? A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('token-row empty')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('No tokens yet')
+			])) : A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('token-row')
+			]),
+		A2($elm$core$List$map, $author$project$Minimal$viewToken, tokens));
+};
+var $author$project$Minimal$viewBrokenParse = F2(
+	function (model, deadEnds) {
+		return _List_fromArray(
+			[
+				A2(
+				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						_Utils_Tuple2('class', 'svg-label'),
-						_Utils_Tuple2(
-						'x',
-						$elm$core$String$fromInt(x)),
-						_Utils_Tuple2(
-						'y',
-						$elm$core$String$fromInt(y)),
-						_Utils_Tuple2('text-anchor', 'middle')
+						$elm$html$Html$Attributes$class('lesson-grid single')
 					]),
 				_List_fromArray(
 					[
-						$elm$svg$Svg$text(label)
-					]));
-		});
-	var leaf = F4(
-		function (x, y, name, state) {
-			return _List_fromArray(
-				[
-					A3(
-					$author$project$FieldManual$Illustrations$svgEl,
-					'rect',
-					_List_fromArray(
-						[
-							_Utils_Tuple2('class', 'line fill-paper'),
-							_Utils_Tuple2(
-							'x',
-							$elm$core$String$fromInt(x - 23)),
-							_Utils_Tuple2(
-							'y',
-							$elm$core$String$fromInt(y - 14)),
-							_Utils_Tuple2('width', '46'),
-							_Utils_Tuple2('height', '28'),
-							_Utils_Tuple2('rx', '3')
-						]),
-					_List_Nil),
-					A3(centered, x, y + 4, name + ('=' + state))
-				]);
-		});
-	var operator = F4(
-		function (x, y, symbol, filled) {
-			return _List_fromArray(
-				[
-					A4(
-					$author$project$FieldManual$Illustrations$circle,
-					filled ? 'fill-blue' : 'fill-paper',
-					x,
-					y,
-					18),
-					A3(centered, x, y + 4, symbol)
-				]);
-		});
-	var token = F4(
-		function (x, width, label, filled) {
-			return _List_fromArray(
-				[
-					A3(
-					$author$project$FieldManual$Illustrations$svgEl,
-					'rect',
-					_List_fromArray(
-						[
-							_Utils_Tuple2(
-							'class',
-							'line ' + (filled ? 'fill-blue' : 'fill-paper')),
-							_Utils_Tuple2(
-							'x',
-							$elm$core$String$fromInt(x)),
-							_Utils_Tuple2('y', '45'),
-							_Utils_Tuple2(
-							'width',
-							$elm$core$String$fromInt(width)),
-							_Utils_Tuple2('height', '28'),
-							_Utils_Tuple2('rx', '3')
-						]),
-					_List_Nil),
-					A3(centered, x + ((width / 2) | 0), 63, label)
-				]);
-		});
-	return A3(
-		$author$project$FieldManual$Illustrations$svgRoot,
-		'diagram formula-parser',
-		'0 0 360 330',
-		_Utils_ap(
-			_List_fromArray(
-				[
-					A3($author$project$FieldManual$Illustrations$svgLabel, '20', '24', 'FORMULA / STRUCTURE / VALUE'),
-					A2($author$project$FieldManual$Illustrations$path, 'soft dash', 'M20 89 H340 M240 108 V267'),
-					A2($author$project$FieldManual$Illustrations$path, 'soft', 'M63 77 V81 H191 V77'),
-					A4($author$project$FieldManual$Illustrations$flowArrow, 127, 89, 127, 108),
-					A2($author$project$FieldManual$Illustrations$path, 'thick', 'M153 146 V160 H100 V171'),
-					A2($author$project$FieldManual$Illustrations$path, 'soft', 'M153 160 H203 V233'),
-					A2($author$project$FieldManual$Illustrations$path, 'thick', 'M100 207 V216'),
-					A2($author$project$FieldManual$Illustrations$path, 'soft', 'M100 252 V263 H56 V268 M100 263 H144 V268'),
-					A2($author$project$FieldManual$Illustrations$path, 'soft dash', 'M172 128 H256'),
-					A3($author$project$FieldManual$Illustrations$svgLabel, '259', '120', 'RESULT'),
-					A3(
-					$author$project$FieldManual$Illustrations$svgEl,
-					'rect',
-					_List_fromArray(
-						[
-							_Utils_Tuple2('class', 'line fill-blue'),
-							_Utils_Tuple2('x', '258'),
-							_Utils_Tuple2('y', '134'),
-							_Utils_Tuple2('width', '78'),
-							_Utils_Tuple2('height', '36'),
-							_Utils_Tuple2('rx', '3')
-						]),
-					_List_Nil),
-					A3(centered, 297, 157, 'TRUE / 1'),
-					A3($author$project$FieldManual$Illustrations$svgLabel, '258', '199', 'a=0  b=1'),
-					A3($author$project$FieldManual$Illustrations$svgLabel, '258', '219', 'c=0'),
-					A3($author$project$FieldManual$Illustrations$svgLabel, '258', '252', 'LEAVES'),
-					A4($author$project$FieldManual$Illustrations$flowArrow, 298, 241, 298, 229),
-					A3($author$project$FieldManual$Illustrations$svgLabel, '21', '322', 'PARSE DOWN / EVALUATE UP')
-				]),
-			_Utils_ap(
-				A4(token, 20, 26, '!', true),
-				_Utils_ap(
-					A4(token, 50, 22, '(', false),
-					_Utils_ap(
-						A4(token, 76, 26, 'a', false),
-						_Utils_ap(
-							A4(token, 106, 26, '&', true),
-							_Utils_ap(
-								A4(token, 136, 26, 'b', false),
-								_Utils_ap(
-									A4(token, 166, 22, ')', false),
-									_Utils_ap(
-										A4(token, 192, 26, '|', true),
-										_Utils_ap(
-											A4(token, 222, 26, 'c', false),
-											_Utils_ap(
-												A4(operator, 153, 128, 'OR', true),
-												_Utils_ap(
-													A4(operator, 100, 189, 'NOT', true),
-													_Utils_ap(
-														A4(operator, 100, 234, 'AND', false),
-														_Utils_ap(
-															A4(leaf, 203, 247, 'c', '0'),
-															_Utils_ap(
-																A4(leaf, 56, 282, 'a', '0'),
-																A4(leaf, 144, 282, 'b', '1'))))))))))))))));
-}();
-var $author$project$PersonalArtwork$formulaParser = $author$project$FieldManual$Illustrations$formulaParser;
-var $elm$core$List$isEmpty = function (xs) {
-	if (!xs.b) {
-		return true;
-	} else {
-		return false;
-	}
+						A2(
+						$elm$html$Html$section,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('panel')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$h2,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Tokens')
+									])),
+								$author$project$Minimal$viewTokens(model.u),
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('notice error')
+									]),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$h3,
+										_List_Nil,
+										_List_fromArray(
+											[
+												$elm$html$Html$text('Parser stopped')
+											])),
+										A2(
+										$elm$html$Html$p,
+										_List_Nil,
+										_List_fromArray(
+											[
+												$elm$html$Html$text(
+												A2(
+													$elm$core$String$join,
+													'\n',
+													A2(
+														$elm$core$List$map,
+														function (error) {
+															return 'Check the formula at row ' + ($elm$core$String$fromInt(error.dd) + (', column ' + ($elm$core$String$fromInt(error.ct) + '. Expected a variable, !, or a parenthesized expression; check operators and closing parentheses.')));
+														},
+														deadEnds)))
+											]))
+									]))
+							]))
+					]))
+			]);
+	});
+var $author$project$Minimal$FormulaChanged = function (a) {
+	return {$: 0, a: a};
 };
-var $author$project$Content$journal = _List_fromArray(
+var $elm$virtual_dom$VirtualDom$attribute = F2(
+	function (key, value) {
+		return A2(
+			_VirtualDom_attribute,
+			_VirtualDom_noOnOrFormAction(key),
+			_VirtualDom_noJavaScriptOrHtmlUri(value));
+	});
+var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
+var $author$project$Minimal$examples = _List_fromArray(
 	[
-		{
-		W: 'PERSONAL',
-		aj: '001',
-		al: _List_fromArray(
-			['I want this website to be a place where the different parts of my work can meet. Engineering, software, experiments, and magic all have a home here.', 'Some pages will explain a finished project. Others will follow an idea while it is still taking shape. I want to share the work and the thinking around it, and leave room for the site to grow.']),
-		aw: 'Why engineering, experiments, and magic belong in the same notebook.',
-		ay: 'Things I make'
-	}
+		_Utils_Tuple2('NAND', '!(a & b)'),
+		_Utils_Tuple2('Precedence', 'a | b & c'),
+		_Utils_Tuple2('Grouping', '(a | b) & !c'),
+		_Utils_Tuple2('Chain', 'a & b & c | !d'),
+		_Utils_Tuple2('Multiplexer', '(!s & a) | (s & b)'),
+		_Utils_Tuple2('Majority', '(a & b) | (a & c) | (b & c)')
 	]);
+var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$html$Html$label = _VirtualDom_node('label');
+var $elm$html$Html$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
+	return {$: 1, a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $elm$html$Html$Events$targetValue = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	$elm$json$Json$Decode$string);
+var $elm$html$Html$Events$onInput = function (tagger) {
+	return A2(
+		$elm$html$Html$Events$stopPropagationOn,
+		'input',
+		A2(
+			$elm$json$Json$Decode$map,
+			$elm$html$Html$Events$alwaysStop,
+			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
+};
+var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
+var $elm$html$Html$Attributes$rows = function (n) {
+	return A2(
+		_VirtualDom_attribute,
+		'rows',
+		$elm$core$String$fromInt(n));
+};
+var $elm$html$Html$textarea = _VirtualDom_node('textarea');
+var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
+var $author$project$Minimal$UseExample = function (a) {
+	return {$: 1, a: a};
+};
+var $elm$html$Html$button = _VirtualDom_node('button');
+var $elm$html$Html$code = _VirtualDom_node('code');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 0, a: a};
 };
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
 var $elm$html$Html$Events$on = F2(
 	function (event, decoder) {
 		return A2(
@@ -6764,256 +6886,598 @@ var $elm$html$Html$Events$on = F2(
 			event,
 			$elm$virtual_dom$VirtualDom$Normal(decoder));
 	});
-var $elm$html$Html$summary = _VirtualDom_node('summary');
-var $author$project$Main$journalEntry = function (entry) {
+var $elm$html$Html$Events$onClick = function (msg) {
 	return A2(
-		$elm$html$Html$details,
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $author$project$Minimal$viewExampleButton = function (_v0) {
+	var title = _v0.a;
+	var formula = _v0.b;
+	return A2(
+		$elm$html$Html$button,
 		_List_fromArray(
 			[
-				$elm$html$Html$Attributes$class('field-note'),
-				A2(
-				$elm$html$Html$Events$on,
-				'toggle',
-				$elm$json$Json$Decode$succeed($author$project$FieldManual$Reader$Measure))
+				$elm$html$Html$Attributes$class('example-button'),
+				$elm$html$Html$Events$onClick(
+				$author$project$Minimal$UseExample(formula))
 			]),
 		_List_fromArray(
 			[
 				A2(
-				$elm$html$Html$summary,
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('example-title')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(title)
+					])),
+				A2(
+				$elm$html$Html$code,
 				_List_Nil,
 				_List_fromArray(
 					[
+						$elm$html$Html$text(formula)
+					]))
+			]));
+};
+var $author$project$Minimal$viewHero = function (model) {
+	return A2(
+		$elm$html$Html$section,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('hero-band')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('hero-inner')
+					]),
+				_List_fromArray(
+					[
 						A2(
-						$elm$html$Html$span,
+						$elm$html$Html$div,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$class('eyebrow blue')
+								$elm$html$Html$Attributes$class('hero-copy')
 							]),
 						_List_fromArray(
 							[
-								$elm$html$Html$text(entry.aj + (' / ' + entry.W))
+								A2(
+								$elm$html$Html$p,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('eyebrow')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('02 / LOGIC & STRUCTURE')
+									])),
+								A2(
+								$elm$html$Html$h1,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Formula Parser'),
+										A2(
+										$elm$html$Html$span,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('title-dot')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text('.')
+											]))
+									])),
+								A2(
+								$elm$html$Html$p,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('I built this parser to explore the structure behind Boolean expressions.')
+									]))
 							])),
 						A2(
-						$elm$html$Html$h3,
-						_List_Nil,
+						$elm$html$Html$div,
 						_List_fromArray(
 							[
-								$elm$html$Html$text(entry.ay)
-							])),
+								$elm$html$Html$Attributes$class('formula-console')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$label,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('input-label')
+									]),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$span,
+										_List_Nil,
+										_List_fromArray(
+											[
+												$elm$html$Html$text('Formula')
+											])),
+										A2(
+										$elm$html$Html$textarea,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('formula-input'),
+												$elm$html$Html$Attributes$rows(2),
+												$elm$html$Html$Attributes$placeholder('Try !(a & b) | c'),
+												$elm$html$Html$Attributes$value(model.u),
+												$elm$html$Html$Events$onInput($author$project$Minimal$FormulaChanged),
+												A2($elm$html$Html$Attributes$attribute, 'spellcheck', 'false')
+											]),
+										_List_Nil)
+									])),
+								A2(
+								$elm$html$Html$p,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('operator-guide')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('! NOT   /   & AND   /   | OR   /   ( ) GROUP')
+									])),
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('example-row')
+									]),
+								A2($elm$core$List$map, $author$project$Minimal$viewExampleButton, $author$project$Minimal$examples))
+							]))
+					]))
+			]));
+};
+var $author$project$Minimal$constructorName = function (expr) {
+	switch (expr.$) {
+		case 0:
+			return 'Var';
+		case 1:
+			return 'Not';
+		case 2:
+			return 'And';
+		default:
+			return 'Or';
+	}
+};
+var $author$project$Minimal$exprChildren = function (expr) {
+	switch (expr.$) {
+		case 0:
+			return _List_Nil;
+		case 1:
+			var inner = expr.a;
+			return _List_fromArray(
+				[inner]);
+		case 2:
+			var left = expr.a;
+			var right = expr.b;
+			return _List_fromArray(
+				[left, right]);
+		default:
+			var left = expr.a;
+			var right = expr.b;
+			return _List_fromArray(
+				[left, right]);
+	}
+};
+var $elm$core$List$sum = function (numbers) {
+	return A3($elm$core$List$foldl, $elm$core$Basics$add, 0, numbers);
+};
+var $author$project$Minimal$nodeCount = function (expr) {
+	return 1 + $elm$core$List$sum(
+		A2(
+			$elm$core$List$map,
+			$author$project$Minimal$nodeCount,
+			$author$project$Minimal$exprChildren(expr)));
+};
+var $elm$core$List$maximum = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return $elm$core$Maybe$Just(
+			A3($elm$core$List$foldl, $elm$core$Basics$max, x, xs));
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $author$project$Minimal$treeDepth = function (expr) {
+	var _v0 = $author$project$Minimal$exprChildren(expr);
+	if (!_v0.b) {
+		return 1;
+	} else {
+		var children = _v0;
+		return 1 + A2(
+			$elm$core$Maybe$withDefault,
+			0,
+			$elm$core$List$maximum(
+				A2($elm$core$List$map, $author$project$Minimal$treeDepth, children)));
+	}
+};
+var $author$project$Minimal$exprToInline = function (expr) {
+	switch (expr.$) {
+		case 0:
+			var name = expr.a;
+			return 'Var \"' + (name + '\"');
+		case 1:
+			var inner = expr.a;
+			return 'Not (' + ($author$project$Minimal$exprToInline(inner) + ')');
+		case 2:
+			var left = expr.a;
+			var right = expr.b;
+			return 'And (' + ($author$project$Minimal$exprToInline(left) + (') (' + ($author$project$Minimal$exprToInline(right) + ')')));
+		default:
+			var left = expr.a;
+			var right = expr.b;
+			return 'Or (' + ($author$project$Minimal$exprToInline(left) + (') (' + ($author$project$Minimal$exprToInline(right) + ')')));
+	}
+};
+var $author$project$Minimal$operatorClass = function (expr) {
+	switch (expr.$) {
+		case 0:
+			return 'op-variable';
+		case 1:
+			return 'op-not';
+		case 2:
+			return 'op-and';
+		default:
+			return 'op-or';
+	}
+};
+var $author$project$Minimal$viewAstBranch = F2(
+	function (role, expr) {
+		var _v0 = function () {
+			switch (expr.$) {
+				case 0:
+					var name = expr.a;
+					return _Utils_Tuple3(name, 'variable', _List_Nil);
+				case 1:
+					var inner = expr.a;
+					return _Utils_Tuple3(
+						'¬',
+						'operator',
+						_List_fromArray(
+							[
+								_Utils_Tuple2('operand', inner)
+							]));
+				case 2:
+					var left = expr.a;
+					var right = expr.b;
+					return _Utils_Tuple3(
+						'∧',
+						'operator',
+						_List_fromArray(
+							[
+								_Utils_Tuple2('left', left),
+								_Utils_Tuple2('right', right)
+							]));
+				default:
+					var left = expr.a;
+					var right = expr.b;
+					return _Utils_Tuple3(
+						'∨',
+						'operator',
+						_List_fromArray(
+							[
+								_Utils_Tuple2('left', left),
+								_Utils_Tuple2('right', right)
+							]));
+			}
+		}();
+		var symbol = _v0.a;
+		var kind = _v0.b;
+		var children = _v0.c;
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class(
+					'ast-branch ast-' + (kind + (' ' + $author$project$Minimal$operatorClass(expr))))
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('ast-entry')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$span,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('ast-symbol')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text(symbol)
+								])),
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('ast-entry-copy')
+								]),
+							_List_fromArray(
+								[
+									A2(
+									$elm$html$Html$span,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$class('ast-constructor')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text(
+											$author$project$Minimal$constructorName(expr))
+										])),
+									A2(
+									$elm$html$Html$span,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$class('ast-role')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text(role)
+										]))
+								]))
+						])),
+					$elm$core$List$isEmpty(children) ? $elm$html$Html$text('') : A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('ast-branches')
+						]),
+					A2(
+						$elm$core$List$map,
+						function (_v2) {
+							var childRole = _v2.a;
+							var child = _v2.b;
+							return A2($author$project$Minimal$viewAstBranch, childRole, child);
+						},
+						children))
+				]));
+	});
+var $author$project$Minimal$viewAstPanel = function (model) {
+	var current = $elm$core$List$head(
+		A2(
+			$elm$core$List$drop,
+			model.L,
+			$author$project$Minimal$parsingSteps(model.u)));
+	var forest = A2(
+		$elm$core$Maybe$withDefault,
+		_List_Nil,
+		A2(
+			$elm$core$Maybe$map,
+			function ($) {
+				return $.cH;
+			},
+			current));
+	var description = $elm$core$List$isEmpty(forest) ? 'No AST nodes built yet' : ('AST so far: ' + A2(
+		$elm$core$String$join,
+		'; ',
+		A2($elm$core$List$map, $author$project$Minimal$exprToInline, forest)));
+	var complete = _Utils_eq(
+		A2(
+			$elm$core$Maybe$map,
+			function ($) {
+				return $.aD;
+			},
+			current),
+		$elm$core$Maybe$Just('Complete'));
+	return A2(
+		$elm$html$Html$section,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('panel ast-panel')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$h2,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Abstract Syntax Tree')
+					])),
+				A2(
+				$elm$html$Html$p,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('panel-lede')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Leaves appear as variables are read. Operators join them into larger trees as you step through the parser.')
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('ast-map'),
+						A2($elm$html$Html$Attributes$attribute, 'role', 'img'),
+						A2($elm$html$Html$Attributes$attribute, 'aria-label', description)
+					]),
+				_List_fromArray(
+					[
 						A2(
-						$elm$html$Html$p,
-						_List_Nil,
+						$elm$html$Html$div,
 						_List_fromArray(
 							[
-								$elm$html$Html$text(entry.aw)
+								$elm$html$Html$Attributes$class('ast-map-caption')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$span,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text(
+										complete ? 'TREE COMPLETE' : 'BUILDING THE TREE')
+									])),
+								A2(
+								$elm$html$Html$span,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text(
+										$elm$core$String$fromInt(
+											$elm$core$List$sum(
+												A2($elm$core$List$map, $author$project$Minimal$nodeCount, forest))) + ' NODES BUILT')
+									]))
+							])),
+						$elm$core$List$isEmpty(forest) ? A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('ast-waiting')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$span,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('ast-waiting-symbol'),
+										A2($elm$html$Html$Attributes$attribute, 'aria-hidden', 'true')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('○')
+									])),
+								A2(
+								$elm$html$Html$p,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Waiting for the first variable.')
+									])),
+								A2(
+								$elm$html$Html$span,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Use Next in the parser to begin building.')
+									]))
+							])) : A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('ast-forest')
+							]),
+						A2(
+							$elm$core$List$indexedMap,
+							F2(
+								function (index, expr) {
+									return A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('ast-fragment')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$author$project$Minimal$viewAstBranch,
+												complete ? 'root' : ('subtree ' + $elm$core$String$fromInt(index + 1)),
+												expr)
+											]));
+								}),
+							forest)),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('ast-legend')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$span,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('ast-legend-operator')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('○ Operator')
+									])),
+								A2(
+								$elm$html$Html$span,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('□ Variable')
+									]))
 							]))
 					])),
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('prose note-content')
+						$elm$html$Html$Attributes$class('source-shape')
 					]),
-				A2(
-					$elm$core$List$map,
-					function (paragraph) {
-						return A2(
-							$elm$html$Html$p,
-							_List_Nil,
-							_List_fromArray(
-								[
-									$elm$html$Html$text(paragraph)
-								]));
-					},
-					entry.al))
-			]));
-};
-var $author$project$Main$links = function (items) {
-	return A2(
-		$elm$html$Html$div,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('text-links')
-			]),
-		A2(
-			$elm$core$List$map,
-			function (_v0) {
-				var url = _v0.a;
-				var label = _v0.b;
-				return A2(
-					$elm$html$Html$a,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$href(url)
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text(label)
-						]));
-			},
-			items));
-};
-var $elm$core$List$append = F2(
-	function (xs, ys) {
-		if (!ys.b) {
-			return xs;
-		} else {
-			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
-		}
-	});
-var $elm$core$List$concat = function (lists) {
-	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
-};
-var $elm$core$List$concatMap = F2(
-	function (f, list) {
-		return $elm$core$List$concat(
-			A2($elm$core$List$map, f, list));
-	});
-var $author$project$FieldManual$Illustrations$processorStack = function () {
-	var plane = F2(
-		function (y, children) {
-			return A3(
-				$author$project$FieldManual$Illustrations$svgEl,
-				'g',
-				_List_fromArray(
-					[
-						_Utils_Tuple2(
-						'transform',
-						'matrix(1 0 -0.6 0.5 106 ' + ($elm$core$String$fromInt(y) + ')'))
-					]),
-				_Utils_ap(
-					_List_fromArray(
-						[
-							A2($author$project$FieldManual$Illustrations$path, 'fill-blue', 'M0 92 H190 V101 H0 Z'),
-							A2($author$project$FieldManual$Illustrations$path, 'fill-faint', 'M0 0 H190 V92 H0 Z'),
-							A4($author$project$FieldManual$Illustrations$circle, 'fill-paper', 8, 8, 2),
-							A4($author$project$FieldManual$Illustrations$circle, 'fill-paper', 182, 84, 2)
-						]),
-					children));
-		});
-	var label = F3(
-		function (y, number, title) {
-			return A3(
-				$author$project$FieldManual$Illustrations$svgEl,
-				'g',
-				_List_Nil,
 				_List_fromArray(
 					[
 						A2(
-						$author$project$FieldManual$Illustrations$path,
-						'soft',
-						'M281 ' + ($elm$core$String$fromInt(y) + ' H303')),
-						A3(
-						$author$project$FieldManual$Illustrations$svgLabel,
-						'313',
-						$elm$core$String$fromInt(y - 8),
-						number),
-						A3(
-						$author$project$FieldManual$Illustrations$svgLabel,
-						'313',
-						$elm$core$String$fromInt(y + 8),
-						title)
-					]));
-		});
-	return A3(
-		$author$project$FieldManual$Illustrations$svgRoot,
-		'diagram processor-stack',
-		'0 0 500 430',
-		_List_fromArray(
-			[
-				A3($author$project$FieldManual$Illustrations$svgLabel, '26', '26', 'COMPUTATION FROM THE GROUND UP'),
-				A2(
-				plane,
-				54,
-				_Utils_ap(
-					_List_fromArray(
-						[
-							A4($author$project$FieldManual$Illustrations$box, 51, 10, 88, 72),
-							A2($author$project$FieldManual$Illustrations$path, 'fill-blue', 'M63 21 H127 V71 H63 Z'),
-							A2($author$project$FieldManual$Illustrations$path, 'soft', 'M63 39 H127 M100 21 V71 M63 56 H100 M113 39 V71'),
-							A3($author$project$FieldManual$Illustrations$svgLabel, '69', '34', 'CORE'),
-							A2($author$project$FieldManual$Illustrations$path, '', 'M10 29 H31 V38 H51 M139 54 H159 V70 H180')
-						]),
-					A2(
-						$elm$core$List$concatMap,
-						function (y) {
-							return _List_fromArray(
-								[
-									A2(
-									$author$project$FieldManual$Illustrations$path,
-									'',
-									'M44 ' + ($elm$core$String$fromInt(y) + (' H51 M139 ' + ($elm$core$String$fromInt(y) + ' H146'))))
-								]);
-						},
+						$elm$html$Html$h3,
+						_List_Nil,
 						_List_fromArray(
-							[22, 34, 46, 58, 70])))),
-				A3(label, 78, '04 / TOP LEVEL???', 'CPU'),
-				A4($author$project$FieldManual$Illustrations$flowArrow, 82, 136, 82, 113),
-				A4($author$project$FieldManual$Illustrations$flowArrow, 236, 136, 236, 113),
-				A2(
-				plane,
-				142,
-				_List_fromArray(
-					[
-						A4($author$project$FieldManual$Illustrations$box, 16, 19, 42, 48),
-						A3($author$project$FieldManual$Illustrations$svgLabel, '21', '39', 'REG'),
-						A2($author$project$FieldManual$Illustrations$path, 'soft', 'M22 47 H51 M22 55 H51'),
-						A2($author$project$FieldManual$Illustrations$path, 'fill-blue', 'M89 18 L119 27 V60 L89 69 L89 49 L99 43 L89 37 Z'),
-						A3($author$project$FieldManual$Illustrations$svgLabel, '94', '83', 'ALU'),
-						A4($author$project$FieldManual$Illustrations$box, 146, 28, 28, 32),
-						A3($author$project$FieldManual$Illustrations$svgLabel, '147', '49', 'OUT'),
-						A2($author$project$FieldManual$Illustrations$path, '', 'M58 30 H74 V30 H89 M58 56 H79 V56 H89 M119 43 H146'),
-						A2($author$project$FieldManual$Illustrations$path, 'soft', 'M160 60 V76 H36 V67 M36 19 V9 H160 V28')
-					])),
-				A3(label, 168, '03 / ALGORITHMS', 'SAVE PREVIOUS STATE'),
-				A4($author$project$FieldManual$Illustrations$flowArrow, 82, 224, 82, 201),
-				A4($author$project$FieldManual$Illustrations$flowArrow, 236, 224, 236, 201),
-				A2(
-				plane,
-				230,
-				_List_fromArray(
-					[
-						A2($author$project$FieldManual$Illustrations$path, 'fill-blue', 'M20 16 L46 26 V61 L20 71 Z'),
-						A3($author$project$FieldManual$Illustrations$svgLabel, '23', '47', 'MUX'),
-						A2($author$project$FieldManual$Illustrations$path, '', 'M9 29 H20 M9 57 H20 M46 43 H64 M33 76 V66'),
-						A2($author$project$FieldManual$Illustrations$path, 'fill-blue', 'M76 15 L116 26 V61 L76 72 V50 L87 43 L76 36 Z'),
-						A3($author$project$FieldManual$Illustrations$svgLabel, '87', '46', 'ALU'),
-						A2($author$project$FieldManual$Illustrations$path, '', 'M64 28 H76 M64 58 H76 M116 43 H132'),
-						A4($author$project$FieldManual$Illustrations$box, 139, 23, 34, 42),
-						A3($author$project$FieldManual$Illustrations$svgLabel, '142', '48', 'REG'),
-						A2($author$project$FieldManual$Illustrations$path, '', 'M132 43 H139 M173 43 H183')
-					])),
-				A3(label, 256, '02 / ROUTE AND OPERATE', 'MATH/LOGIC'),
-				A4($author$project$FieldManual$Illustrations$flowArrow, 82, 312, 82, 289),
-				A4($author$project$FieldManual$Illustrations$flowArrow, 236, 312, 236, 289),
-				A2(
-				plane,
-				318,
-				_List_fromArray(
-					[
-						A2($author$project$FieldManual$Illustrations$path, 'fill-paper', 'M22 22 H36 C61 22 61 64 36 64 H22 Z'),
-						A2($author$project$FieldManual$Illustrations$path, '', 'M9 32 H22 M9 54 H22 M55 43 H66'),
-						A3($author$project$FieldManual$Illustrations$svgLabel, '23', '84', 'AND'),
-						A2($author$project$FieldManual$Illustrations$path, 'fill-paper', 'M79 22 Q97 43 79 64 Q108 64 123 43 Q108 22 79 22 Z'),
-						A2($author$project$FieldManual$Illustrations$path, '', 'M66 32 H85 M66 54 H85 M123 43 H133'),
-						A3($author$project$FieldManual$Illustrations$svgLabel, '91', '84', 'OR'),
-						A2($author$project$FieldManual$Illustrations$path, 'fill-paper', 'M144 24 L170 43 L144 62 Z'),
-						A4($author$project$FieldManual$Illustrations$circle, 'fill-paper', 174, 43, 4),
-						A2($author$project$FieldManual$Illustrations$path, '', 'M133 43 H144 M178 43 H185'),
-						A3($author$project$FieldManual$Illustrations$svgLabel, '144', '84', 'NOT')
-					])),
-				A3(label, 344, '01 / COMBINATIONAL', 'BOOLEAN GATES'),
-				A3($author$project$FieldManual$Illustrations$svgLabel, '26', '410', 'SIMPLE PARTS / BOUNDLESS COMPLEXITY')
+							[
+								$elm$html$Html$text(
+								complete ? 'Elm value shape' : 'Elm values so far')
+							])),
+						$elm$core$List$isEmpty(forest) ? A2(
+						$elm$html$Html$p,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('ast-source-empty')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('No values built yet.')
+							])) : A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						A2(
+							$elm$core$List$map,
+							function (expr) {
+								return A2(
+									$elm$html$Html$code,
+									_List_Nil,
+									_List_fromArray(
+										[
+											$elm$html$Html$text(
+											$author$project$Minimal$exprToInline(expr))
+										]));
+							},
+							forest))
+					]))
 			]));
-}();
-var $author$project$Content$profile = {ab: 'https://github.com/antonioandara', ad: 'Computers. Embedded. Open-source. Sleight of hand.', ae: 'I’m Antonio and I like to make things. Here I share some of my work, experiments, and writing. I hope you find something that sparks your curiosity.', af: 'https://www.linkedin.com/in/antonio-alejandro-andara-lara-ab5453a4/', ag: 'https://www.youtube.com/@viamagus', ai: 'Antonio Andara Lara', aA: 'https://x.com/A3L', aC: 'https://www.youtube.com/@andaralabs'};
-var $author$project$Main$profileLink = F4(
-	function (number, label, description, url) {
+};
+var $author$project$Minimal$viewMetric = F2(
+	function (title, amount) {
 		return A2(
-			$elm$html$Html$a,
+			$elm$html$Html$div,
 			_List_fromArray(
 				[
-					$elm$html$Html$Attributes$href(url)
+					$elm$html$Html$Attributes$class('metric')
 				]),
 			_List_fromArray(
 				[
@@ -7021,727 +7485,43 @@ var $author$project$Main$profileLink = F4(
 					$elm$html$Html$span,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$class('eyebrow blue')
+							$elm$html$Html$Attributes$class('metric-title')
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text(number)
+							$elm$html$Html$text(title)
 						])),
 					A2(
-					$elm$html$Html$div,
-					_List_Nil,
+					$elm$html$Html$span,
 					_List_fromArray(
 						[
-							A2(
-							$elm$html$Html$h3,
-							_List_Nil,
-							_List_fromArray(
-								[
-									$elm$html$Html$text(label + ' ↗')
-								])),
-							A2(
-							$elm$html$Html$p,
-							_List_Nil,
-							_List_fromArray(
-								[
-									$elm$html$Html$text(description)
-								]))
+							$elm$html$Html$Attributes$class('metric-value')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(amount)
 						]))
 				]));
 	});
-var $author$project$PersonalArtwork$video = A2(
-	$elm$svg$Svg$svg,
-	_List_fromArray(
-		[
-			$elm$svg$Svg$Attributes$class('diagram'),
-			$elm$svg$Svg$Attributes$viewBox('0 0 360 260'),
-			A2($elm$html$Html$Attributes$attribute, 'aria-hidden', 'true')
-		]),
-	_List_fromArray(
-		[
-			A2(
-			$elm$svg$Svg$rect,
-			_List_fromArray(
-				[
-					$elm$svg$Svg$Attributes$class('line fill-faint'),
-					$elm$svg$Svg$Attributes$x('44'),
-					$elm$svg$Svg$Attributes$y('50'),
-					$elm$svg$Svg$Attributes$width('272'),
-					$elm$svg$Svg$Attributes$height('152'),
-					$elm$svg$Svg$Attributes$rx('4')
-				]),
-			_List_Nil),
-			A2(
-			$elm$svg$Svg$path,
-			_List_fromArray(
-				[
-					$elm$svg$Svg$Attributes$class('line soft'),
-					$elm$svg$Svg$Attributes$d('M44 76 H316 M44 176 H316 M64 50 V76 M94 50 V76 M124 50 V76 M154 50 V76 M184 50 V76 M214 50 V76 M244 50 V76 M274 50 V76 M304 50 V76 M64 176 V202 M94 176 V202 M124 176 V202 M154 176 V202 M184 176 V202 M214 176 V202 M244 176 V202 M274 176 V202 M304 176 V202')
-				]),
-			_List_Nil),
-			A2(
-			$elm$svg$Svg$path,
-			_List_fromArray(
-				[
-					$elm$svg$Svg$Attributes$class('line fill-blue'),
-					$elm$svg$Svg$Attributes$d('M164 100 L208 126 L164 152 Z')
-				]),
-			_List_Nil),
-			A2(
-			$elm$svg$Svg$text_,
-			_List_fromArray(
-				[
-					$elm$svg$Svg$Attributes$class('svg-label'),
-					$elm$svg$Svg$Attributes$x('90'),
-					$elm$svg$Svg$Attributes$y('235')
-				]),
-			_List_fromArray(
-				[
-					$elm$svg$Svg$text('ANDARA LABS / VIDEO')
-				]))
-		]));
-var $elm$html$Html$Attributes$alt = $elm$html$Html$Attributes$stringProperty('alt');
-var $elm$html$Html$Attributes$height = function (n) {
-	return A2(
-		_VirtualDom_attribute,
-		'height',
-		$elm$core$String$fromInt(n));
-};
-var $elm$html$Html$img = _VirtualDom_node('img');
-var $elm$html$Html$Attributes$src = function (url) {
-	return A2(
-		$elm$html$Html$Attributes$stringProperty,
-		'src',
-		_VirtualDom_noJavaScriptOrHtmlUri(url));
-};
-var $elm$html$Html$Attributes$width = function (n) {
-	return A2(
-		_VirtualDom_attribute,
-		'width',
-		$elm$core$String$fromInt(n));
-};
-var $author$project$LmsProject$view = A2(
-	$elm$html$Html$article,
-	_List_fromArray(
-		[
-			$elm$html$Html$Attributes$class('lms-feature')
-		]),
-	_List_fromArray(
-		[
-			A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('lms-project-copy')
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$p,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('eyebrow blue')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('MARKDOWNBOOK / ELM LMS')
-						])),
-					A2(
-					$elm$html$Html$h3,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Simple and to the point.')
-						])),
-					A2(
-					$elm$html$Html$p,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('large-copy')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('I like to teach and this is my attempt at building a good and easy to use learning management system.')
-						])),
-					A2(
-					$elm$html$Html$p,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text('This is a Markdown-first learning management system in Elm. Lessons can include interactive tools, quizzes, and exercises.')
-						])),
-					A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('lms-project-tags')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$span,
-							_List_Nil,
-							_List_fromArray(
-								[
-									$elm$html$Html$text('Interactive lessons')
-								])),
-							A2(
-							$elm$html$Html$span,
-							_List_Nil,
-							_List_fromArray(
-								[
-									$elm$html$Html$text('Markdown authoring')
-								])),
-							A2(
-							$elm$html$Html$span,
-							_List_Nil,
-							_List_fromArray(
-								[
-									$elm$html$Html$text('Elm')
-								]))
-						])),
-					A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('text-links')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$a,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('read-link'),
-									$elm$html$Html$Attributes$href('projects/lms/demo/index.html')
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text('Try a sample lesson ↗')
-								]))
-						]))
-				])),
-			A2(
-			$elm$html$Html$a,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('lms-project-preview'),
-					$elm$html$Html$Attributes$href('projects/lms/demo/index.html')
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('lms-preview-bar')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$span,
-							_List_Nil,
-							_List_fromArray(
-								[
-									$elm$html$Html$text('MARKDOWNBOOK')
-								])),
-							A2(
-							$elm$html$Html$span,
-							_List_Nil,
-							_List_fromArray(
-								[
-									$elm$html$Html$text('WORKING PREVIEW')
-								]))
-						])),
-					A2(
-					$elm$html$Html$img,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$src('projects/lms/preview.png'),
-							$elm$html$Html$Attributes$alt('MarkdownBook reader showing a binary lesson, course navigation, and an interactive eight-bit calculator'),
-							$elm$html$Html$Attributes$width(1440),
-							$elm$html$Html$Attributes$height(1000),
-							A2($elm$html$Html$Attributes$attribute, 'loading', 'lazy')
-						]),
-					_List_Nil),
-					A2(
-					$elm$html$Html$p,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text('A look inside the working app. Open the demo to toggle bits, answer a question or two.')
-						]))
-				]))
-		]));
-var $author$project$Main$body = A2(
-	$elm$html$Html$div,
-	_List_Nil,
-	_List_fromArray(
-		[
-			A5(
-			$author$project$Main$chapter,
-			'engineering',
-			'01',
-			'Work you can look inside.',
-			'ENGINEERING & PRACTICE',
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('intro-grid')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$p,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('large-copy')
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text('I’m an electronic engineer. I love to understand things deeply.')
-								])),
-							A2(
-							$elm$html$Html$div,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('prose')
-								]),
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$p,
-									_List_Nil,
-									_List_fromArray(
-										[
-											$elm$html$Html$text('Some of my interests are electronics, microcontrollers (MCUs), mechatronics, programming languages and language design, distributed systems, decentralization, blockchain, and open source. I enjoy exploring the latest technology, helping people understand it, and staying up to date with the latest innovations.')
-										])),
-									A2(
-									$elm$html$Html$p,
-									_List_Nil,
-									_List_fromArray(
-										[
-											$elm$html$Html$text('This is a place for anyone who wants to learn and have a good time doing it. I hope you find something interesting here.')
-										])),
-									$author$project$Main$links(
-									_List_fromArray(
-										[
-											_Utils_Tuple2($author$project$Content$profile.af, 'Professional background ↗'),
-											_Utils_Tuple2($author$project$Content$profile.ab, 'My GitHub ↗')
-										]))
-								]))
-						])),
-					A2(
-					$elm$html$Html$article,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('work-feature')
-						]),
-					_List_fromArray(
-						[
-							A4($author$project$FieldManual$Components$figurePlate, 'IN PRACTICE / 01', 'learning from first principles', $author$project$FieldManual$Illustrations$processorStack, 'Bottom up design.'),
-							A2(
-							$elm$html$Html$div,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('prose')
-								]),
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$p,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('eyebrow blue')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text('ELECTRONICS / SOFTWARE / MAGIC')
-										])),
-									A2(
-									$elm$html$Html$h3,
-									_List_Nil,
-									_List_fromArray(
-										[
-											$elm$html$Html$text('A personal field manual')
-										])),
-									A2(
-									$elm$html$Html$p,
-									_List_Nil,
-									_List_fromArray(
-										[
-											$elm$html$Html$text('This site is a working example of my work and my explorations of web development and functional programming.')
-										])),
-									A2(
-									$elm$html$Html$details,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('field-note'),
-											A2(
-											$elm$html$Html$Events$on,
-											'toggle',
-											$elm$json$Json$Decode$succeed($author$project$FieldManual$Reader$Measure))
-										]),
-									_List_fromArray(
-										[
-											A2(
-											$elm$html$Html$summary,
-											_List_Nil,
-											_List_fromArray(
-												[
-													$elm$html$Html$text('Look at the implementation')
-												])),
-											A2(
-											$elm$html$Html$div,
-											_List_fromArray(
-												[
-													$elm$html$Html$Attributes$class('prose note-content')
-												]),
-											_List_fromArray(
-												[
-													A2(
-													$elm$html$Html$p,
-													_List_Nil,
-													_List_fromArray(
-														[
-															$elm$html$Html$text('The main application is built in Elm using the Elm architecture of model, update, and view. This is the first site I have published.')
-														]))
-												]))
-										]))
-								]))
-						]))
-				])),
-			A5(
-			$author$project$Main$chapter,
-			'open-source',
-			'02',
-			'Build it. Share it. Let it grow.',
-			'OPEN SOURCE',
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('two-column')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$div,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('prose')
-								]),
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$p,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('large-copy')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text('Sharing is the most fundamental act of friendship. Because it is a way you can give something without losing something. — Richard Stallman')
-										])),
-									A2(
-									$elm$html$Html$p,
-									_List_Nil,
-									_List_fromArray(
-										[
-											$elm$html$Html$text('Open-source software is an important part of my work. This site connects the experiments and ideas with the places where the code and everything else lives.')
-										])),
-									A2(
-									$elm$html$Html$a,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('read-link'),
-											$elm$html$Html$Attributes$href($author$project$Content$profile.ab)
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text('Explore my GitHub ↗')
-										]))
-								])),
-							A4($author$project$FieldManual$Components$figurePlate, 'PRINCIPLE / 01', 'find the connections', $author$project$FieldManual$Illustrations$composable, 'Innovation thrives at the intersection of seemingly disjointed topics.')
-						]))
-				])),
-			A5(
-			$author$project$Main$chapter,
-			'experiments',
-			'03',
-			'An open workbench.',
-			'SOME EXPERIMENTS & SMALL EXPLORATIONS',
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$p,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('section-intro')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('These are experiments on different interesting topics. There is no real structure behind them, more like a stream of consciousness.')
-						])),
-					A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('experiment-grid')
-						]),
-					_List_fromArray(
-						[
-							A5($author$project$Main$experiment, '01', 'Three-color formula tiles', 'Connected logic tiles. Toggle an input and watch shared-border constraints carry the change toward the output.', 'experiments/three-color-mosaic.html', $author$project$PersonalArtwork$formulaMosaic),
-							A5($author$project$Main$experiment, '02', 'Formula parser & AST explorer', 'Step through a Boolean formula, watch its syntax tree grow, and explore how inputs change the result.', 'experiments/formula-parser.html', $author$project$PersonalArtwork$formulaParser)
-						]))
-				])),
-			A5(
-			$author$project$Main$chapter,
-			'lms',
-			'04',
-			'Experimental.',
-			'MARKDOWNBOOK / LEARNING SOFTWARE',
-			_List_fromArray(
-				[$author$project$LmsProject$view])),
-			A5(
-			$author$project$Main$chapter,
-			'magic',
-			'05',
-			'Magic exists in the mind',
-			'MAGIC & THE HUMAN SIDE',
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('two-column')
-						]),
-					_List_fromArray(
-						[
-							A4($author$project$FieldManual$Components$figurePlate, 'ANOTHER KIND OF CRAFT', 'attention / possibility / surprise', $author$project$PersonalArtwork$cards, 'Engineering is about how things work. Magic is about what they feel like.'),
-							A2(
-							$elm$html$Html$div,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('prose')
-								]),
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$p,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('large-copy')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text('I do sleight of hand, too.')
-										])),
-									A2(
-									$elm$html$Html$p,
-									_List_Nil,
-									_List_fromArray(
-										[
-											$elm$html$Html$text('Magic belongs alongside engineering. Both are part of my work and my curiosity: the mechanics of making something happen, and the experience of using it.')
-										])),
-									A2(
-									$elm$html$Html$p,
-									_List_Nil,
-									_List_fromArray(
-										[
-											$elm$html$Html$text('This corner of the field manual is for performances, reflections, and experiments in wonder. I’ll build it out with my own material as the collection grows.')
-										])),
-									$author$project$Main$links(
-									_List_fromArray(
-										[
-											_Utils_Tuple2($author$project$Content$profile.ag, 'Watch Via Magus on YouTube ↗'),
-											_Utils_Tuple2($author$project$Content$profile.aA, 'Find me on X ↗')
-										]))
-								]))
-						]))
-				])),
-			A5(
-			$author$project$Main$chapter,
-			'journal',
-			'06',
-			'Notes between projects.',
-			'MY PERSONAL JOURNAL',
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$p,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('section-intro')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('A place for the thinking around the work. Short notes on different topics.')
-						])),
-					$elm$core$List$isEmpty($author$project$Content$journal) ? A2(
-					$elm$html$Html$p,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('section-empty')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('No field notes yet. The first entries are still being written.')
-						])) : A2(
-					$elm$html$Html$div,
-					_List_Nil,
-					A2($elm$core$List$map, $author$project$Main$journalEntry, $author$project$Content$journal))
-				])),
-			A5(
-			$author$project$Main$chapter,
-			'videos',
-			'07',
-			'My YouTube channel.',
-			'ANDARA LABS / VIDEO',
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('two-column')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$div,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('prose')
-								]),
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$p,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('large-copy')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text('I don\'t make too many videos, but some things are better shown.')
-										])),
-									A2(
-									$elm$html$Html$p,
-									_List_Nil,
-									_List_fromArray(
-										[
-											$elm$html$Html$text('Andara Labs is my YouTube channel. It’s the place to follow the video side of my work; this section will grow into a collection of individual videos and the notes behind them.')
-										])),
-									A2(
-									$elm$html$Html$a,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('read-link'),
-											$elm$html$Html$Attributes$href($author$project$Content$profile.aC)
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text('Visit Andara Labs on YouTube ↗')
-										]))
-								])),
-							A2(
-							$elm$html$Html$a,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('video-link'),
-									$elm$html$Html$Attributes$href($author$project$Content$profile.aC)
-								]),
-							_List_fromArray(
-								[
-									A4($author$project$FieldManual$Components$figurePlate, 'CHANNEL / @ANDARALABS', 'watch on youtube ↗', $author$project$PersonalArtwork$video, 'Open the channel to explore the videos.')
-								]))
-						]))
-				])),
-			A5(
-			$author$project$Main$chapter,
-			'connect',
-			'08',
-			'Let’s compare notes.',
-			'WORK / COLLABORATION / CONVERSATION',
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('intro-grid')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$p,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('large-copy')
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text('Looking for engineering consultation or tutoring? Have a project, a magic idea, or a question about something I’ve written?')
-								])),
-							A2(
-							$elm$html$Html$div,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('prose')
-								]),
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$p,
-									_List_Nil,
-									_List_fromArray(
-										[
-											$elm$html$Html$text('For professional conversations, find me on LinkedIn. For code, visit GitHub. For videos and the conversations around the work, there’s Andara Labs and X.')
-										])),
-									A2(
-									$elm$html$Html$div,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('profile-links')
-										]),
-									_List_fromArray(
-										[
-											A4($author$project$Main$profileLink, '01', 'LinkedIn', 'Professional background & opportunities', $author$project$Content$profile.af),
-											A4($author$project$Main$profileLink, '02', 'GitHub', 'Code & open-source work', $author$project$Content$profile.ab),
-											A4($author$project$Main$profileLink, '03', 'YouTube', 'Andara Labs / @andaralabs', $author$project$Content$profile.aC),
-											A4($author$project$Main$profileLink, '04', 'X', 'Ideas & conversation / @A3L', $author$project$Content$profile.aA)
-										]))
-								]))
-						]))
-				]))
-		]));
-var $author$project$Main$chapters = _List_fromArray(
+var $author$project$Minimal$precedenceLevels = _List_fromArray(
 	[
-		_Utils_Tuple3('01', 'engineering', 'Engineering & work'),
-		_Utils_Tuple3('02', 'open-source', 'Open source'),
-		_Utils_Tuple3('03', 'experiments', 'Experiments'),
-		_Utils_Tuple3('04', 'lms', 'Experimental LMS'),
-		_Utils_Tuple3('05', 'magic', 'Brain Magic & wonder'),
-		_Utils_Tuple3('06', 'journal', 'Field notes'),
-		_Utils_Tuple3('07', 'videos', 'Andara Labs / Via Magus'),
-		_Utils_Tuple3('08', 'connect', 'Get in touch')
+		_Utils_Tuple3('exprParser', 'entry', 'read the whole expression; check nothing is left'),
+		_Utils_Tuple3('orExpr', '|', 'OR binds last; read AND expressions on each side'),
+		_Utils_Tuple3('andExpr', '&', 'AND binds before OR; read NOT expressions first'),
+		_Utils_Tuple3('notExpr', '!', 'NOT binds first; applies to the next unit'),
+		_Utils_Tuple3('atom', 'var / ( )', 'one unit: a variable or a parenthesized group')
 	]);
-var $author$project$FieldManual$Reader$ToggleSidebar = {$: 1};
-var $author$project$FieldManual$Reader$ToggleTheme = {$: 0};
-var $elm$html$Html$aside = _VirtualDom_node('aside');
-var $elm$json$Json$Encode$bool = _Json_wrap;
-var $author$project$FieldManual$Reader$boolString = function (value) {
-	return value ? 'true' : 'false';
-};
-var $elm$html$Html$br = _VirtualDom_node('br');
-var $elm$html$Html$button = _VirtualDom_node('button');
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
 var $elm$core$Tuple$second = function (_v0) {
 	var y = _v0.b;
 	return y;
@@ -7756,176 +7536,74 @@ var $elm$html$Html$Attributes$classList = function (classes) {
 				$elm$core$Tuple$first,
 				A2($elm$core$List$filter, $elm$core$Tuple$second, classes))));
 };
-var $author$project$FieldManual$Illustrations$computerStack = function () {
-	var plane = F3(
-		function (x, y, children) {
-			return A3(
-				$author$project$FieldManual$Illustrations$svgEl,
-				'g',
-				_List_fromArray(
-					[
-						_Utils_Tuple2(
-						'transform',
-						'matrix(1 0 -0.6 0.5 ' + ($elm$core$String$fromInt(x) + (' ' + ($elm$core$String$fromInt(y) + ')'))))
-					]),
-				children);
-		});
-	var memory = function (y) {
-		return A3(
-			plane,
-			124,
-			y,
-			_Utils_ap(
-				_List_fromArray(
-					[
-						A4($author$project$FieldManual$Illustrations$box, 0, 0, 154, 30),
-						A2($author$project$FieldManual$Illustrations$path, 'fill-blue', 'M8 30 H146 V35 H8 Z')
-					]),
-				_Utils_ap(
-					A2(
-						$elm$core$List$map,
-						function (x) {
-							return A4($author$project$FieldManual$Illustrations$box, x, 6, 24, 18);
-						},
-						_List_fromArray(
-							[10, 46, 82, 118])),
-					A2(
-						$elm$core$List$map,
-						function (x) {
-							return A2(
-								$author$project$FieldManual$Illustrations$path,
-								'soft',
-								'M' + ($elm$core$String$fromInt(x) + ' 30 V35'));
-						},
-						A2(
-							$elm$core$List$map,
-							$elm$core$Basics$mul(5),
-							A2($elm$core$List$range, 2, 28))))));
-	};
-	return A3(
-		$author$project$FieldManual$Illustrations$svgRoot,
-		'diagram computer-stack',
-		'0 0 420 360',
-		_List_fromArray(
-			[
-				A3($author$project$FieldManual$Illustrations$svgLabel, '26', '26', 'COMPUTER / SYSTEM ARCHITECTURE'),
-				A2($author$project$FieldManual$Illustrations$path, 'fill-blue', 'M40 116 H230 L290 66 V74 L230 124 H40 Z'),
-				A3(
-				plane,
-				100,
-				66,
-				_Utils_ap(
-					_List_fromArray(
-						[
-							A4($author$project$FieldManual$Illustrations$box, 0, 0, 190, 100),
-							A4($author$project$FieldManual$Illustrations$box, 57, 13, 76, 74),
-							A3(
-							$author$project$FieldManual$Illustrations$svgEl,
-							'rect',
-							_List_fromArray(
-								[
-									_Utils_Tuple2('class', 'line fill-blue'),
-									_Utils_Tuple2('x', '71'),
-									_Utils_Tuple2('y', '27'),
-									_Utils_Tuple2('width', '48'),
-									_Utils_Tuple2('height', '46')
-								]),
-							_List_Nil),
-							A2($author$project$FieldManual$Illustrations$path, 'soft', 'M76 33 H113 V67 H76 Z M76 50 H113 M94 33 V67'),
-							A2($author$project$FieldManual$Illustrations$path, '', 'M0 23 H30 V36 H57 M0 75 H36 V62 H57 M133 35 H159 V18 H184 M133 65 H154 V86 H184'),
-							A4($author$project$FieldManual$Illustrations$circle, 'fill-paper', 10, 10, 3),
-							A4($author$project$FieldManual$Illustrations$circle, 'fill-paper', 180, 90, 3)
-						]),
-					A2(
-						$elm$core$List$concatMap,
-						function (y) {
-							return _List_fromArray(
-								[
-									A2(
-									$author$project$FieldManual$Illustrations$path,
-									'',
-									'M50 ' + ($elm$core$String$fromInt(y) + (' H57 M133 ' + ($elm$core$String$fromInt(y) + ' H140'))))
-								]);
-						},
-						_List_fromArray(
-							[24, 36, 48, 60, 72])))),
-				A2($author$project$FieldManual$Illustrations$path, 'soft', 'M245 93 H305'),
-				A3($author$project$FieldManual$Illustrations$svgLabel, '318', '97', 'CPU'),
-				A4($author$project$FieldManual$Illustrations$flowArrow, 94, 135, 94, 158),
-				memory(165),
-				memory(195),
-				A2($author$project$FieldManual$Illustrations$path, 'soft', 'M272 180 H305'),
-				A3($author$project$FieldManual$Illustrations$svgLabel, '318', '184', 'RAM'),
-				A4($author$project$FieldManual$Illustrations$flowArrow, 94, 221, 94, 244),
-				A3(
-				plane,
-				100,
-				259,
-				_List_fromArray(
-					[
-						A2($author$project$FieldManual$Illustrations$path, 'fill-faint', 'M0 0 H179 V10 H190 V49 H179 V59 H0 Z'),
-						A4($author$project$FieldManual$Illustrations$circle, '', 10, 29, 5),
-						A4($author$project$FieldManual$Illustrations$box, 27, 13, 25, 32),
-						A3(
-						$author$project$FieldManual$Illustrations$svgEl,
-						'rect',
-						_List_fromArray(
-							[
-								_Utils_Tuple2('class', 'line fill-blue'),
-								_Utils_Tuple2('x', '66'),
-								_Utils_Tuple2('y', '9'),
-								_Utils_Tuple2('width', '40'),
-								_Utils_Tuple2('height', '40')
-							]),
-						_List_Nil),
-						A3(
-						$author$project$FieldManual$Illustrations$svgEl,
-						'rect',
-						_List_fromArray(
-							[
-								_Utils_Tuple2('class', 'line fill-blue'),
-								_Utils_Tuple2('x', '117'),
-								_Utils_Tuple2('y', '9'),
-								_Utils_Tuple2('width', '40'),
-								_Utils_Tuple2('height', '40')
-							]),
-						_List_Nil),
-						A2($author$project$FieldManual$Illustrations$path, 'soft', 'M52 22 H66 M52 29 H66 M52 36 H66 M106 22 H117 M106 36 H117 M157 22 H176 M157 36 H176'),
-						A2($author$project$FieldManual$Illustrations$path, '', 'M176 13 H190 M176 20 H190 M176 27 H190 M176 34 H190 M176 41 H190 M176 48 H190')
-					])),
-				A2($author$project$FieldManual$Illustrations$path, 'soft', 'M286 276 H305'),
-				A3($author$project$FieldManual$Illustrations$svgLabel, '318', '280', 'SSD'),
-				A2($author$project$FieldManual$Illustrations$path, 'dash soft', 'M52 282 H27 V88 H41'),
-				A4($author$project$FieldManual$Illustrations$flowArrow, 27, 88, 42, 88),
-				A3($author$project$FieldManual$Illustrations$svgLabel, '55', '332', 'COMPUTE / BUFFER / SAVE')
-			]));
-}();
-var $elm$html$Html$footer = _VirtualDom_node('footer');
-var $elm$html$Html$h1 = _VirtualDom_node('h1');
-var $elm$html$Html$header = _VirtualDom_node('header');
-var $elm$html$Html$main_ = _VirtualDom_node('main');
-var $elm$html$Html$nav = _VirtualDom_node('nav');
-var $elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
-};
-var $elm$virtual_dom$VirtualDom$property = F2(
-	function (key, value) {
+var $author$project$Minimal$viewParsingTokens = F2(
+	function (cursor, formula) {
 		return A2(
-			_VirtualDom_property,
-			_VirtualDom_noInnerHtmlOrFormAction(key),
-			_VirtualDom_noJavaScriptOrHtmlJson(value));
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('token-row parsing-tokens')
+				]),
+			_Utils_ap(
+				A2(
+					$elm$core$List$indexedMap,
+					F2(
+						function (index, token) {
+							return A2(
+								$elm$html$Html$span,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$classList(
+										_List_fromArray(
+											[
+												_Utils_Tuple2('parsing-token', true),
+												_Utils_Tuple2(
+												'consumed',
+												_Utils_cmp(index, cursor) < 0),
+												_Utils_Tuple2(
+												'next-token',
+												_Utils_eq(index, cursor))
+											])),
+										A2(
+										$elm$html$Html$Attributes$attribute,
+										'title',
+										(_Utils_cmp(index, cursor) < 0) ? 'Consumed' : (_Utils_eq(index, cursor) ? 'Next unread token' : 'Unread'))
+									]),
+								_List_fromArray(
+									[
+										$author$project$Minimal$viewToken(token)
+									]));
+						}),
+					$author$project$Minimal$scanTokens(formula)),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$span,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$classList(
+								_List_fromArray(
+									[
+										_Utils_Tuple2('end-token', true),
+										_Utils_Tuple2(
+										'next-token',
+										_Utils_eq(
+											cursor,
+											$elm$core$List$length(
+												$author$project$Minimal$scanTokens(formula))))
+									]))
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('END')
+							]))
+					])));
 	});
-var $elm$html$Html$Attributes$property = $elm$virtual_dom$VirtualDom$property;
-var $author$project$FieldManual$Reader$themeName = function (model) {
-	return $author$project$FieldManual$Reader$isLight(model) ? 'Light mode' : 'Dark mode';
-};
-var $elm$html$Html$Attributes$title = $elm$html$Html$Attributes$stringProperty('title');
-var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
-var $author$project$SiteShell$view = F4(
-	function (libraryPage, chapters, body, model) {
+var $author$project$Minimal$viewPrecedenceStep = F2(
+	function (activeLevel, _v0) {
+		var name = _v0.a;
+		var symbolText = _v0.b;
+		var detail = _v0.c;
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -7933,614 +7611,1193 @@ var $author$project$SiteShell$view = F4(
 					$elm$html$Html$Attributes$classList(
 					_List_fromArray(
 						[
-							_Utils_Tuple2('night-manual', true),
-							_Utils_Tuple2('library-page', libraryPage),
-							_Utils_Tuple2('sidebar-open', model.u)
-						])),
-					$elm$html$Html$Attributes$id('top'),
-					$elm$html$Html$Attributes$tabindex(-1)
+							_Utils_Tuple2('ladder-step', true),
+							_Utils_Tuple2(
+							'active',
+							_Utils_eq(activeLevel, name))
+						]))
 				]),
 			_List_fromArray(
 				[
 					A2(
-					$elm$html$Html$a,
+					$elm$html$Html$span,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$class('skip-link'),
-							$elm$html$Html$Attributes$href(
-							libraryPage ? '#library' : '#engineering')
+							$elm$html$Html$Attributes$class('ladder-name')
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text('Skip to the manual')
+							$elm$html$Html$text(name)
 						])),
 					A2(
-					$elm$html$Html$aside,
+					$elm$html$Html$span,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$classList(
-							_List_fromArray(
-								[
-									_Utils_Tuple2('sidebar', true),
-									_Utils_Tuple2('is-open', model.u)
-								])),
-							$elm$html$Html$Attributes$id('manual-sidebar'),
-							A2(
-							$elm$html$Html$Attributes$property,
-							'inert',
-							$elm$json$Json$Encode$bool(!model.u)),
-							A2($elm$html$Html$Attributes$attribute, 'aria-label', 'Manual contents')
+							$elm$html$Html$Attributes$class('ladder-symbol')
 						]),
 					_List_fromArray(
 						[
-							A2(
-							$elm$html$Html$button,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('sidebar-close icon-button'),
-									$elm$html$Html$Attributes$id('sidebar-close'),
-									$elm$html$Html$Events$onClick($author$project$FieldManual$Reader$CloseSidebar),
-									$elm$html$Html$Attributes$type_('button'),
-									A2($elm$html$Html$Attributes$attribute, 'aria-label', 'Close sidebar')
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text('×')
-								])),
-							A2(
-							$elm$html$Html$a,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('wordmark'),
-									$elm$html$Html$Attributes$href('index.html')
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text('a3l')
-								])),
-							A2(
-							$elm$html$Html$div,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('sidebar-body')
-								]),
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$p,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('eyebrow')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text('ANTONIO ANDARA')
-										])),
-									A2(
-									$elm$html$Html$p,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('sidebar-title')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text('A closer look.')
-										])),
-									A2(
-									$elm$html$Html$p,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('side-note')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text('Open source engineering and a little sleight of hand.')
-										])),
-									A2(
-									$elm$html$Html$nav,
-									_List_fromArray(
-										[
-											A2($elm$html$Html$Attributes$attribute, 'aria-label', 'Chapters')
-										]),
-									A2(
-										$elm$core$List$map,
-										function (_v0) {
-											var number = _v0.a;
-											var target = _v0.b;
-											var title = _v0.c;
-											return A2(
-												$elm$html$Html$a,
-												_List_fromArray(
-													[
-														$elm$html$Html$Attributes$href('#' + target),
-														A2($elm$html$Html$Attributes$attribute, 'data-chapter', target),
-														A2(
-														$elm$html$Html$Attributes$attribute,
-														'aria-current',
-														_Utils_eq(
-															model.K,
-															$elm$core$Maybe$Just(target)) ? 'location' : 'false')
-													]),
-												_List_fromArray(
-													[
-														A2(
-														$elm$html$Html$span,
-														_List_Nil,
-														_List_fromArray(
-															[
-																$elm$html$Html$text(number)
-															])),
-														$elm$html$Html$text(title)
-													]));
-										},
-										chapters))
-								])),
-							A2(
-							$elm$html$Html$div,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('sidebar-foot')
-								]),
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$p,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('eyebrow')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text(
-											$author$project$FieldManual$Reader$isLight(model) ? 'EDITION 02 / DAY' : 'EDITION 01 / NIGHT')
-										])),
-									A2(
-									$elm$html$Html$a,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$href($author$project$Content$profile.ab)
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text('GitHub ↗')
-										]))
-								]))
+							$elm$html$Html$text(symbolText)
 						])),
 					A2(
-					$elm$html$Html$div,
+					$elm$html$Html$span,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$class('page-body')
+							$elm$html$Html$Attributes$class('ladder-detail')
 						]),
 					_List_fromArray(
 						[
-							A2(
-							$elm$html$Html$section,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('cover personal-cover'),
-									A2($elm$html$Html$Attributes$attribute, 'aria-labelledby', 'cover-title')
-								]),
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$div,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('cover-meta eyebrow')
-										]),
-									_List_fromArray(
-										[
+							$elm$html$Html$text(detail)
+						]))
+				]));
+	});
+var $author$project$Minimal$SetParseStep = function (a) {
+	return {$: 3, a: a};
+};
+var $elm$json$Json$Encode$bool = _Json_wrap;
+var $elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$bool(bool));
+	});
+var $elm$html$Html$Attributes$disabled = $elm$html$Html$Attributes$boolProperty('disabled');
+var $elm$core$String$fromFloat = _String_fromNumber;
+var $elm$core$Basics$ge = _Utils_ge;
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
+var $elm$core$List$takeReverse = F3(
+	function (n, list, kept) {
+		takeReverse:
+		while (true) {
+			if (n <= 0) {
+				return kept;
+			} else {
+				if (!list.b) {
+					return kept;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs,
+						$temp$kept = A2($elm$core$List$cons, x, kept);
+					n = $temp$n;
+					list = $temp$list;
+					kept = $temp$kept;
+					continue takeReverse;
+				}
+			}
+		}
+	});
+var $elm$core$List$takeTailRec = F2(
+	function (n, list) {
+		return $elm$core$List$reverse(
+			A3($elm$core$List$takeReverse, n, list, _List_Nil));
+	});
+var $elm$core$List$takeFast = F3(
+	function (ctr, n, list) {
+		if (n <= 0) {
+			return _List_Nil;
+		} else {
+			var _v0 = _Utils_Tuple2(n, list);
+			_v0$1:
+			while (true) {
+				_v0$5:
+				while (true) {
+					if (!_v0.b.b) {
+						return list;
+					} else {
+						if (_v0.b.b.b) {
+							switch (_v0.a) {
+								case 1:
+									break _v0$1;
+								case 2:
+									var _v2 = _v0.b;
+									var x = _v2.a;
+									var _v3 = _v2.b;
+									var y = _v3.a;
+									return _List_fromArray(
+										[x, y]);
+								case 3:
+									if (_v0.b.b.b.b) {
+										var _v4 = _v0.b;
+										var x = _v4.a;
+										var _v5 = _v4.b;
+										var y = _v5.a;
+										var _v6 = _v5.b;
+										var z = _v6.a;
+										return _List_fromArray(
+											[x, y, z]);
+									} else {
+										break _v0$5;
+									}
+								default:
+									if (_v0.b.b.b.b && _v0.b.b.b.b.b) {
+										var _v7 = _v0.b;
+										var x = _v7.a;
+										var _v8 = _v7.b;
+										var y = _v8.a;
+										var _v9 = _v8.b;
+										var z = _v9.a;
+										var _v10 = _v9.b;
+										var w = _v10.a;
+										var tl = _v10.b;
+										return (ctr > 1000) ? A2(
+											$elm$core$List$cons,
+											x,
 											A2(
-											$elm$html$Html$span,
-											_List_Nil,
+												$elm$core$List$cons,
+												y,
+												A2(
+													$elm$core$List$cons,
+													z,
+													A2(
+														$elm$core$List$cons,
+														w,
+														A2($elm$core$List$takeTailRec, n - 4, tl))))) : A2(
+											$elm$core$List$cons,
+											x,
+											A2(
+												$elm$core$List$cons,
+												y,
+												A2(
+													$elm$core$List$cons,
+													z,
+													A2(
+														$elm$core$List$cons,
+														w,
+														A3($elm$core$List$takeFast, ctr + 1, n - 4, tl)))));
+									} else {
+										break _v0$5;
+									}
+							}
+						} else {
+							if (_v0.a === 1) {
+								break _v0$1;
+							} else {
+								break _v0$5;
+							}
+						}
+					}
+				}
+				return list;
+			}
+			var _v1 = _v0.b;
+			var x = _v1.a;
+			return _List_fromArray(
+				[x]);
+		}
+	});
+var $elm$core$List$take = F2(
+	function (n, list) {
+		return A3($elm$core$List$takeFast, 0, n, list);
+	});
+var $author$project$Minimal$viewTrace = F2(
+	function (selected, steps) {
+		var total = $elm$core$List$length(steps);
+		var controls = A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('parse-controls')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Events$onClick(
+							$author$project$Minimal$SetParseStep(0)),
+							$elm$html$Html$Attributes$disabled(!selected)
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Reset')
+						])),
+					A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Events$onClick(
+							$author$project$Minimal$SetParseStep(selected - 1)),
+							$elm$html$Html$Attributes$disabled(!selected)
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('← Back')
+						])),
+					A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('parse-next'),
+							$elm$html$Html$Events$onClick(
+							$author$project$Minimal$SetParseStep(selected + 1)),
+							$elm$html$Html$Attributes$disabled(
+							_Utils_cmp(selected, total - 1) > -1)
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Next →')
+						])),
+					A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Events$onClick(
+							$author$project$Minimal$SetParseStep(total - 1)),
+							$elm$html$Html$Attributes$disabled(
+							_Utils_cmp(selected, total - 1) > -1)
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Finish')
+						]))
+				]));
+		var _v0 = $elm$core$List$head(
+			A2($elm$core$List$drop, selected, steps));
+		if (_v0.$ === 1) {
+			return $elm$html$Html$text('');
+		} else {
+			var current = _v0.a;
+			return A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('parse-walkthrough')
+					]),
+				_List_fromArray(
+					[
+						controls,
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('parse-progress'),
+								A2($elm$html$Html$Attributes$attribute, 'role', 'progressbar'),
+								A2($elm$html$Html$Attributes$attribute, 'aria-label', 'Parsing progress'),
+								A2($elm$html$Html$Attributes$attribute, 'aria-valuemin', '1'),
+								A2(
+								$elm$html$Html$Attributes$attribute,
+								'aria-valuemax',
+								$elm$core$String$fromInt(total)),
+								A2(
+								$elm$html$Html$Attributes$attribute,
+								'aria-valuenow',
+								$elm$core$String$fromInt(selected + 1))
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$span,
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$Attributes$style,
+										'width',
+										$elm$core$String$fromFloat(((selected + 1) / total) * 100) + '%')
+									]),
+								_List_Nil)
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('parse-current'),
+								A2($elm$html$Html$Attributes$attribute, 'aria-live', 'polite'),
+								A2($elm$html$Html$Attributes$attribute, 'aria-atomic', 'true')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('parse-step-meta')
+									]),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$span,
+										_List_Nil,
+										_List_fromArray(
+											[
+												$elm$html$Html$text(
+												'STEP ' + ($elm$core$String$fromInt(selected + 1) + (' / ' + $elm$core$String$fromInt(total))))
+											])),
+										A2(
+										$elm$html$Html$code,
+										_List_Nil,
+										_List_fromArray(
+											[
+												$elm$html$Html$text(current.aS)
+											]))
+									])),
+								A2(
+								$elm$html$Html$p,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('parse-action')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text(current.aD)
+									])),
+								A2(
+								$elm$html$Html$p,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('parse-explanation')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text(current.a9)
+									])),
+								function () {
+								var _v1 = current.cn;
+								if (!_v1.$) {
+									var expr = _v1.a;
+									return A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('parse-result')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$span,
+												_List_Nil,
+												_List_fromArray(
+													[
+														$elm$html$Html$text('Result')
+													])),
+												A2(
+												$elm$html$Html$code,
+												_List_Nil,
+												_List_fromArray(
+													[
+														$elm$html$Html$text(
+														$author$project$Minimal$exprToInline(expr))
+													]))
+											]));
+								} else {
+									return $elm$html$Html$text('');
+								}
+							}()
+							])),
+						A2(
+						$elm$html$Html$h3,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Recent steps')
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('parse-history'),
+								A2($elm$html$Html$Attributes$attribute, 'aria-label', 'Parsing history')
+							]),
+						A2(
+							$elm$core$List$map,
+							function (_v2) {
+								var index = _v2.a;
+								var step = _v2.b;
+								return A2(
+									$elm$html$Html$button,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$classList(
 											_List_fromArray(
 												[
-													$elm$html$Html$text('ANTONIO ANDARA — A PERSONAL FIELD MANUAL')
+													_Utils_Tuple2('parse-log', true),
+													_Utils_Tuple2(
+													'current',
+													_Utils_eq(index, selected))
 												])),
+											$elm$html$Html$Events$onClick(
+											$author$project$Minimal$SetParseStep(index)),
+											A2(
+											$elm$html$Html$Attributes$attribute,
+											'aria-current',
+											_Utils_eq(index, selected) ? 'step' : 'false')
+										]),
+									_List_fromArray(
+										[
 											A2(
 											$elm$html$Html$span,
 											_List_fromArray(
 												[
-													$elm$html$Html$Attributes$class('edition')
+													$elm$html$Html$Attributes$class('parse-log-number')
 												]),
 											_List_fromArray(
 												[
 													$elm$html$Html$text(
-													$author$project$FieldManual$Reader$isLight(model) ? '● DAY EDITION' : '● NIGHT EDITION')
-												]))
-										])),
-									A2(
-									$elm$html$Html$div,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('cover-grid')
-										]),
-									_List_fromArray(
-										[
-											A2(
-											$elm$html$Html$div,
-											_List_fromArray(
-												[
-													$elm$html$Html$Attributes$class('cover-copy')
-												]),
-											_List_fromArray(
-												[
-													A2(
-													$elm$html$Html$p,
-													_List_fromArray(
-														[
-															$elm$html$Html$Attributes$class('eyebrow blue')
-														]),
-													_List_fromArray(
-														[
-															$elm$html$Html$text('ENGINEERING / SOFTWARE / MAGIC')
-														])),
-													A2(
-													$elm$html$Html$h1,
-													_List_fromArray(
-														[
-															$elm$html$Html$Attributes$id('cover-title')
-														]),
-													_List_fromArray(
-														[
-															$elm$html$Html$text(
-															libraryPage ? 'Drawing' : 'Antonio'),
-															A2($elm$html$Html$br, _List_Nil, _List_Nil),
-															$elm$html$Html$text(
-															libraryPage ? 'library' : 'Andara'),
-															A2(
-															$elm$html$Html$span,
-															_List_fromArray(
-																[
-																	$elm$html$Html$Attributes$class('title-dot')
-																]),
-															_List_fromArray(
-																[
-																	$elm$html$Html$text('.')
-																]))
-														])),
-													A2(
-													$elm$html$Html$p,
-													_List_fromArray(
-														[
-															$elm$html$Html$Attributes$class('cover-deck')
-														]),
-													_List_fromArray(
-														[
-															$elm$html$Html$text(
-															libraryPage ? 'Small, reusable pieces of a visual language.' : $author$project$Content$profile.ad)
-														])),
-													A2(
-													$elm$html$Html$p,
-													_List_fromArray(
-														[
-															$elm$html$Html$Attributes$class('cover-description')
-														]),
-													_List_fromArray(
-														[
-															$elm$html$Html$text(
-															libraryPage ? 'A collection of schematics, patterns, and objects, drawn in Elm. Part of Antonio Andara’s personal field manual.' : $author$project$Content$profile.ae)
-														])),
-													A2(
-													$elm$html$Html$a,
-													_List_fromArray(
-														[
-															$elm$html$Html$Attributes$class('read-link'),
-															$elm$html$Html$Attributes$href(
-															libraryPage ? '#library' : '#engineering')
-														]),
-													_List_fromArray(
-														[
-															$elm$html$Html$text(
-															libraryPage ? 'Browse the drawings' : 'Explore my work'),
-															A2(
-															$elm$html$Html$span,
-															_List_Nil,
-															_List_fromArray(
-																[
-																	$elm$html$Html$text('↘')
-																]))
-														]))
+													$elm$core$String$fromInt(index + 1))
 												])),
 											A2(
 											$elm$html$Html$div,
-											_List_fromArray(
-												[
-													$elm$html$Html$Attributes$class('cover-plate')
-												]),
+											_List_Nil,
 											_List_fromArray(
 												[
 													A2(
 													$elm$html$Html$div,
 													_List_fromArray(
 														[
-															$elm$html$Html$Attributes$class('figure-meta')
+															$elm$html$Html$Attributes$class('parse-log-heading')
 														]),
 													_List_fromArray(
 														[
 															A2(
-															$elm$html$Html$span,
+															$elm$html$Html$code,
 															_List_Nil,
 															_List_fromArray(
 																[
-																	$elm$html$Html$text('PLATE 002')
+																	$elm$html$Html$text(step.aS)
 																])),
 															A2(
 															$elm$html$Html$span,
 															_List_Nil,
 															_List_fromArray(
 																[
-																	$elm$html$Html$text('COMPUTER / STACK')
+																	$elm$html$Html$text(step.aD)
 																]))
 														])),
-													$author$project$FieldManual$Illustrations$computerStack,
 													A2(
 													$elm$html$Html$p,
+													_List_Nil,
 													_List_fromArray(
 														[
-															$elm$html$Html$Attributes$class('eyebrow plate-note')
-														]),
-													_List_fromArray(
-														[
-															$elm$html$Html$text('COMPUTE. REMEMBER. PERSIST.')
-														]))
-												]))
-										])),
-									A2(
-									$elm$html$Html$div,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('cover-bottom eyebrow')
-										]),
-									_List_fromArray(
-										[
-											A2(
-											$elm$html$Html$span,
-											_List_Nil,
-											_List_fromArray(
-												[
-													$elm$html$Html$text('BUILD / SHARE / EXPERIMENT / WONDER')
-												])),
-											A2(
-											$elm$html$Html$a,
-											_List_fromArray(
-												[
-													$elm$html$Html$Attributes$href(
-													libraryPage ? '#library' : '#engineering')
-												]),
-											_List_fromArray(
-												[
-													$elm$html$Html$text('SCROLL TO INSPECT ↓')
-												]))
-										]))
-								])),
-							A2(
-							$elm$html$Html$header,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('reading-header'),
-									$elm$html$Html$Attributes$id('reading-header')
-								]),
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$div,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('header-start')
-										]),
-									_List_fromArray(
-										[
-											A2(
-											$elm$html$Html$button,
-											_List_fromArray(
-												[
-													$elm$html$Html$Attributes$class('menu-toggle icon-button'),
-													$elm$html$Html$Attributes$id('menu-toggle'),
-													$elm$html$Html$Events$onClick($author$project$FieldManual$Reader$ToggleSidebar),
-													$elm$html$Html$Attributes$type_('button'),
-													A2(
-													$elm$html$Html$Attributes$attribute,
-													'aria-label',
-													model.u ? 'Close sidebar' : 'Open sidebar'),
-													A2(
-													$elm$html$Html$Attributes$attribute,
-													'aria-expanded',
-													$author$project$FieldManual$Reader$boolString(model.u)),
-													A2($elm$html$Html$Attributes$attribute, 'aria-controls', 'manual-sidebar')
-												]),
-											_List_fromArray(
-												[
-													A2(
-													$elm$html$Html$span,
-													_List_fromArray(
-														[
-															$elm$html$Html$Attributes$class('hamburger'),
-															A2($elm$html$Html$Attributes$attribute, 'aria-hidden', 'true')
-														]),
-													_List_fromArray(
-														[
-															A2($elm$html$Html$span, _List_Nil, _List_Nil),
-															A2($elm$html$Html$span, _List_Nil, _List_Nil),
-															A2($elm$html$Html$span, _List_Nil, _List_Nil)
+															$elm$html$Html$text(step.a9)
 														]))
 												])),
 											A2(
-											$elm$html$Html$a,
-											_List_fromArray(
-												[
-													$elm$html$Html$Attributes$class('header-title'),
-													$elm$html$Html$Attributes$href('#top')
-												]),
-											_List_fromArray(
-												[
-													A2(
-													$elm$html$Html$span,
-													_List_fromArray(
-														[
-															$elm$html$Html$Attributes$class('blue')
-														]),
-													_List_fromArray(
-														[
-															$elm$html$Html$text('[ AA / FM ]')
-														])),
-													$elm$html$Html$text(' Antonio Andara')
-												]))
-										])),
-									A2(
-									$elm$html$Html$nav,
-									_List_fromArray(
-										[
-											A2($elm$html$Html$Attributes$attribute, 'aria-label', 'Quick navigation')
-										]),
-									_List_fromArray(
-										[
-											A2(
-											$elm$html$Html$a,
-											_List_fromArray(
-												[
-													$elm$html$Html$Attributes$href(
-													libraryPage ? 'index.html#engineering' : '#engineering')
-												]),
-											_List_fromArray(
-												[
-													$elm$html$Html$text('Work')
-												])),
-											A2(
-											$elm$html$Html$a,
-											_List_fromArray(
-												[
-													$elm$html$Html$Attributes$href(
-													libraryPage ? 'index.html#journal' : '#journal')
-												]),
-											_List_fromArray(
-												[
-													$elm$html$Html$text('Journal')
-												])),
-											A2(
-											$elm$html$Html$a,
-											_List_fromArray(
-												[
-													$elm$html$Html$Attributes$href(
-													libraryPage ? 'index.html#connect' : '#connect')
-												]),
-											_List_fromArray(
-												[
-													$elm$html$Html$text('Connect')
-												]))
-										])),
-									A2(
-									$elm$html$Html$button,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('theme-toggle'),
-											$elm$html$Html$Events$onClick($author$project$FieldManual$Reader$ToggleTheme),
-											$elm$html$Html$Attributes$title(
-											$author$project$FieldManual$Reader$isLight(model) ? 'Switch to dark mode' : 'Switch to light mode'),
-											$elm$html$Html$Attributes$type_('button'),
-											A2($elm$html$Html$Attributes$attribute, 'role', 'switch'),
-											A2(
-											$elm$html$Html$Attributes$attribute,
-											'aria-checked',
-											$author$project$FieldManual$Reader$boolString(
-												$author$project$FieldManual$Reader$isLight(model))),
-											A2($elm$html$Html$Attributes$attribute, 'aria-label', 'Light mode')
-										]),
-									_List_fromArray(
-										[
-											A2(
 											$elm$html$Html$span,
-											_List_Nil,
+											_List_fromArray(
+												[
+													$elm$html$Html$Attributes$class('parse-log-depth')
+												]),
 											_List_fromArray(
 												[
 													$elm$html$Html$text(
-													$author$project$FieldManual$Reader$themeName(model))
-												])),
-											A2(
-											$elm$html$Html$span,
-											_List_fromArray(
-												[
-													$elm$html$Html$Attributes$class('switch-track'),
-													A2($elm$html$Html$Attributes$attribute, 'aria-hidden', 'true')
-												]),
-											_List_fromArray(
-												[
-													A2(
-													$elm$html$Html$span,
-													_List_fromArray(
-														[
-															$elm$html$Html$Attributes$class('switch-thumb')
-														]),
-													_List_Nil)
+													'depth ' + $elm$core$String$fromInt(step.cz))
 												]))
-										]))
-								])),
+										]));
+							},
 							A2(
-							$elm$html$Html$main_,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$id('manual-content')
-								]),
-							_List_fromArray(
-								[body])),
+								$elm$core$List$take,
+								8,
+								$elm$core$List$reverse(
+									A2(
+										$elm$core$List$take,
+										selected + 1,
+										A2(
+											$elm$core$List$indexedMap,
+											F2(
+												function (index, step) {
+													return _Utils_Tuple2(index, step);
+												}),
+											steps))))))
+					]));
+		}
+	});
+var $author$project$Minimal$viewParserPanel = F2(
+	function (model, _v0) {
+		var steps = $author$project$Minimal$parsingSteps(model.u);
+		var current = $elm$core$List$head(
+			A2($elm$core$List$drop, model.L, steps));
+		return A2(
+			$elm$html$Html$section,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('panel parser-panel')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$h2,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Parser Pipeline')
+						])),
+					A2(
+					$elm$html$Html$p,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('panel-lede')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Follow the recursive-descent grammar one step at a time. The blue outline marks the next unread token; dimmed tokens have already been consumed.')
+						])),
+					A2(
+					$elm$html$Html$h3,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Token stream')
+						])),
+					A2(
+					$author$project$Minimal$viewParsingTokens,
+					A2(
+						$elm$core$Maybe$withDefault,
+						0,
+						A2(
+							$elm$core$Maybe$map,
+							function ($) {
+								return $.cw;
+							},
+							current)),
+					model.u),
+					A2(
+					$elm$html$Html$h3,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Precedence ladder')
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('ladder')
+						]),
+					A2(
+						$elm$core$List$map,
+						$author$project$Minimal$viewPrecedenceStep(
 							A2(
-							$elm$html$Html$footer,
+								$elm$core$Maybe$withDefault,
+								'exprParser',
+								A2(
+									$elm$core$Maybe$map,
+									function ($) {
+										return $.aS;
+									},
+									current))),
+						$author$project$Minimal$precedenceLevels)),
+					A2(
+					$elm$html$Html$h3,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Parsing walkthrough')
+						])),
+					A2($author$project$Minimal$viewTrace, model.L, steps)
+				]));
+	});
+var $author$project$FormulaParser$evaluate = F2(
+	function (ast, assignment) {
+		switch (ast.$) {
+			case 0:
+				var name = ast.a;
+				return A2(
+					$elm$core$Maybe$withDefault,
+					false,
+					A2($elm$core$Dict$get, name, assignment));
+			case 1:
+				var inner = ast.a;
+				return !A2($author$project$FormulaParser$evaluate, inner, assignment);
+			case 2:
+				var left = ast.a;
+				var right = ast.b;
+				return A2($author$project$FormulaParser$evaluate, left, assignment) && A2($author$project$FormulaParser$evaluate, right, assignment);
+			default:
+				var left = ast.a;
+				var right = ast.b;
+				return A2($author$project$FormulaParser$evaluate, left, assignment) || A2($author$project$FormulaParser$evaluate, right, assignment);
+		}
+	});
+var $author$project$Minimal$ToggleVariable = F2(
+	function (a, b) {
+		return {$: 2, a: a, b: b};
+	});
+var $author$project$Minimal$truthText = function (bool) {
+	return bool ? 'True' : 'False';
+};
+var $author$project$Minimal$signalNodeTitle = F2(
+	function (expr, assignment) {
+		switch (expr.$) {
+			case 0:
+				var name = expr.a;
+				return name + (' = ' + $author$project$Minimal$truthText(
+					A2(
+						$elm$core$Maybe$withDefault,
+						false,
+						A2($elm$core$Dict$get, name, assignment))));
+			case 1:
+				return 'not';
+			case 2:
+				return 'and';
+			default:
+				return 'or';
+		}
+	});
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
+var $author$project$Minimal$viewSignalBlock = F3(
+	function (assignment, expr, result) {
+		var contents = _List_fromArray(
+			[
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('node-title')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						A2($author$project$Minimal$signalNodeTitle, expr, assignment))
+					])),
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('node-detail')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$Minimal$truthText(result))
+					]))
+			]);
+		var attributes = _List_fromArray(
+			[
+				$elm$html$Html$Attributes$classList(
+				_List_fromArray(
+					[
+						_Utils_Tuple2('node-box', true),
+						_Utils_Tuple2('signal-node-box', true),
+						_Utils_Tuple2(
+						$author$project$Minimal$operatorClass(expr),
+						true),
+						_Utils_Tuple2('is-true', result),
+						_Utils_Tuple2('is-false', !result)
+					]))
+			]);
+		if (!expr.$) {
+			var name = expr.a;
+			return A2(
+				$elm$html$Html$button,
+				_Utils_ap(
+					attributes,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$type_('button'),
+							$elm$html$Html$Events$onClick(
+							A2($author$project$Minimal$ToggleVariable, name, !result)),
+							A2(
+							$elm$html$Html$Attributes$attribute,
+							'aria-pressed',
+							result ? 'true' : 'false'),
+							A2($elm$html$Html$Attributes$attribute, 'aria-label', 'Toggle input ' + name),
+							A2($elm$html$Html$Attributes$attribute, 'title', 'Toggle ' + (name + ' everywhere'))
+						])),
+				contents);
+		} else {
+			return A2($elm$html$Html$div, attributes, contents);
+		}
+	});
+var $author$project$Minimal$viewSignalNode = F2(
+	function (assignment, expr) {
+		var result = A2($author$project$FormulaParser$evaluate, expr, assignment);
+		var children = $author$project$Minimal$exprChildren(expr);
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$classList(
+					_List_fromArray(
+						[
+							_Utils_Tuple2('tree-node', true),
+							_Utils_Tuple2(
+							'leaf-node',
+							$elm$core$List$isEmpty(children))
+						]))
+				]),
+			_Utils_ap(
+				_List_fromArray(
+					[
+						A3($author$project$Minimal$viewSignalBlock, assignment, expr, result)
+					]),
+				$elm$core$List$isEmpty(children) ? _List_Nil : _List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('tree-children')
+							]),
+						A2(
+							$elm$core$List$map,
+							$author$project$Minimal$viewSignalNode(assignment),
+							children))
+					])));
+	});
+var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('checked');
+var $elm$html$Html$input = _VirtualDom_node('input');
+var $elm$json$Json$Decode$bool = _Json_decodeBool;
+var $elm$html$Html$Events$targetChecked = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'checked']),
+	$elm$json$Json$Decode$bool);
+var $elm$html$Html$Events$onCheck = function (tagger) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'change',
+		A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetChecked));
+};
+var $author$project$Minimal$viewVariableToggle = F2(
+	function (assignment, name) {
+		var isChecked = A2(
+			$elm$core$Maybe$withDefault,
+			false,
+			A2($elm$core$Dict$get, name, assignment));
+		return A2(
+			$elm$html$Html$label,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$classList(
+					_List_fromArray(
+						[
+							_Utils_Tuple2('var-toggle', true),
+							_Utils_Tuple2('is-true', isChecked)
+						]))
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$input,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$type_('checkbox'),
+							$elm$html$Html$Attributes$checked(isChecked),
+							A2($elm$html$Html$Attributes$attribute, 'role', 'switch'),
+							A2($elm$html$Html$Attributes$attribute, 'aria-label', 'Input ' + name),
+							$elm$html$Html$Events$onCheck(
+							$author$project$Minimal$ToggleVariable(name))
+						]),
+					_List_Nil),
+					A2(
+					$elm$html$Html$span,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('switch-track'),
+							A2($elm$html$Html$Attributes$attribute, 'aria-hidden', 'true')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$span,
 							_List_fromArray(
 								[
-									$elm$html$Html$Attributes$class('manual-footer site-footer')
+									$elm$html$Html$Attributes$class('switch-thumb')
 								]),
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$span,
-									_List_Nil,
-									_List_fromArray(
-										[
-											$elm$html$Html$text('ANTONIO ANDARA / ENGINEERING & MAGIC')
-										])),
-									A2(
-									$elm$html$Html$a,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$href('library.html')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text('Drawing library ↗')
-										])),
-									A2(
-									$elm$html$Html$a,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$href('#top')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text('Back to the surface ↑')
-										]))
-								]))
+							_List_Nil)
+						])),
+					A2(
+					$elm$html$Html$span,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('var-name')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(name)
+						])),
+					A2(
+					$elm$html$Html$span,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('var-value')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(
+							$author$project$Minimal$truthText(isChecked))
 						]))
 				]));
 	});
-var $author$project$Main$main = A3(
-	$author$project$FieldManual$Reader$application,
-	'Antonio Andara — Engineer & magician',
-	A2(
-		$elm$core$List$map,
-		function (_v0) {
-			var target = _v0.b;
-			return target;
-		},
-		$author$project$Main$chapters),
-	function (model) {
-		return A4($author$project$SiteShell$view, false, $author$project$Main$chapters, $author$project$Main$body, model);
+var $author$project$Minimal$viewVariableToggles = F2(
+	function (variables, assignment) {
+		return $elm$core$List$isEmpty(variables) ? A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('toggle-row empty')
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text('No variables')
+				])) : A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('toggle-row')
+				]),
+			A2(
+				$elm$core$List$map,
+				$author$project$Minimal$viewVariableToggle(assignment),
+				variables));
 	});
-_Platform_export({'Main':{'init':$author$project$Main$main(
-	A2(
-		$elm$json$Json$Decode$andThen,
-		function (theme) {
-			return $elm$json$Json$Decode$succeed(
-				{z: theme});
+var $author$project$Minimal$viewSignalPanel = F3(
+	function (variables, assignment, ast) {
+		return A2(
+			$elm$html$Html$section,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('panel signal-panel')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$h2,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Signal Propagation')
+						])),
+					A2(
+					$elm$html$Html$p,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('panel-lede')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Use the switches or click a variable block to change its value. Signals update from the inputs toward the root.')
+						])),
+					A2($author$project$Minimal$viewVariableToggles, variables, assignment),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('tree-scroll')
+						]),
+					_List_fromArray(
+						[
+							A2($author$project$Minimal$viewSignalNode, assignment, ast)
+						]))
+				]));
+	});
+var $elm$core$Basics$pow = _Basics_pow;
+var $elm$core$Basics$modBy = _Basics_modBy;
+var $author$project$FormulaParser$bitAt = F2(
+	function (mask, bitPos) {
+		return A2(
+			$elm$core$Basics$modBy,
+			2,
+			(mask / A2($elm$core$Basics$pow, 2, bitPos)) | 0) === 1;
+	});
+var $author$project$FormulaParser$buildTruthTable = function (ast) {
+	var vars = $author$project$FormulaParser$collectVariables(ast);
+	var varCount = $elm$core$List$length(vars);
+	var rowCount = A2($elm$core$Basics$pow, 2, varCount);
+	var assignmentForMask = function (mask) {
+		return $elm$core$Dict$fromList(
+			A2(
+				$elm$core$List$indexedMap,
+				F2(
+					function (i, _var) {
+						return _Utils_Tuple2(
+							_var,
+							A2($author$project$FormulaParser$bitAt, mask, (varCount - 1) - i));
+					}),
+				vars));
+	};
+	return A2(
+		$elm$core$List$map,
+		function (mask) {
+			var assignment = assignmentForMask(mask);
+			return {
+				a0: assignment,
+				bH: A2($author$project$FormulaParser$evaluate, ast, assignment)
+			};
 		},
-		A2($elm$json$Json$Decode$field, 'theme', $elm$json$Json$Decode$string)))(0)}});}(this));
+		A2($elm$core$List$range, 0, rowCount - 1));
+};
+var $elm$html$Html$table = _VirtualDom_node('table');
+var $elm$html$Html$tbody = _VirtualDom_node('tbody');
+var $elm$html$Html$th = _VirtualDom_node('th');
+var $elm$html$Html$thead = _VirtualDom_node('thead');
+var $elm$html$Html$tr = _VirtualDom_node('tr');
+var $elm$core$List$any = F2(
+	function (isOkay, list) {
+		any:
+		while (true) {
+			if (!list.b) {
+				return false;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (isOkay(x)) {
+					return true;
+				} else {
+					var $temp$isOkay = isOkay,
+						$temp$list = xs;
+					isOkay = $temp$isOkay;
+					list = $temp$list;
+					continue any;
+				}
+			}
+		}
+	});
+var $elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var $elm$core$List$all = F2(
+	function (isOkay, list) {
+		return !A2(
+			$elm$core$List$any,
+			A2($elm$core$Basics$composeL, $elm$core$Basics$not, isOkay),
+			list);
+	});
+var $author$project$Minimal$assignmentsMatch = F3(
+	function (variables, left, right) {
+		return A2(
+			$elm$core$List$all,
+			function (name) {
+				return _Utils_eq(
+					A2($elm$core$Dict$get, name, left),
+					A2($elm$core$Dict$get, name, right));
+			},
+			variables);
+	});
+var $elm$html$Html$td = _VirtualDom_node('td');
+var $author$project$Minimal$viewBoolCell = function (bool) {
+	return A2(
+		$elm$html$Html$td,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$classList(
+						_List_fromArray(
+							[
+								_Utils_Tuple2('truth-chip', true),
+								_Utils_Tuple2('is-true', bool),
+								_Utils_Tuple2('is-false', !bool)
+							]))
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$Minimal$truthText(bool))
+					]))
+			]));
+};
+var $author$project$Minimal$viewTruthTableRow = F4(
+	function (variables, currentAssignment, _v0, row) {
+		return A2(
+			$elm$html$Html$tr,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$classList(
+					_List_fromArray(
+						[
+							_Utils_Tuple2(
+							'current-row',
+							A3($author$project$Minimal$assignmentsMatch, variables, currentAssignment, row.a0))
+						]))
+				]),
+			_Utils_ap(
+				A2(
+					$elm$core$List$map,
+					function (name) {
+						return $author$project$Minimal$viewBoolCell(
+							A2(
+								$elm$core$Maybe$withDefault,
+								false,
+								A2($elm$core$Dict$get, name, row.a0)));
+					},
+					variables),
+				_List_fromArray(
+					[
+						$author$project$Minimal$viewBoolCell(row.bH)
+					])));
+	});
+var $author$project$Minimal$viewTruthTable = F3(
+	function (variables, assignment, ast) {
+		var rowsForAst = $author$project$FormulaParser$buildTruthTable(ast);
+		return A2(
+			$elm$html$Html$table,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('truth-table')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$thead,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$tr,
+							_List_Nil,
+							_Utils_ap(
+								A2(
+									$elm$core$List$map,
+									function (name) {
+										return A2(
+											$elm$html$Html$th,
+											_List_Nil,
+											_List_fromArray(
+												[
+													$elm$html$Html$text(name)
+												]));
+									},
+									variables),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$th,
+										_List_Nil,
+										_List_fromArray(
+											[
+												$elm$html$Html$text('result')
+											]))
+									])))
+						])),
+					A2(
+					$elm$html$Html$tbody,
+					_List_Nil,
+					A2(
+						$elm$core$List$indexedMap,
+						A2($author$project$Minimal$viewTruthTableRow, variables, assignment),
+						rowsForAst))
+				]));
+	});
+var $author$project$Minimal$viewTruthTablePanel = F3(
+	function (variables, assignment, ast) {
+		var variableCount = $elm$core$List$length(variables);
+		return A2(
+			$elm$html$Html$section,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('panel truth-panel')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$h2,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Truth Table')
+						])),
+					A2(
+					$elm$html$Html$p,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('panel-lede')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('The table enumerates every assignment. The highlighted row matches the live toggles above.')
+						])),
+					(variableCount > 6) ? A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('notice')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(
+							'This formula has ' + ($elm$core$String$fromInt(variableCount) + (' variables, which would create ' + ($elm$core$String$fromInt(
+								A2($elm$core$Basics$pow, 2, variableCount)) + ' rows. Try six variables or fewer for the live table.'))))
+						])) : A3($author$project$Minimal$viewTruthTable, variables, assignment, ast)
+				]));
+	});
+var $author$project$Minimal$viewParsed = F2(
+	function (model, ast) {
+		var variables = $author$project$FormulaParser$collectVariables(ast);
+		var assignment = A2($author$project$Minimal$completeAssignment, variables, model.a0);
+		return _List_fromArray(
+			[
+				A2(
+				$elm$html$Html$section,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('metrics-strip')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$author$project$Minimal$viewMetric,
+						'Root node',
+						$author$project$Minimal$constructorName(ast)),
+						A2(
+						$author$project$Minimal$viewMetric,
+						'Variables',
+						$elm$core$String$fromInt(
+							$elm$core$List$length(variables))),
+						A2(
+						$author$project$Minimal$viewMetric,
+						'AST nodes',
+						$elm$core$String$fromInt(
+							$author$project$Minimal$nodeCount(ast))),
+						A2(
+						$author$project$Minimal$viewMetric,
+						'Tree depth',
+						$elm$core$String$fromInt(
+							$author$project$Minimal$treeDepth(ast)))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('lesson-grid')
+					]),
+				_List_fromArray(
+					[
+						A2($author$project$Minimal$viewParserPanel, model, ast),
+						$author$project$Minimal$viewAstPanel(model),
+						A3($author$project$Minimal$viewSignalPanel, variables, assignment, ast),
+						A3($author$project$Minimal$viewTruthTablePanel, variables, assignment, ast)
+					]))
+			]);
+	});
+var $author$project$Minimal$view = function (model) {
+	var parsed = $author$project$FormulaParser$parse(model.u);
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('page-shell')
+			]),
+		_List_fromArray(
+			[
+				$author$project$Minimal$viewHero(model),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('workspace')
+					]),
+				function () {
+					if (!parsed.$) {
+						var ast = parsed.a;
+						return A2($author$project$Minimal$viewParsed, model, ast);
+					} else {
+						var deadEnds = parsed.a;
+						return A2($author$project$Minimal$viewBrokenParse, model, deadEnds);
+					}
+				}())
+			]));
+};
+var $author$project$Minimal$main = $elm$browser$Browser$sandbox(
+	{cQ: $author$project$Minimal$init, dN: $author$project$Minimal$update, dO: $author$project$Minimal$view});
+_Platform_export({'Minimal':{'init':$author$project$Minimal$main(
+	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
