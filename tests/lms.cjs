@@ -26,7 +26,14 @@ const server=http.createServer((q,r)=>{
   assert.equal(await page.locator('#lms .text-links a').count(),1);
   assert.equal(await page.locator('a.lms-project-preview').getAttribute('href'),'projects/lms/demo/index.html');
   assert.equal(await page.locator('#magic a[href="https://www.youtube.com/@viamagus"]').count(),1);
-  assert.ok(await page.locator('.lms-project-preview img').evaluate(i=>i.complete&&i.naturalWidth>0));
+  const previewImage=page.locator('.lms-project-preview img');
+  // Lazy images start loading when scrolled into view, after navigation finishes.
+  await previewImage.scrollIntoViewIfNeeded();
+  await page.waitForFunction(()=>{
+   const image=document.querySelector('.lms-project-preview img');
+   return image?.complete&&image.naturalWidth>0;
+  });
+  assert.ok(await previewImage.evaluate(i=>i.complete&&i.naturalWidth>0));
   await page.locator('#lms').getByRole('link',{name:'Try a sample lesson ↗',exact:true}).click();
   assert.equal(new URL(page.url()).pathname,'/projects/lms/demo/index.html');
   await page.getByRole('switch',{name:'Light mode'}).waitFor();
