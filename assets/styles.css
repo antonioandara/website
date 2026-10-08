@@ -41,6 +41,10 @@ button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:2p
 @media(prefers-reduced-motion:reduce){.video-link .plate-surface{transition:none}}
 
 /* MarkdownBook project preview */
+/* The processor drawing needs its full height and room for its labels. */
+.plate-surface.compact:has(> .processor-stack){aspect-ratio:auto}
+.work-feature .figure-plate .processor-stack{max-height:none}
+
 .lms-feature{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.3fr);gap:40px;align-items:center}
 .lms-project-copy h3{font-size:clamp(24px,3vw,36px);line-height:1.4;margin:14px 0 22px}
 .lms-project-copy>p{color:var(--prose);line-height:1.85}

@@ -6767,7 +6767,7 @@ var $author$project$FieldManual$Illustrations$processorStack = function () {
 	return A3(
 		$author$project$FieldManual$Illustrations$svgRoot,
 		'diagram processor-stack',
-		'0 0 420 430',
+		'0 0 500 430',
 		_List_fromArray(
 			[
 				A3($author$project$FieldManual$Illustrations$svgLabel, '26', '26', 'COMPUTATION FROM THE GROUND UP'),

@@ -84,7 +84,7 @@ processorStack =
                 , svgLabel "313" (String.fromInt (y + 8)) title
                 ]
     in
-    svgRoot "diagram processor-stack" "0 0 420 430"
+    svgRoot "diagram processor-stack" "0 0 500 430"
         [ svgLabel "26" "26" "COMPUTATION FROM THE GROUND UP"
         -- The assembled core: pins, a die, and its internal floorplan.
         , plane 54

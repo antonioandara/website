@@ -86,6 +86,13 @@ const server = http.createServer((req, res) => {
       const side = await page.locator('.sidebar').boundingBox(), content = await page.locator('.page-body').boundingBox();
       assert.ok(side.x + side.width <= content.x + 1);
       await page.keyboard.press('Escape');
+      const drawingFits = await page.locator('.processor-stack').evaluate(svg => {
+        const frame = svg.parentElement.getBoundingClientRect();
+        const drawing = svg.getBoundingClientRect();
+        const inside = (inner, outer) => inner.left >= outer.left - 1 && inner.right <= outer.right + 1 && inner.top >= outer.top - 1 && inner.bottom <= outer.bottom + 1;
+        return inside(drawing, frame) && [...svg.querySelectorAll('text')].every(label => inside(label.getBoundingClientRect(), drawing));
+      });
+      assert.ok(drawingFits, `Processor drawing or labels escape the frame at ${width}`);
     }
     await page.locator('.menu-toggle').click();
     await page.locator('#sidebar-close').click();
