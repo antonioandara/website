@@ -150,17 +150,23 @@ const server = http.createServer((req, res) => {
     await page.goto(base + '/index.html');
     assert.equal(await page.locator('.language-toggle .lang-code').innerText(), 'EN');
     await page.locator('.language-toggle').click();
-    await page.waitForFunction(() => document.documentElement.lang === 'es');
+    await page.waitForFunction(() =>
+      document.documentElement.lang === 'es' &&
+      document.querySelector('.language-toggle .lang-code')?.textContent === 'ES');
     assert.equal(await page.locator('.language-toggle .lang-code').innerText(), 'ES');
     assert.match(await page.locator('#magic h2').innerText(), /La magia existe en la mente/);
     assert.match(await page.locator('#journal .field-note h3').innerText(), /Cosas que hago/);
     assert.equal(await page.locator('#journal .note-content p').count(), 2);
     assert.match(await page.locator('h2').first().innerText(), /Trabajo/);
     await page.reload();
-    await page.waitForFunction(() => document.documentElement.lang === 'es');
+    await page.waitForFunction(() =>
+      document.documentElement.lang === 'es' &&
+      document.querySelector('.language-toggle .lang-code')?.textContent === 'ES');
     assert.equal(await page.locator('.theme-toggle').innerText(), 'Modo oscuro');
     await page.locator('.language-toggle').click();
-    await page.waitForFunction(() => document.documentElement.lang === 'en');
+    await page.waitForFunction(() =>
+      document.documentElement.lang === 'en' &&
+      document.querySelector('.language-toggle .lang-code')?.textContent === 'EN');
     assert.deepEqual(errors,[]);
     console.log('PASS: identity, four profile URLs, eight sections, themes/persistence, language selector, navigation/focus, journal state, library, bundled experiments and parser interactions, local links, five responsive widths, no runtime errors.');
   } finally { await browser.close(); await new Promise(resolve => server.close(resolve)); }
