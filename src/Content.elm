@@ -1,18 +1,30 @@
 module Content exposing (Profile, JournalEntry, profile, journal)
 
-{-| Personal facts and proposed editorial copy live here, separate from layout.
+{-| Personal facts and editorial copy live here, separate from layout.
 Only user-provided identity, interests, and profile URLs are used.
 Add verified project case studies and career details as they become available.
 -}
 
+import Generated.Content as Generated
+import I18n exposing (Language(..), pick)
+
+
 type alias Profile =
     { name : String, identity : String, introduction : String, github : String, linkedin : String, x : String, youtube : String, magicYoutube : String }
 
-profile : Profile
-profile =
+
+{-| URL values are language independent; only the identity and introduction change. -}
+profile : Language -> Profile
+profile language =
     { name = "Antonio Andara Lara"
-    , identity = "Computers. Embedded. Open-source. Sleight of hand."
-    , introduction = "I’m Antonio and I like to make things. Here I share some of my work, experiments, and writing. I hope you find something that sparks your curiosity."
+    , identity =
+        pick language
+            "Computers. Embedded. Open-source. Sleight of hand."
+            "Computadoras. Eletrónica. Programación. Código abierto. Prestidigitación."
+    , introduction =
+        pick language
+            "I’m Antonio and I like to make things. Here I share some of my work, experiments, and writing. I hope you find something that sparks your curiosity."
+            "Soy Antonio y me gusta hacer cosas. Aquí comparto parte de mi trabajo, experimentos y mis algunos articulos. Espero que algo que despierte tu curiosidad."
     , github = "https://github.com/antonioandara"
     , linkedin = "https://www.linkedin.com/in/antonio-alejandro-andara-lara-ab5453a4/"
     , x = "https://x.com/A3L"
@@ -22,10 +34,9 @@ profile =
 
 
 type alias JournalEntry =
-    { number : String, category : String, title : String, summary : String, paragraphs : List String }
+    Generated.JournalEntry
 
-{-| Published field notes. Unpublished drafts are kept in CONTENT-PLAN.md. -}
-journal : List JournalEntry
+
+journal : Language -> List JournalEntry
 journal =
-    [ { number = "001", category = "PERSONAL", title = "Things I make", summary = "Why engineering, experiments, and magic belong in the same notebook."
-      , paragraphs = [ "I want this website to be a place where the different parts of my work can meet. Engineering, software, experiments, and magic all have a home here.", "Some pages will explain a finished project. Others will follow an idea while it is still taking shape. I want to share the work and the thinking around it, and leave room for the site to grow." ] }]
+    Generated.journal

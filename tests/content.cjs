@@ -1,0 +1,38 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const { spawnSync } = require('node:child_process');
+const root = path.resolve(__dirname, '..');
+const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'site-content-'));
+const content = path.join(temp, 'content');
+const output = path.join(temp, 'Content.elm');
+const run = () => spawnSync(process.execPath, [path.join(root, 'scripts/generate-content.mjs'), content, output], { encoding: 'utf8' });
+const reset = () => { fs.rmSync(content, { recursive: true, force: true }); fs.cpSync(path.join(root, 'content'), content, { recursive: true }); };
+try {
+  reset();
+  assert.equal(run().status, 0);
+  assert.match(fs.readFileSync(output, 'utf8'), /Cosas que hago/);
+  fs.copyFileSync(path.join(content, 'en/journal/things-i-make.md'), path.join(content, 'en/journal/new-note.md'));
+  let result = run();
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /id must match filename/);
+  reset();
+  fs.unlinkSync(path.join(content, 'es/journal/things-i-make.md'));
+  result = run();
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /IDs must match/);
+  reset();
+  const file = path.join(content, 'es/sections/magic.md');
+  fs.writeFileSync(file, fs.readFileSync(file, 'utf8').replace(/^heading:.*\n/m, ''));
+  result = run();
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /missing heading/);
+  reset();
+  const note = path.join(content, 'es/journal/things-i-make.md');
+  fs.writeFileSync(note, fs.readFileSync(note, 'utf8').replace('number: 001', 'number: 002'));
+  result = run();
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /numbers must match/);
+  console.log('Content generation and translation validation passed.');
+} finally { fs.rmSync(temp, { recursive: true, force: true }); }
