@@ -38,6 +38,9 @@ const server = http.createServer((req, res) => {
     await page.goto(base + '/index.html');
     assert.match(await page.locator('h1').innerText(), /Antonio\s+Andara/);
     assert.equal(await page.locator('.chapter').count(), 8);
+    assert.equal(await page.locator('#magic .prose > div p').count(), 2);
+    assert.equal(await page.locator('#journal .note-content p').count(), 2);
+    assert.match(await page.locator('#journal .field-note h3').innerText(), /Things I make/);
     const profiles = ['https://github.com/antonioandara','https://x.com/A3L','https://www.linkedin.com/in/antonio-alejandro-andara-lara-ab5453a4/','https://www.youtube.com/@andaralabs'];
     for (const profile of profiles) assert.ok(await page.locator(`a[href="${profile}"]`).count() > 0);
     await checkLinks();
@@ -143,7 +146,28 @@ const server = http.createServer((req, res) => {
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Parser overflow at ${width} in ${theme}`);
       }
     }
+    // Language selector: switch to Spanish, verify it persists, then return to English.
+    await page.goto(base + '/index.html');
+    assert.equal(await page.locator('.language-toggle .lang-code').innerText(), 'EN');
+    await page.locator('.language-toggle').click();
+    await page.waitForFunction(() =>
+      document.documentElement.lang === 'es' &&
+      document.querySelector('.language-toggle .lang-code')?.textContent === 'ES');
+    assert.equal(await page.locator('.language-toggle .lang-code').innerText(), 'ES');
+    assert.match(await page.locator('#magic h2').innerText(), /La magia existe en la mente/);
+    assert.match(await page.locator('#journal .field-note h3').innerText(), /Cosas que hago/);
+    assert.equal(await page.locator('#journal .note-content p').count(), 2);
+    assert.match(await page.locator('h2').first().innerText(), /Trabajo/);
+    await page.reload();
+    await page.waitForFunction(() =>
+      document.documentElement.lang === 'es' &&
+      document.querySelector('.language-toggle .lang-code')?.textContent === 'ES');
+    assert.equal(await page.locator('.theme-toggle').innerText(), 'Modo oscuro');
+    await page.locator('.language-toggle').click();
+    await page.waitForFunction(() =>
+      document.documentElement.lang === 'en' &&
+      document.querySelector('.language-toggle .lang-code')?.textContent === 'EN');
     assert.deepEqual(errors,[]);
-    console.log('PASS: identity, four profile URLs, eight sections, themes/persistence, navigation/focus, journal state, library, bundled experiments and parser interactions, local links, five responsive widths, no runtime errors.');
+    console.log('PASS: identity, four profile URLs, eight sections, themes/persistence, language selector, navigation/focus, journal state, library, bundled experiments and parser interactions, local links, five responsive widths, no runtime errors.');
   } finally { await browser.close(); await new Promise(resolve => server.close(resolve)); }
 })().catch(error => { console.error(error); server.close(); process.exitCode = 1; });

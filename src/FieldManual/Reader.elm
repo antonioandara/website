@@ -1,10 +1,11 @@
-port module FieldManual.Reader exposing (Flags, Model, Msg(..), application, boolString, isLight, themeName)
+port module FieldManual.Reader exposing (Flags, Model, Msg(..), application, boolString, isLight)
 
 import Browser
 import Browser.Dom as Dom
 import Browser.Events
 import Browser.Navigation as Navigation
 import Html exposing (Html)
+import I18n exposing (Language)
 import Json.Decode as Decode
 import Task
 import Url exposing (Url)
@@ -14,6 +15,10 @@ import Url exposing (Url)
 port persistTheme : { name : String, color : String } -> Cmd msg
 
 
+{-| Language is persisted next to the theme so the choice survives navigation. -}
+port persistLanguage : String -> Cmd msg
+
+
 {-| A scroll notification, with no UI decisions or DOM measurements in JavaScript. -}
 port scrollObserved : (() -> msg) -> Sub msg
 
@@ -21,11 +26,12 @@ port scrollObserved : (() -> msg) -> Sub msg
 type Theme = Dark | Light
 
 
-type alias Flags = { theme : String }
+type alias Flags = { theme : String, language : String }
 
 
 type alias Model =
     { theme : Theme
+    , language : Language
     , sidebarOpen : Bool
     , activeChapter : Maybe String
     , measuring : Bool
@@ -38,6 +44,7 @@ type alias Model =
 
 type Msg
     = ToggleTheme
+    | ToggleLanguage
     | ToggleSidebar
     | CloseSidebar
     | SelectCategory String
@@ -48,15 +55,15 @@ type Msg
     | NoOp
 
 
-application : String -> List String -> (Model -> Html Msg) -> Program Flags Model Msg
+application : (Model -> String) -> List String -> (Model -> Html Msg) -> Program Flags Model Msg
 application title chapters view =
     Browser.application
         { init = \flags url key ->
             let
-                model = { theme = if flags.theme == "light" then Light else Dark, sidebarOpen = False, activeChapter = Nothing, category = "All", measuring = True, measureAgain = False, key = key, url = url }
+                model = { theme = if flags.theme == "light" then Light else Dark, language = I18n.fromCode flags.language, sidebarOpen = False, activeChapter = Nothing, category = "All", measuring = True, measureAgain = False, key = key, url = url }
             in
             ( model, Cmd.batch [ saveTheme model, navigate url, measure chapters ] )
-        , view = \model -> { title = title, body = [ view model ] }
+        , view = \model -> { title = title model, body = [ view model ] }
         , update = update chapters
         , subscriptions = \model -> Sub.batch
             [ scrollObserved (\_ -> Measure)
@@ -76,6 +83,10 @@ update chapters msg model =
         ToggleTheme ->
             let next = { model | theme = if isLight model then Dark else Light }
             in ( next, saveTheme next )
+
+        ToggleLanguage ->
+            let next = { model | language = I18n.next model.language }
+            in ( next, saveLanguage next )
 
         ToggleSidebar ->
             ( { model | sidebarOpen = not model.sidebarOpen }
@@ -168,12 +179,13 @@ isLight : Model -> Bool
 isLight model = model.theme == Light
 
 
-themeName : Model -> String
-themeName model = if isLight model then "Light mode" else "Dark mode"
-
-
 boolString : Bool -> String
 boolString value = if value then "true" else "false"
+
+
+saveLanguage : Model -> Cmd Msg
+saveLanguage model =
+    persistLanguage (I18n.code model.language)
 
 
 saveTheme : Model -> Cmd Msg
