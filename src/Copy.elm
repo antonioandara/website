@@ -218,7 +218,7 @@ en =
         , "Experiments"
         , "Experimental LMS"
         , "Brain Magic & wonder"
-        , "Field notes"
+        , "Articles"
         , "Andara Labs / Via Magus"
         , "Get in touch"
         ]
@@ -264,7 +264,7 @@ en =
         }
     , home =
         { engineering =
-            { heading = "Work you can look inside."
+            { heading = "Look inside."
             , subtitle = "ENGINEERING & PRACTICE"
             , lead = "I’m an electronic engineer. I love to understand things deeply."
             , p1 = "Some of my interests are electronics, microcontrollers (MCUs), mechatronics, programming languages and language design, distributed systems, decentralization, blockchain, and open source. I enjoy exploring the latest technology, helping people understand it, and staying up to date with the latest innovations."
@@ -281,7 +281,7 @@ en =
             , noteBody = "The main application is built in Elm using the Elm architecture of model, update, and view. This is the first site I have published."
             }
         , openSource =
-            { heading = "Build. Share. Cooperate."
+            { heading = "Share the knowledge."
             , subtitle = "OPEN SOURCE"
             , quote = "Sharing is the most fundamental act of friendship. Because it is a way you can give something without losing something. — Richard Stallman"
             , body = "Open-source software is an important part of my work. This site connects the experiments and ideas with the places where the code and everything else lives."
@@ -292,7 +292,7 @@ en =
             }
         , experiments =
             { heading = "My workbench."
-            , subtitle = "SOME EXPERIMENTS & SMALL EXPLORATIONS"
+            , subtitle = "EXPERIMENTS & EXPLORATIONS"
             , intro = "These are experiments on different interesting topics. There is no real structure behind them, more like a stream of consciousness."
             , metaPrefix = "EXPERIMENT"
             , openLabel = "OPEN ↗"
@@ -392,7 +392,7 @@ es =
         , closeSidebar = "Cerrar barra lateral"
         , openSidebar = "Abrir barra lateral"
         , profileEyebrow = "ANTONIO ANDARA"
-        , sidebarTitle = "Una mirada de cerca."
+        , sidebarTitle = "Una mirada."
         , sideNote = "Ingeniería de código abierto y un poco de prestidigitación."
         , editionNight = "EDICIÓN 01 / NOCHE"
         , editionDay = "EDICIÓN 02 / DÍA"
@@ -405,7 +405,7 @@ es =
         , homeTitleBottom = "Andara"
         , libraryTitleTop = "Dibujos"
         , libraryTitleBottom = "biblioteca"
-        , libraryDeck = "Pequeños bloques reutilizables."
+        , libraryDeck = "Bloques Reutilizables."
         , libraryDescription = "Colección de esquemas, patrones y objetos, dibujados en Elm."
         , homeReadLink = "Explora mi trabajo"
         , libraryReadLink = "Explora los dibujos"
@@ -428,7 +428,7 @@ es =
         }
     , home =
         { engineering =
-            { heading = "Trabajo que puedes examinar."
+            { heading = "Mi trabajo."
             , subtitle = "INGENIERÍA Y PRÁCTICA"
             , lead = "Soy ingeniero electrónico. Me encanta entender las cosas a fondo."
             , p1 = "Algunos de mis intereses son la electrónica, los microcontroladores (MCU), la mecatrónica, los lenguajes de programación, el diseño de lenguajes, los sistemas distribuidos, la descentralización, blockchain y el código abierto. Disfruto explorar la tecnología más reciente, ayudar a las personas a entenderla y mantenerme al día con las últimas innovaciones."
@@ -445,7 +445,7 @@ es =
             , noteBody = "La aplicación principal está construida en Elm usando la arquitectura de Elm: modelo, actualización y vista. Este es el primer sitio que publico."
             }
         , openSource =
-            { heading = "Construir. Compartir. Cooperar."
+            { heading = "Compartiendo el conocimiento."
             , subtitle = "CÓDIGO ABIERTO"
             , quote = "Compartir es el acto más fundamental de la amistad. Porque es una forma de dar algo sin perder nada. — Richard Stallman"
             , body = "El software de código abierto es una parte importante de mi trabajo. Este sitio conecta los experimentos y las ideas con los lugares donde vive el código y todo lo demás."
@@ -455,17 +455,17 @@ es =
             , plateCaption = "La innovación prospera en la intersección de temas aparentemente inconexos."
             }
         , experiments =
-            { heading = "Banco de trabajo."
-            , subtitle = "ALGUNOS EXPERIMENTOS Y EXPLORACIONES"
+            { heading = "Mi taller."
+            , subtitle = "EXPERIMENTOS Y EXPLORACIONES"
             , intro = "Estos son experimentos sobre distintos temas interesantes. No hay una estructura real detrás, más bien un flujo de conciencia."
             , metaPrefix = "EXPERIMENTO"
             , openLabel = "ABRIR ↗"
             , items =
-                [ { title = "Fichas de fórmulas de tres colores"
-                  , description = "Fichas lógicas conectadas. Activa una entrada y observa cómo las restricciones de borde compartido propagan el cambio hacia la salida."
+                [ { title = "Mapas de tres colores"
+                  , description = "Cambia una entrada y observa cómo las nuevas restricciones se propagan hacia la salida."
                   }
                 , { title = "Parseo de fórmulas y explorador de AST"
-                  , description = "Recorre paso a paso una fórmula booleana, observa cómo crece su árbol de sintaxis y explora cómo las entradas cambian el resultado."
+                  , description = "Recorre paso a paso una fórmula booleana, observa cómo crece su árbol de sintaxis."
                   }
                 ]
             }
@@ -475,14 +475,14 @@ es =
             }
         , journal =
             { heading = "Notas."
-            , subtitle = "MI DIARIO"
+            , subtitle = "DIARIO"
             , intro = "Notas breves sobre distintos temas."
             , empty = "Aún no hay notas. Las primeras entradas todavía se están escribiendo."
             }
         , videos =
             { heading = "Mi canal de YouTube."
             , subtitle = "ANDARA LABS / VIDEO"
-            , lead = "No hago demasiados vídeos, pero algunas cosas es mejor mostrarlas."
+            , lead = "No hago muchos vídeos, pero algunas cosas es mejor mostrarlas."
             , body = "Andara Labs es mi canal de YouTube. Es el lugar para seguir el lado audiovisual de mi trabajo; esta sección crecerá hasta convertirse en una colección de vídeos individuales y las notas que hay detrás."
             , youtubeLink = "Visita Andara Labs en YouTube ↗"
             , plateMeta = "CANAL / @ANDARALABS"
@@ -564,12 +564,12 @@ specimens language =
 specimenRows : List SpecimenRow
 specimenRows =
     [ { key = "stack", category = "Systems", example = "Ink.computerStack"
-      , en = ( "Computer stack", "A processor board, paired memory sticks, and solid-state storage connected by a data path." )
-      , es = ( "Pila de computadora", "Una placa de procesador, módulos de memoria emparejados y almacenamiento de estado sólido conectados por una ruta de datos." )
+      , en = ( "Computer stack", "Processor board, paired memory sticks, solid-state storage." )
+      , es = ( "Arquitectura del computador", "Procesador, memoria de estado sólido." )
       }
     , { key = "processor", category = "Systems", example = "Ink.processorStack"
-      , en = ( "From gates to a CPU", "Logic gates build muxes and an ALU; connected into a datapath, they become a CPU core. Follow the arrows upward." )
-      , es = ( "De puertas lógicas a una CPU", "Las puertas lógicas construyen multiplexores y una ALU; conectadas en una ruta de datos, se convierten en un núcleo de CPU. Sigue las flechas hacia arriba." )
+      , en = ( "From gates to a CPU", "Logic gates build muxes and an ALU; connected into a datapath, they become a CPU core. Follow the arrows." )
+      , es = ( "De puertas lógicas a una CPU", "Las puertas lógicas construyen multiplexores y una ALU; conectadas de la forma correcta, se convierten en un CPU. Sigue las flechas." )
       }
     , { key = "touch", category = "Systems", example = "Ink.touchDiagram"
       , en = ( "Capacitive surface", "A measured field becomes a coordinate." )
