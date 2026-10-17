@@ -6771,7 +6771,7 @@ var $author$project$Main$experimentCard = F4(
 	});
 var $author$project$Copy$en = {
 	aO: _List_fromArray(
-		['Engineering & work', 'Open source', 'Experiments', 'Experimental LMS', 'Brain Magic & wonder', 'Field notes', 'Andara Labs / Via Magus', 'Get in touch']),
+		['Engineering & work', 'Open source', 'Experiments', 'Experimental LMS', 'Brain Magic & wonder', 'Articles', 'Andara Labs / Via Magus', 'Get in touch']),
 	a9: {
 		aS: {
 			D: 'For professional conversations, find me on LinkedIn. For code, visit GitHub. For videos and the conversations around the work, there’s Andara Labs and X.',
@@ -6786,7 +6786,7 @@ var $author$project$Copy$en = {
 				]),
 			q: 'WORK / COLLABORATION / CONVERSATION'
 		},
-		a3: {ac: 'ELECTRONICS / SOFTWARE / MAGIC', ad: 'My GitHub ↗', j: 'Work you can look inside.', G: 'I’m an electronic engineer. I love to understand things deeply.', bu: 'Professional background ↗', bC: 'The main application is built in Elm using the Elm architecture of model, update, and view. This is the first site I have published.', bD: 'Look at the implementation', bJ: 'Some of my interests are electronics, microcontrollers (MCUs), mechatronics, programming languages and language design, distributed systems, decentralization, blockchain, and open source. I enjoy exploring the latest technology, helping people understand it, and staying up to date with the latest innovations.', bK: 'This is a place for anyone who wants to learn and have a good time doing it. I hope you find something interesting here.', Q: 'Bottom up design.', H: 'IN PRACTICE / 01', R: 'learning from first principles', bU: 'This site is a working example of my work and my explorations of web development and functional programming.', bV: 'A personal field manual', q: 'ENGINEERING & PRACTICE'},
+		a3: {ac: 'ELECTRONICS / SOFTWARE / MAGIC', ad: 'My GitHub ↗', j: 'Look inside.', G: 'I’m an electronic engineer. I love to understand things deeply.', bu: 'Professional background ↗', bC: 'The main application is built in Elm using the Elm architecture of model, update, and view. This is the first site I have published.', bD: 'Look at the implementation', bJ: 'Some of my interests are electronics, microcontrollers (MCUs), mechatronics, programming languages and language design, distributed systems, decentralization, blockchain, and open source. I enjoy exploring the latest technology, helping people understand it, and staying up to date with the latest innovations.', bK: 'This is a place for anyone who wants to learn and have a good time doing it. I hope you find something interesting here.', Q: 'Bottom up design.', H: 'IN PRACTICE / 01', R: 'learning from first principles', bU: 'This site is a working example of my work and my explorations of web development and functional programming.', bV: 'A personal field manual', q: 'ENGINEERING & PRACTICE'},
 		a4: {
 			j: 'My workbench.',
 			M: 'These are experiments on different interesting topics. There is no real structure behind them, more like a stream of consciousness.',
@@ -6797,11 +6797,11 @@ var $author$project$Copy$en = {
 				]),
 			bz: 'EXPERIMENT',
 			bF: 'OPEN ↗',
-			q: 'SOME EXPERIMENTS & SMALL EXPLORATIONS'
+			q: 'EXPERIMENTS & EXPLORATIONS'
 		},
 		bi: {a2: 'No notes yet. The first entries are still being written.', j: 'Project Notes.', M: 'Short notes on different topics.', q: 'A PERSONAL JOURNAL'},
 		bx: {by: 'Watch Via Magus on YouTube ↗', cm: 'Find me on X ↗'},
-		bH: {D: 'Open-source software is an important part of my work. This site connects the experiments and ideas with the places where the code and everything else lives.', ad: 'Explore my GitHub ↗', j: 'Build. Share. Cooperate.', Q: 'Innovation thrives at the intersection of seemingly disjointed topics.', H: 'PRINCIPLE / 01', R: 'find the connections', bW: 'Sharing is the most fundamental act of friendship. Because it is a way you can give something without losing something. — Richard Stallman', q: 'OPEN SOURCE'},
+		bH: {D: 'Open-source software is an important part of my work. This site connects the experiments and ideas with the places where the code and everything else lives.', ad: 'Explore my GitHub ↗', j: 'Share the knowledge.', Q: 'Innovation thrives at the intersection of seemingly disjointed topics.', H: 'PRINCIPLE / 01', R: 'find the connections', bW: 'Sharing is the most fundamental act of friendship. Because it is a way you can give something without losing something. — Richard Stallman', q: 'OPEN SOURCE'},
 		ck: {D: 'Andara Labs is my YouTube channel. It’s the place to follow the video side of my work; this section will grow into a collection of individual videos and the notes behind them.', j: 'My YouTube channel.', G: 'I don\'t make too many videos, but some things are better shown.', Q: 'Open the channel to explore the videos.', H: 'CHANNEL / @ANDARALABS', R: 'watch on youtube ↗', q: 'ANDARA LABS / VIDEO', cn: 'Visit Andara Labs on YouTube ↗'}
 	},
 	bn: {
@@ -6858,23 +6858,23 @@ var $author$project$Copy$es = {
 				]),
 			q: 'TRABAJO / COLABORACIÓN / CONVERSACIÓN'
 		},
-		a3: {ac: 'ELECTRÓNICA / SOFTWARE / MAGIA', ad: 'Mi GitHub ↗', j: 'Trabajo que puedes examinar.', G: 'Soy ingeniero electrónico. Me encanta entender las cosas a fondo.', bu: 'Trayectoria profesional ↗', bC: 'La aplicación principal está construida en Elm usando la arquitectura de Elm: modelo, actualización y vista. Este es el primer sitio que publico.', bD: 'Mira la implementación', bJ: 'Algunos de mis intereses son la electrónica, los microcontroladores (MCU), la mecatrónica, los lenguajes de programación, el diseño de lenguajes, los sistemas distribuidos, la descentralización, blockchain y el código abierto. Disfruto explorar la tecnología más reciente, ayudar a las personas a entenderla y mantenerme al día con las últimas innovaciones.', bK: 'Este es un lugar para cualquiera que quiera aprender y pasarlo bien haciéndolo. Espero que encuentres algo interesante aquí.', Q: 'Diseño de abajo hacia arriba.', H: 'EN LA PRÁCTICA / 01', R: 'aprendizaje desde primeros principios', bU: 'Este sitio es un ejemplo de mi trabajo y de mis exploraciones en desarrollo web y programación funcional.', bV: 'Un manual de campo personal', q: 'INGENIERÍA Y PRÁCTICA'},
+		a3: {ac: 'ELECTRÓNICA / SOFTWARE / MAGIA', ad: 'Mi GitHub ↗', j: 'Mi trabajo.', G: 'Soy ingeniero electrónico. Me encanta entender las cosas a fondo.', bu: 'Trayectoria profesional ↗', bC: 'La aplicación principal está construida en Elm usando la arquitectura de Elm: modelo, actualización y vista. Este es el primer sitio que publico.', bD: 'Mira la implementación', bJ: 'Algunos de mis intereses son la electrónica, los microcontroladores (MCU), la mecatrónica, los lenguajes de programación, el diseño de lenguajes, los sistemas distribuidos, la descentralización, blockchain y el código abierto. Disfruto explorar la tecnología más reciente, ayudar a las personas a entenderla y mantenerme al día con las últimas innovaciones.', bK: 'Este es un lugar para cualquiera que quiera aprender y pasarlo bien haciéndolo. Espero que encuentres algo interesante aquí.', Q: 'Diseño de abajo hacia arriba.', H: 'EN LA PRÁCTICA / 01', R: 'aprendizaje desde primeros principios', bU: 'Este sitio es un ejemplo de mi trabajo y de mis exploraciones en desarrollo web y programación funcional.', bV: 'Un manual de campo personal', q: 'INGENIERÍA Y PRÁCTICA'},
 		a4: {
-			j: 'Banco de trabajo.',
+			j: 'Mi taller.',
 			M: 'Estos son experimentos sobre distintos temas interesantes. No hay una estructura real detrás, más bien un flujo de conciencia.',
 			bh: _List_fromArray(
 				[
-					{A: 'Fichas lógicas conectadas. Activa una entrada y observa cómo las restricciones de borde compartido propagan el cambio hacia la salida.', L: 'Fichas de fórmulas de tres colores'},
-					{A: 'Recorre paso a paso una fórmula booleana, observa cómo crece su árbol de sintaxis y explora cómo las entradas cambian el resultado.', L: 'Parseo de fórmulas y explorador de AST'}
+					{A: 'Cambia una entrada y observa cómo las nuevas restricciones se propagan hacia la salida.', L: 'Mapas de tres colores'},
+					{A: 'Recorre paso a paso una fórmula booleana, observa cómo crece su árbol de sintaxis.', L: 'Parseo de fórmulas y explorador de AST'}
 				]),
 			bz: 'EXPERIMENTO',
 			bF: 'ABRIR ↗',
-			q: 'ALGUNOS EXPERIMENTOS Y EXPLORACIONES'
+			q: 'EXPERIMENTOS Y EXPLORACIONES'
 		},
-		bi: {a2: 'Aún no hay notas. Las primeras entradas todavía se están escribiendo.', j: 'Notas.', M: 'Notas breves sobre distintos temas.', q: 'MI DIARIO'},
+		bi: {a2: 'Aún no hay notas. Las primeras entradas todavía se están escribiendo.', j: 'Notas.', M: 'Notas breves sobre distintos temas.', q: 'DIARIO'},
 		bx: {by: 'Mira Via Magus en YouTube ↗', cm: 'Encuéntrame en X ↗'},
-		bH: {D: 'El software de código abierto es una parte importante de mi trabajo. Este sitio conecta los experimentos y las ideas con los lugares donde vive el código y todo lo demás.', ad: 'Explora mi GitHub ↗', j: 'Construir. Compartir. Cooperar.', Q: 'La innovación prospera en la intersección de temas aparentemente inconexos.', H: 'PRINCIPIO / 01', R: 'encuentra las conexiones', bW: 'Compartir es el acto más fundamental de la amistad. Porque es una forma de dar algo sin perder nada. — Richard Stallman', q: 'CÓDIGO ABIERTO'},
-		ck: {D: 'Andara Labs es mi canal de YouTube. Es el lugar para seguir el lado audiovisual de mi trabajo; esta sección crecerá hasta convertirse en una colección de vídeos individuales y las notas que hay detrás.', j: 'Mi canal de YouTube.', G: 'No hago demasiados vídeos, pero algunas cosas es mejor mostrarlas.', Q: 'Abre el canal para explorar los vídeos.', H: 'CANAL / @ANDARALABS', R: 'ver en youtube ↗', q: 'ANDARA LABS / VIDEO', cn: 'Visita Andara Labs en YouTube ↗'}
+		bH: {D: 'El software de código abierto es una parte importante de mi trabajo. Este sitio conecta los experimentos y las ideas con los lugares donde vive el código y todo lo demás.', ad: 'Explora mi GitHub ↗', j: 'Compartiendo el conocimiento.', Q: 'La innovación prospera en la intersección de temas aparentemente inconexos.', H: 'PRINCIPIO / 01', R: 'encuentra las conexiones', bW: 'Compartir es el acto más fundamental de la amistad. Porque es una forma de dar algo sin perder nada. — Richard Stallman', q: 'CÓDIGO ABIERTO'},
+		ck: {D: 'Andara Labs es mi canal de YouTube. Es el lugar para seguir el lado audiovisual de mi trabajo; esta sección crecerá hasta convertirse en una colección de vídeos individuales y las notas que hay detrás.', j: 'Mi canal de YouTube.', G: 'No hago muchos vídeos, pero algunas cosas es mejor mostrarlas.', Q: 'Abre el canal para explorar los vídeos.', H: 'CANAL / @ANDARALABS', R: 'ver en youtube ↗', q: 'ANDARA LABS / VIDEO', cn: 'Visita Andara Labs en YouTube ↗'}
 	},
 	bn: {
 		aK: 'Catálogo de dibujos',
@@ -6910,7 +6910,7 @@ var $author$project$Copy$es = {
 		cd: _List_fromArray(
 			['Lecciones interactivas', 'Autoría en Markdown', 'Elm'])
 	},
-	b_: {aI: 'Volver a la superficie ↑', aP: 'Cerrar barra lateral', aT: 'Contacto', aU: 'Contenido', aW: 'CONSTRUIR / COMPARTIR / EXPERIMENTAR', aX: 'INGENIERÍA / SOFTWARE / MAGIA', aY: 'ANTONIO ANDARA', aZ: '● EDICIÓN DÍA', a$: 'EDICIÓN 02 / DÍA', a0: 'EDICIÓN 01 / NOCHE', a6: 'Biblioteca de dibujos ↗', a7: 'ANTONIO ANDARA / INGENIERÍA Y MAGIA', cz: 'GitHub ↗', ba: 'Explora mi trabajo', bb: 'Andara', bc: 'Antonio', bj: 'Diario', bk: 'Cambiar a inglés', bl: 'Cambiar a español', bo: 'Pequeños bloques reutilizables.', bp: 'Colección de esquemas, patrones y objetos, dibujados en Elm.', bq: 'Explora los dibujos', br: 'biblioteca', bs: 'Dibujos', bB: '● EDICIÓN NOCHE', bG: 'Abrir barra lateral', H: 'LÁMINA 002', bN: 'LEER. PROCESAR. REPETIR.', bT: 'ANTONIO ANDARA', bY: 'DESPLAZA PARA INSPECCIONAR ↓', b$: 'Ingeniería de código abierto y un poco de prestidigitación.', b0: 'Una mirada de cerca.', b1: 'Saltar a la pagina', cf: 'Modo oscuro', cg: 'Modo claro', ch: 'Cambiar a modo oscuro', ci: 'Cambiar a modo claro', cl: 'Trabajo'},
+	b_: {aI: 'Volver a la superficie ↑', aP: 'Cerrar barra lateral', aT: 'Contacto', aU: 'Contenido', aW: 'CONSTRUIR / COMPARTIR / EXPERIMENTAR', aX: 'INGENIERÍA / SOFTWARE / MAGIA', aY: 'ANTONIO ANDARA', aZ: '● EDICIÓN DÍA', a$: 'EDICIÓN 02 / DÍA', a0: 'EDICIÓN 01 / NOCHE', a6: 'Biblioteca de dibujos ↗', a7: 'ANTONIO ANDARA / INGENIERÍA Y MAGIA', cz: 'GitHub ↗', ba: 'Explora mi trabajo', bb: 'Andara', bc: 'Antonio', bj: 'Diario', bk: 'Cambiar a inglés', bl: 'Cambiar a español', bo: 'Bloques Reutilizables.', bp: 'Colección de esquemas, patrones y objetos, dibujados en Elm.', bq: 'Explora los dibujos', br: 'biblioteca', bs: 'Dibujos', bB: '● EDICIÓN NOCHE', bG: 'Abrir barra lateral', H: 'LÁMINA 002', bN: 'LEER. PROCESAR. REPETIR.', bT: 'ANTONIO ANDARA', bY: 'DESPLAZA PARA INSPECCIONAR ↓', b$: 'Ingeniería de código abierto y un poco de prestidigitación.', b0: 'Una mirada.', b1: 'Saltar a la pagina', cf: 'Modo oscuro', cg: 'Modo claro', ch: 'Cambiar a modo oscuro', ci: 'Cambiar a modo claro', cl: 'Trabajo'},
 	L: 'Antonio Andara — Ingeniero y mago'
 };
 var $author$project$Copy$forLanguage = function (language) {
@@ -18074,7 +18074,7 @@ var $author$project$SiteShell$view = F4(
 														]),
 													_List_fromArray(
 														[
-															$elm$html$Html$text('[ AA / FM ]')
+															$elm$html$Html$text('[ A3L ]')
 														])),
 													$elm$html$Html$text(' Antonio Andara')
 												]))

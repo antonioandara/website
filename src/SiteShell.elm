@@ -70,7 +70,7 @@ view libraryPage chapters body model =
                 [ div [ class "header-start" ]
                     [ button [ class "menu-toggle icon-button", id "menu-toggle", onClick ToggleSidebar, type_ "button", attribute "aria-label" (if model.sidebarOpen then shell.closeSidebar else shell.openSidebar), attribute "aria-expanded" (Reader.boolString model.sidebarOpen), attribute "aria-controls" "manual-sidebar" ]
                         [ span [ class "hamburger", attribute "aria-hidden" "true" ] [ span [] [], span [] [], span [] [] ] ]
-                    , a [ class "header-title", href "#top" ] [ span [ class "blue" ] [ text "[ AA / FM ]" ], text " Antonio Andara" ]
+                    , a [ class "header-title", href "#top" ] [ span [ class "blue" ] [ text "[ A3L ]" ], text " Antonio Andara" ]
                     ]
                 , nav [ attribute "aria-label" (if model.language == I18n.Spanish then "Navegación rápida" else "Quick navigation") ]
                     [ a [ href (if libraryPage then "index.html#engineering" else "#engineering") ] [ text shell.workNav ], a [ href (if libraryPage then "index.html#journal" else "#journal") ] [ text shell.journalNav ], a [ href (if libraryPage then "index.html#connect" else "#connect") ] [ text shell.connectNav ] ]
