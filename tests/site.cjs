@@ -157,7 +157,7 @@ const server = http.createServer((req, res) => {
     assert.match(await page.locator('#magic h2').innerText(), /La magia existe en la mente/);
     assert.match(await page.locator('#journal .field-note h3').innerText(), /Cosas que hago/);
     assert.equal(await page.locator('#journal .note-content p').count(), 2);
-    assert.match(await page.locator('h2').first().innerText(), /Trabajo/);
+    assert.equal(await page.locator('#engineering h2').innerText(), 'Mi trabajo.');
     await page.reload();
     await page.waitForFunction(() =>
       document.documentElement.lang === 'es' &&
