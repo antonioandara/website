@@ -20,7 +20,7 @@ profile language =
     , identity =
         pick language
             "Computers. Embedded. Open-source. Sleight of hand."
-            "Computadoras. Eletrónica. Programación. Código abierto. Prestidigitación."
+            "Computadoras. Electrónica. Programación. Código abierto. Prestidigitación."
     , introduction =
         pick language
             "I’m Antonio and I like to make things. Here I share some of my work, experiments, and writing. I hope you find something that sparks your curiosity."

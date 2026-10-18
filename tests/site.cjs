@@ -105,8 +105,8 @@ const server = http.createServer((req, res) => {
     await page.screenshot({path:'/tmp/antonio-andara-mobile.png',fullPage:true});
     await page.goto(base + '/library.html#library');
     await waitActive('library');
-    assert.equal(await page.locator('.library-item').count(),19);
-    for(const [category,count] of [['Concepts',4],['Patterns',3],['All',19]]) {
+    assert.equal(await page.locator('.library-item').count(),23);
+    for(const [category,count] of [['Concepts',8],['Patterns',3],['All',23]]) {
       await page.locator(`[data-filter="${category}"]`).click();
       await page.waitForFunction(expected => [...document.querySelectorAll('.library-item')].filter(node => !node.hidden).length === expected, count);
       assert.equal(await page.locator('.library-item:visible').count(),count);

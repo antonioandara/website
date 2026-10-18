@@ -28,5 +28,5 @@ body model =
     section [ class "chapter", id "library", tabindex -1 ]
         [ chapterHeading "01" libraryCopy.heading libraryCopy.subtitle
         , p [ class "section-intro" ] [ text libraryCopy.intro ]
-        , Library.view model.language model.category SelectCategory Measure
+        , Library.view model.language model.category SelectCategory
         ]

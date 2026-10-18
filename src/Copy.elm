@@ -158,7 +158,6 @@ type alias Library =
     , heading : String
     , subtitle : String
     , intro : String
-    , recipe : String
     , countSuffix : String
     , filterAria : String
     , categories : List ( String, String )
@@ -343,8 +342,7 @@ en =
         , catalogue = "Drawing catalogue"
         , heading = "A cabinet of mechanisms."
         , subtitle = "REUSABLE DRAWINGS"
-        , intro = "All drawings share a visual language. Filter the collection or open an Elm recipe to see how a figure can be reused."
-        , recipe = "Elm recipe"
+        , intro = "All drawings share a visual language. Filter the collection to explore the drawings."
         , countSuffix = "drawings /"
         , filterAria = "Filter drawings"
         , categories =
@@ -507,8 +505,7 @@ es =
         , catalogue = "Catálogo de dibujos"
         , heading = "Un gabinete de mecanismos."
         , subtitle = "DIBUJOS REUTILIZABLES"
-        , intro = "Dibujos en un lenguaje visual compartido. Filtra la colección o abre una receta de Elm para ver cómo se puede reutilizar una figura."
-        , recipe = "Receta de Elm"
+        , intro = "Dibujos en un lenguaje visual compartido. Filtra la colección para explorar los dibujos."
         , countSuffix = "dibujos /"
         , filterAria = "Filtrar dibujos"
         , categories =
@@ -638,5 +635,21 @@ specimenRows =
     , { key = "turing", category = "Concepts", example = "Ink.turingMachine"
       , en = ( "Turing machine", "A tape, a state, and a head. Read a symbol, write a symbol, then move." )
       , es = ( "Máquina de Turing", "Una cinta, un estado y un cabezal. Lee un símbolo, escribe un símbolo y luego muévete." )
+      }
+    , { key = "state-machine", category = "Concepts", example = "Ink.stateMachine"
+      , en = ( "Finite state machine", "Read binary digits: 0 keeps the state, 1 toggles it. The double ring accepts an even number of ones." )
+      , es = ( "Máquina de estados finitos", "Lee dígitos binarios: 0 conserva el estado y 1 lo alterna. El doble círculo acepta una cantidad par de unos." )
+      }
+    , { key = "stack-machine", category = "Concepts", example = "Ink.stackMachine"
+      , en = ( "Stack machine", "Push 3, push 4, then ADD: pop both operands and push their sum onto the stack." )
+      , es = ( "Máquina de pila", "Apila 3 y 4, luego ejecuta ADD: retira ambos operandos y apila su suma." )
+      }
+    , { key = "register-machine", category = "Concepts", example = "Ink.registerMachine"
+      , en = ( "Register machine", "ADD R2, R0, R1 reads 3 and 4 from named registers and writes 7 into R2." )
+      , es = ( "Máquina de registros", "ADD R2, R0, R1 lee 3 y 4 de los registros indicados y escribe 7 en R2." )
+      }
+    , { key = "fifo", category = "Concepts", example = "Ink.fifo"
+      , en = ( "FIFO queue", "Software queues and hardware buffers preserve arrival order: write at the tail, read from the head. A arrived first and leaves before B, C, and the incoming D." )
+      , es = ( "Cola FIFO", "Las colas de software y los búferes de hardware conservan el orden de llegada: se escribe al final y se lee del frente. A llegó primero y sale antes que B, C y el nuevo D." )
       }
     ]

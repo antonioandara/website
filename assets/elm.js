@@ -519,11 +519,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.i.aj === region.g.aj)
+	if (region.n.aj === region.g.aj)
 	{
-		return 'on line ' + region.i.aj;
+		return 'on line ' + region.n.aj;
 	}
-	return 'on lines ' + region.i.aj + ' through ' + region.g.aj;
+	return 'on lines ' + region.n.aj + ' through ' + region.g.aj;
 }
 
 
@@ -1861,9 +1861,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.dk,
-		impl.dz,
+		impl.dj,
 		impl.dy,
+		impl.dx,
 		function() { return function() {} }
 	);
 });
@@ -2728,7 +2728,7 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		T: func(record.T),
-		b3: record.b3,
+		b2: record.b2,
 		bO: record.bO
 	}
 });
@@ -2998,7 +2998,7 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.T;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.b3;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.b2;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
 			(tag == 2 ? value.b : tag == 3 && value.bO) && event.preventDefault(),
@@ -3951,11 +3951,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.dk,
-		impl.dz,
+		impl.dj,
 		impl.dy,
+		impl.dx,
 		function(sendToApp, initialModel) {
-			var view = impl.dA;
+			var view = impl.dz;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3987,12 +3987,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.dk,
-		impl.dz,
+		impl.dj,
 		impl.dy,
+		impl.dx,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.bZ && impl.bZ(sendToApp)
-			var view = impl.dA;
+			var divertHrefToApp = impl.bY && impl.bY(sendToApp)
+			var view = impl.dz;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -4061,12 +4061,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.dp;
-	var onUrlRequest = impl.dq;
+	var onUrlChange = impl.$7;
+	var onUrlRequest = impl.dp;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		bZ: function(sendToApp)
+		bY: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4082,9 +4082,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.cT === next.cT
-							&& curr.cB === next.cB
-							&& curr.cQ.a === next.cQ.a
+							&& curr.cS === next.cS
+							&& curr.cA === next.cA
+							&& curr.cP.a === next.cP.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4092,13 +4092,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		dk: function(flags)
+		dj: function(flags)
 		{
-			return A3(impl.dk, flags, _Browser_getUrl(), key);
+			return A3(impl.dj, flags, _Browser_getUrl(), key);
 		},
-		dA: impl.dA,
 		dz: impl.dz,
-		dy: impl.dy
+		dy: impl.dy,
+		dx: impl.dx
 	});
 }
 
@@ -4164,17 +4164,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { di: 'hidden', db: 'visibilitychange' }
+		? { dh: 'hidden', da: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { di: 'mozHidden', db: 'mozvisibilitychange' }
+		? { dh: 'mozHidden', da: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { di: 'msHidden', db: 'msvisibilitychange' }
+		? { dh: 'msHidden', da: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { di: 'webkitHidden', db: 'webkitvisibilitychange' }
-		: { di: 'hidden', db: 'visibilitychange' };
+		? { dh: 'webkitHidden', da: 'webkitvisibilitychange' }
+		: { dh: 'hidden', da: 'visibilitychange' };
 }
 
 
@@ -4255,11 +4255,11 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		dx: _Browser_getScene(),
+		dw: _Browser_getScene(),
 		aG: {
-			c5: _Browser_window.pageXOffset,
+			c4: _Browser_window.pageXOffset,
 			ar: _Browser_window.pageYOffset,
-			c4: _Browser_doc.documentElement.clientWidth,
+			c3: _Browser_doc.documentElement.clientWidth,
 			ay: _Browser_doc.documentElement.clientHeight
 		}
 	};
@@ -4270,7 +4270,7 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		c4: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		c3: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
 		ay: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
@@ -4294,14 +4294,14 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			dx: {
-				c4: node.scrollWidth,
+			dw: {
+				c3: node.scrollWidth,
 				ay: node.scrollHeight
 			},
 			aG: {
-				c5: node.scrollLeft,
+				c4: node.scrollLeft,
 				ar: node.scrollTop,
-				c4: node.clientWidth,
+				c3: node.clientWidth,
 				ay: node.clientHeight
 			}
 		};
@@ -4332,17 +4332,17 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			dx: _Browser_getScene(),
+			dw: _Browser_getScene(),
 			aG: {
-				c5: x,
+				c4: x,
 				ar: y,
-				c4: _Browser_doc.documentElement.clientWidth,
+				c3: _Browser_doc.documentElement.clientWidth,
 				ay: _Browser_doc.documentElement.clientHeight
 			},
 			ax: {
-				c5: x + rect.left,
+				c4: x + rect.left,
 				ar: y + rect.top,
-				c4: rect.width,
+				c3: rect.width,
 				ay: rect.height
 			}
 		};
@@ -4571,8 +4571,8 @@ var _Regex_never = /.^/;
 var _Regex_fromStringWith = F2(function(options, string)
 {
 	var flags = 'g';
-	if (options.$7) { flags += 'm'; }
-	if (options.da) { flags += 'i'; }
+	if (options.dn) { flags += 'm'; }
+	if (options.c9) { flags += 'i'; }
 
 	try
 	{
@@ -5179,7 +5179,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {dh: fragment, cB: host, cO: path, cQ: port_, cT: protocol, cU: query};
+		return {dg: fragment, cA: host, cN: path, cP: port_, cS: protocol, cT: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5546,7 +5546,7 @@ var $author$project$FieldManual$Reader$measure = function (chapters) {
 						return A2(
 							$elm$core$Task$map,
 							function (viewport) {
-								return ((viewport.aG.ar > 0) && (_Utils_cmp(viewport.aG.ar + viewport.aG.ay, viewport.dx.ay - 2) > -1)) ? $elm$core$List$head(
+								return ((viewport.aG.ar > 0) && (_Utils_cmp(viewport.aG.ar + viewport.aG.ay, viewport.dw.ay - 2) > -1)) ? $elm$core$List$head(
 									$elm$core$List$reverse(chapters)) : A2(
 									$elm$core$Maybe$map,
 									$elm$core$Tuple$first,
@@ -5581,7 +5581,7 @@ var $elm$core$Maybe$withDefault = F2(
 		}
 	});
 var $author$project$FieldManual$Reader$navigate = function (url) {
-	var _v0 = url.dh;
+	var _v0 = url.dg;
 	if (_v0.$ === 1) {
 		return $elm$core$Platform$Cmd$none;
 	} else {
@@ -5624,7 +5624,7 @@ var $elm$browser$Browser$Events$MySub = F3(
 	});
 var $elm$browser$Browser$Events$State = F2(
 	function (subs, pids) {
-		return {cP: pids, c$: subs};
+		return {cO: pids, c_: subs};
 	});
 var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
@@ -5856,7 +5856,7 @@ var $elm$core$Dict$merge = F6(
 	});
 var $elm$browser$Browser$Events$Event = F2(
 	function (key, event) {
-		return {cw: event, n: key};
+		return {cv: event, j: key};
 	});
 var $elm$core$Platform$sendToSelf = _Platform_sendToSelf;
 var $elm$browser$Browser$Events$spawn = F3(
@@ -5931,7 +5931,7 @@ var $elm$browser$Browser$Events$onEffects = F3(
 			stepLeft,
 			stepBoth,
 			stepRight,
-			state.cP,
+			state.cO,
 			$elm$core$Dict$fromList(newSubs),
 			_Utils_Tuple3(_List_Nil, $elm$core$Dict$empty, _List_Nil));
 		var deadPids = _v0.a;
@@ -5977,8 +5977,8 @@ var $elm$core$List$filterMap = F2(
 	});
 var $elm$browser$Browser$Events$onSelfMsg = F3(
 	function (router, _v0, state) {
-		var key = _v0.n;
-		var event = _v0.cw;
+		var key = _v0.j;
+		var event = _v0.cv;
 		var toMessage = function (_v2) {
 			var subKey = _v2.a;
 			var _v3 = _v2.b;
@@ -5987,7 +5987,7 @@ var $elm$browser$Browser$Events$onSelfMsg = F3(
 			var decoder = _v3.c;
 			return _Utils_eq(subKey, key) ? A2(_Browser_decodeEvent, decoder, event) : $elm$core$Maybe$Nothing;
 		};
-		var messages = A2($elm$core$List$filterMap, toMessage, state.c$);
+		var messages = A2($elm$core$List$filterMap, toMessage, state.c_);
 		return A2(
 			$elm$core$Task$andThen,
 			function (_v1) {
@@ -6059,17 +6059,17 @@ var $author$project$FieldManual$Reader$persistTheme = _Platform_outgoingPort(
 				[
 					_Utils_Tuple2(
 					'color',
-					$elm$json$Json$Encode$string($.cu)),
+					$elm$json$Json$Encode$string($.ct)),
 					_Utils_Tuple2(
 					'name',
-					$elm$json$Json$Encode$string($.cM))
+					$elm$json$Json$Encode$string($.cL))
 				]));
 	});
 var $author$project$FieldManual$Reader$saveTheme = function (model) {
 	return $author$project$FieldManual$Reader$persistTheme(
 		{
-			cu: $author$project$FieldManual$Reader$isLight(model) ? '#fbfaf4' : '#11171c',
-			cM: $author$project$FieldManual$Reader$isLight(model) ? 'light' : 'dark'
+			ct: $author$project$FieldManual$Reader$isLight(model) ? '#fbfaf4' : '#11171c',
+			cL: $author$project$FieldManual$Reader$isLight(model) ? 'light' : 'dark'
 		});
 };
 var $elm$json$Json$Decode$null = _Json_decodeNull;
@@ -6136,7 +6136,7 @@ var $elm$url$Url$addPrefixed = F3(
 	});
 var $elm$url$Url$toString = function (url) {
 	var http = function () {
-		var _v0 = url.cT;
+		var _v0 = url.cS;
 		if (!_v0) {
 			return 'http://';
 		} else {
@@ -6146,17 +6146,17 @@ var $elm$url$Url$toString = function (url) {
 	return A3(
 		$elm$url$Url$addPrefixed,
 		'#',
-		url.dh,
+		url.dg,
 		A3(
 			$elm$url$Url$addPrefixed,
 			'?',
-			url.cU,
+			url.cT,
 			_Utils_ap(
 				A2(
 					$elm$url$Url$addPort,
-					url.cQ,
-					_Utils_ap(http, url.cB)),
-				url.cO)));
+					url.cP,
+					_Utils_ap(http, url.cA)),
+				url.cN)));
 };
 var $elm$core$Result$withDefault = F2(
 	function (def, result) {
@@ -6216,17 +6216,17 @@ var $author$project$FieldManual$Reader$update = F3(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{l: category}),
+						{h: category}),
 					$author$project$FieldManual$Reader$requestMeasure);
 			case 5:
 				var request = msg.a;
 				if (!request.$) {
 					var url = request.a;
-					return (_Utils_eq(url.cO, model.aq.cO) && _Utils_eq(url.cU, model.aq.cU)) ? _Utils_Tuple2(
+					return (_Utils_eq(url.cN, model.aq.cN) && _Utils_eq(url.cT, model.aq.cT)) ? _Utils_Tuple2(
 						model,
 						A2(
 							$elm$browser$Browser$Navigation$pushUrl,
-							model.n,
+							model.j,
 							$elm$url$Url$toString(url))) : _Utils_Tuple2(
 						model,
 						$elm$browser$Browser$Navigation$load(
@@ -6278,12 +6278,12 @@ var $author$project$FieldManual$Reader$application = F3(
 	function (title, chapters, view) {
 		return $elm$browser$Browser$application(
 			{
-				dk: F3(
+				dj: F3(
 					function (flags, url, key) {
 						var model = {
 							as: $elm$core$Maybe$Nothing,
-							l: 'All',
-							n: key,
+							h: 'All',
+							j: key,
 							X: $author$project$I18n$fromCode(flags.X),
 							ae: false,
 							al: true,
@@ -6301,9 +6301,9 @@ var $author$project$FieldManual$Reader$application = F3(
 										$author$project$FieldManual$Reader$measure(chapters)
 									])));
 					}),
-				dp: $author$project$FieldManual$Reader$UrlChanged,
-				dq: $author$project$FieldManual$Reader$LinkClicked,
-				dy: function (model) {
+				$7: $author$project$FieldManual$Reader$UrlChanged,
+				dp: $author$project$FieldManual$Reader$LinkClicked,
+				dx: function (model) {
 					return $elm$core$Platform$Sub$batch(
 						_List_fromArray(
 							[
@@ -6325,8 +6325,8 @@ var $author$project$FieldManual$Reader$application = F3(
 									A2($elm$json$Json$Decode$field, 'key', $elm$json$Json$Decode$string))) : $elm$core$Platform$Sub$none
 							]));
 				},
-				dz: $author$project$FieldManual$Reader$update(chapters),
-				dA: function (model) {
+				dy: $author$project$FieldManual$Reader$update(chapters),
+				dz: function (model) {
 					return {
 						D: _List_fromArray(
 							[
@@ -6775,7 +6775,7 @@ var $author$project$Copy$en = {
 	a9: {
 		aS: {
 			D: 'For professional conversations, find me on LinkedIn. For code, visit GitHub. For videos and the conversations around the work, there’s Andara Labs and X.',
-			j: 'Let’s compare notes.',
+			o: 'Let’s compare notes.',
 			G: 'Looking for engineering consultation or tutoring? Have a project, a magic idea, or a question about something I’ve written?',
 			bv: _List_fromArray(
 				[
@@ -6786,9 +6786,9 @@ var $author$project$Copy$en = {
 				]),
 			q: 'WORK / COLLABORATION / CONVERSATION'
 		},
-		a3: {ac: 'ELECTRONICS / SOFTWARE / MAGIC', ad: 'My GitHub ↗', j: 'Look inside.', G: 'I’m an electronic engineer. I love to understand things deeply.', bu: 'Professional background ↗', bC: 'The main application is built in Elm using the Elm architecture of model, update, and view. This is the first site I have published.', bD: 'Look at the implementation', bJ: 'Some of my interests are electronics, microcontrollers (MCUs), mechatronics, programming languages and language design, distributed systems, decentralization, blockchain, and open source. I enjoy exploring the latest technology, helping people understand it, and staying up to date with the latest innovations.', bK: 'This is a place for anyone who wants to learn and have a good time doing it. I hope you find something interesting here.', Q: 'Bottom up design.', H: 'IN PRACTICE / 01', R: 'learning from first principles', bU: 'This site is a working example of my work and my explorations of web development and functional programming.', bV: 'A personal field manual', q: 'ENGINEERING & PRACTICE'},
+		a3: {ac: 'ELECTRONICS / SOFTWARE / MAGIC', ad: 'My GitHub ↗', o: 'Look inside.', G: 'I’m an electronic engineer. I love to understand things deeply.', bu: 'Professional background ↗', bC: 'The main application is built in Elm using the Elm architecture of model, update, and view. This is the first site I have published.', bD: 'Look at the implementation', bJ: 'Some of my interests are electronics, microcontrollers (MCUs), mechatronics, programming languages and language design, distributed systems, decentralization, blockchain, and open source. I enjoy exploring the latest technology, helping people understand it, and staying up to date with the latest innovations.', bK: 'This is a place for anyone who wants to learn and have a good time doing it. I hope you find something interesting here.', Q: 'Bottom up design.', H: 'IN PRACTICE / 01', R: 'learning from first principles', bU: 'This site is a working example of my work and my explorations of web development and functional programming.', bV: 'A personal field manual', q: 'ENGINEERING & PRACTICE'},
 		a4: {
-			j: 'My workbench.',
+			o: 'My workbench.',
 			M: 'These are experiments on different interesting topics. There is no real structure behind them, more like a stream of consciousness.',
 			bh: _List_fromArray(
 				[
@@ -6799,10 +6799,10 @@ var $author$project$Copy$en = {
 			bF: 'OPEN ↗',
 			q: 'EXPERIMENTS & EXPLORATIONS'
 		},
-		bi: {a2: 'No notes yet. The first entries are still being written.', j: 'Project Notes.', M: 'Short notes on different topics.', q: 'A PERSONAL JOURNAL'},
-		bx: {by: 'Watch Via Magus on YouTube ↗', cm: 'Find me on X ↗'},
-		bH: {D: 'Open-source software is an important part of my work. This site connects the experiments and ideas with the places where the code and everything else lives.', ad: 'Explore my GitHub ↗', j: 'Share the knowledge.', Q: 'Innovation thrives at the intersection of seemingly disjointed topics.', H: 'PRINCIPLE / 01', R: 'find the connections', bW: 'Sharing is the most fundamental act of friendship. Because it is a way you can give something without losing something. — Richard Stallman', q: 'OPEN SOURCE'},
-		ck: {D: 'Andara Labs is my YouTube channel. It’s the place to follow the video side of my work; this section will grow into a collection of individual videos and the notes behind them.', j: 'My YouTube channel.', G: 'I don\'t make too many videos, but some things are better shown.', Q: 'Open the channel to explore the videos.', H: 'CHANNEL / @ANDARALABS', R: 'watch on youtube ↗', q: 'ANDARA LABS / VIDEO', cn: 'Visit Andara Labs on YouTube ↗'}
+		bi: {a2: 'No notes yet. The first entries are still being written.', o: 'Project Notes.', M: 'Short notes on different topics.', q: 'A PERSONAL JOURNAL'},
+		bx: {by: 'Watch Via Magus on YouTube ↗', cl: 'Find me on X ↗'},
+		bH: {D: 'Open-source software is an important part of my work. This site connects the experiments and ideas with the places where the code and everything else lives.', ad: 'Explore my GitHub ↗', o: 'Share the knowledge.', Q: 'Innovation thrives at the intersection of seemingly disjointed topics.', H: 'PRINCIPLE / 01', R: 'find the connections', bW: 'Sharing is the most fundamental act of friendship. Because it is a way you can give something without losing something. — Richard Stallman', q: 'OPEN SOURCE'},
+		cj: {D: 'Andara Labs is my YouTube channel. It’s the place to follow the video side of my work; this section will grow into a collection of individual videos and the notes behind them.', o: 'My YouTube channel.', G: 'I don\'t make too many videos, but some things are better shown.', Q: 'Open the channel to explore the videos.', H: 'CHANNEL / @ANDARALABS', R: 'watch on youtube ↗', q: 'ANDARA LABS / VIDEO', cm: 'Visit Andara Labs on YouTube ↗'}
 	},
 	bn: {
 		aK: 'Drawing catalogue',
@@ -6817,10 +6817,9 @@ var $author$project$Copy$en = {
 			]),
 		aV: 'drawings /',
 		a5: 'Filter drawings',
-		j: 'A cabinet of mechanisms.',
-		M: 'All drawings share a visual language. Filter the collection or open an Elm recipe to see how a figure can be reused.',
+		o: 'A cabinet of mechanisms.',
+		M: 'All drawings share a visual language. Filter the collection to explore the drawings.',
 		bL: 'Drawing library — Antonio Andara',
-		bX: 'Elm recipe',
 		q: 'REUSABLE DRAWINGS'
 	},
 	bw: {
@@ -6829,16 +6828,16 @@ var $author$project$Copy$en = {
 		aN: 'MARKDOWNBOOK / LEARNING SOFTWARE',
 		a_: 'Try a sample lesson ↗',
 		ac: 'MARKDOWNBOOK / ELM LMS',
-		j: 'Simple and to the point.',
+		o: 'Simple and to the point.',
 		G: 'I like to teach and this is my attempt at building a good and easy to use learning management system.',
 		bP: 'MarkdownBook reader showing a binary lesson, course navigation, and an interactive eight-bit calculator',
 		bQ: 'A look inside the working app. Open the demo to toggle bits, answer a question or two.',
 		bR: 'MARKDOWNBOOK',
 		bS: 'WORKING PREVIEW',
-		cd: _List_fromArray(
+		cc: _List_fromArray(
 			['Interactive lessons', 'Markdown authoring', 'Elm'])
 	},
-	b_: {aI: 'Back to the surface ↑', aP: 'Close sidebar', aT: 'Connect', aU: 'Manual contents', aW: 'BUILD / SHARE / EXPERIMENT / WONDER', aX: 'ENGINEERING / SOFTWARE / MAGIC', aY: 'ANTONIO ANDARA', aZ: '● DAY EDITION', a$: 'EDITION 02 / DAY', a0: 'EDITION 01 / NIGHT', a6: 'Drawing library ↗', a7: 'ANTONIO ANDARA / ENGINEERING & MAGIC', cz: 'GitHub ↗', ba: 'Explore my work', bb: 'Andara', bc: 'Antonio', bj: 'Journal', bk: 'Switch to English', bl: 'Switch to Spanish', bo: 'Small, reusable pieces of a visual language.', bp: 'A collection of schematics, patterns, and objects, drawn in Elm.', bq: 'Browse the drawings', br: 'library', bs: 'Drawing', bB: '● NIGHT EDITION', bG: 'Open sidebar', H: 'PLATE 002', bN: 'READ. COMPUTE. REPEAT.', bT: 'ANTONIO ANDARA', bY: 'SCROLL TO INSPECT ↓', b$: 'Open source engineering and a little sleight of hand.', b0: 'A closer look.', b1: 'Skip to the manual', cf: 'Dark mode', cg: 'Light mode', ch: 'Switch to dark mode', ci: 'Switch to light mode', cl: 'Work'},
+	bZ: {aI: 'Back to the surface ↑', aP: 'Close sidebar', aT: 'Connect', aU: 'Manual contents', aW: 'BUILD / SHARE / EXPERIMENT / WONDER', aX: 'ENGINEERING / SOFTWARE / MAGIC', aY: 'ANTONIO ANDARA', aZ: '● DAY EDITION', a$: 'EDITION 02 / DAY', a0: 'EDITION 01 / NIGHT', a6: 'Drawing library ↗', a7: 'ANTONIO ANDARA / ENGINEERING & MAGIC', cy: 'GitHub ↗', ba: 'Explore my work', bb: 'Andara', bc: 'Antonio', bj: 'Journal', bk: 'Switch to English', bl: 'Switch to Spanish', bo: 'Small, reusable pieces of a visual language.', bp: 'A collection of schematics, patterns, and objects, drawn in Elm.', bq: 'Browse the drawings', br: 'library', bs: 'Drawing', bB: '● NIGHT EDITION', bG: 'Open sidebar', H: 'PLATE 002', bN: 'READ. COMPUTE. REPEAT.', bT: 'ANTONIO ANDARA', bX: 'SCROLL TO INSPECT ↓', b_: 'Open source engineering and a little sleight of hand.', b$: 'A closer look.', b0: 'Skip to the manual', ce: 'Dark mode', cf: 'Light mode', cg: 'Switch to dark mode', ch: 'Switch to light mode', ck: 'Work'},
 	L: 'Antonio Andara — Engineering & Magic'
 };
 var $author$project$Copy$es = {
@@ -6847,7 +6846,7 @@ var $author$project$Copy$es = {
 	a9: {
 		aS: {
 			D: 'Para conversaciones profesionales, encuéntrame en LinkedIn. Para el código, visita GitHub. Para los vídeos y las conversaciones en torno al trabajo, están Andara Labs y X.',
-			j: 'Comparemos notas.',
+			o: 'Comparemos notas.',
 			G: '¿Buscas asesoría o clases de ingeniería? ¿Tienes un proyecto, una idea de magia o una pregunta sobre algo que he escrito?',
 			bv: _List_fromArray(
 				[
@@ -6858,9 +6857,9 @@ var $author$project$Copy$es = {
 				]),
 			q: 'TRABAJO / COLABORACIÓN / CONVERSACIÓN'
 		},
-		a3: {ac: 'ELECTRÓNICA / SOFTWARE / MAGIA', ad: 'Mi GitHub ↗', j: 'Mi trabajo.', G: 'Soy ingeniero electrónico. Me encanta entender las cosas a fondo.', bu: 'Trayectoria profesional ↗', bC: 'La aplicación principal está construida en Elm usando la arquitectura de Elm: modelo, actualización y vista. Este es el primer sitio que publico.', bD: 'Mira la implementación', bJ: 'Algunos de mis intereses son la electrónica, los microcontroladores (MCU), la mecatrónica, los lenguajes de programación, el diseño de lenguajes, los sistemas distribuidos, la descentralización, blockchain y el código abierto. Disfruto explorar la tecnología más reciente, ayudar a las personas a entenderla y mantenerme al día con las últimas innovaciones.', bK: 'Este es un lugar para cualquiera que quiera aprender y pasarlo bien haciéndolo. Espero que encuentres algo interesante aquí.', Q: 'Diseño de abajo hacia arriba.', H: 'EN LA PRÁCTICA / 01', R: 'aprendizaje desde primeros principios', bU: 'Este sitio es un ejemplo de mi trabajo y de mis exploraciones en desarrollo web y programación funcional.', bV: 'Un manual de campo personal', q: 'INGENIERÍA Y PRÁCTICA'},
+		a3: {ac: 'ELECTRÓNICA / SOFTWARE / MAGIA', ad: 'Mi GitHub ↗', o: 'Mi trabajo.', G: 'Soy ingeniero electrónico. Me encanta entender las cosas a fondo.', bu: 'Trayectoria profesional ↗', bC: 'La aplicación principal está construida en Elm usando la arquitectura de Elm: modelo, actualización y vista. Este es el primer sitio que publico.', bD: 'Mira la implementación', bJ: 'Algunos de mis intereses son la electrónica, los microcontroladores (MCU), la mecatrónica, los lenguajes de programación, el diseño de lenguajes, los sistemas distribuidos, la descentralización, blockchain y el código abierto. Disfruto explorar la tecnología más reciente, ayudar a las personas a entenderla y mantenerme al día con las últimas innovaciones.', bK: 'Este es un lugar para cualquiera que quiera aprender y pasarlo bien haciéndolo. Espero que encuentres algo interesante aquí.', Q: 'Diseño de abajo hacia arriba.', H: 'EN LA PRÁCTICA / 01', R: 'aprendizaje desde primeros principios', bU: 'Este sitio es un ejemplo de mi trabajo y de mis exploraciones en desarrollo web y programación funcional.', bV: 'Un manual de campo personal', q: 'INGENIERÍA Y PRÁCTICA'},
 		a4: {
-			j: 'Mi taller.',
+			o: 'Mi taller.',
 			M: 'Estos son experimentos sobre distintos temas interesantes. No hay una estructura real detrás, más bien un flujo de conciencia.',
 			bh: _List_fromArray(
 				[
@@ -6871,10 +6870,10 @@ var $author$project$Copy$es = {
 			bF: 'ABRIR ↗',
 			q: 'EXPERIMENTOS Y EXPLORACIONES'
 		},
-		bi: {a2: 'Aún no hay notas. Las primeras entradas todavía se están escribiendo.', j: 'Notas.', M: 'Notas breves sobre distintos temas.', q: 'DIARIO'},
-		bx: {by: 'Mira Via Magus en YouTube ↗', cm: 'Encuéntrame en X ↗'},
-		bH: {D: 'El software de código abierto es una parte importante de mi trabajo. Este sitio conecta los experimentos y las ideas con los lugares donde vive el código y todo lo demás.', ad: 'Explora mi GitHub ↗', j: 'Compartiendo el conocimiento.', Q: 'La innovación prospera en la intersección de temas aparentemente inconexos.', H: 'PRINCIPIO / 01', R: 'encuentra las conexiones', bW: 'Compartir es el acto más fundamental de la amistad. Porque es una forma de dar algo sin perder nada. — Richard Stallman', q: 'CÓDIGO ABIERTO'},
-		ck: {D: 'Andara Labs es mi canal de YouTube. Es el lugar para seguir el lado audiovisual de mi trabajo; esta sección crecerá hasta convertirse en una colección de vídeos individuales y las notas que hay detrás.', j: 'Mi canal de YouTube.', G: 'No hago muchos vídeos, pero algunas cosas es mejor mostrarlas.', Q: 'Abre el canal para explorar los vídeos.', H: 'CANAL / @ANDARALABS', R: 'ver en youtube ↗', q: 'ANDARA LABS / VIDEO', cn: 'Visita Andara Labs en YouTube ↗'}
+		bi: {a2: 'Aún no hay notas. Las primeras entradas todavía se están escribiendo.', o: 'Notas.', M: 'Notas breves sobre distintos temas.', q: 'DIARIO'},
+		bx: {by: 'Mira Via Magus en YouTube ↗', cl: 'Encuéntrame en X ↗'},
+		bH: {D: 'El software de código abierto es una parte importante de mi trabajo. Este sitio conecta los experimentos y las ideas con los lugares donde vive el código y todo lo demás.', ad: 'Explora mi GitHub ↗', o: 'Compartiendo el conocimiento.', Q: 'La innovación prospera en la intersección de temas aparentemente inconexos.', H: 'PRINCIPIO / 01', R: 'encuentra las conexiones', bW: 'Compartir es el acto más fundamental de la amistad. Porque es una forma de dar algo sin perder nada. — Richard Stallman', q: 'CÓDIGO ABIERTO'},
+		cj: {D: 'Andara Labs es mi canal de YouTube. Es el lugar para seguir el lado audiovisual de mi trabajo; esta sección crecerá hasta convertirse en una colección de vídeos individuales y las notas que hay detrás.', o: 'Mi canal de YouTube.', G: 'No hago muchos vídeos, pero algunas cosas es mejor mostrarlas.', Q: 'Abre el canal para explorar los vídeos.', H: 'CANAL / @ANDARALABS', R: 'ver en youtube ↗', q: 'ANDARA LABS / VIDEO', cm: 'Visita Andara Labs en YouTube ↗'}
 	},
 	bn: {
 		aK: 'Catálogo de dibujos',
@@ -6889,10 +6888,9 @@ var $author$project$Copy$es = {
 			]),
 		aV: 'dibujos /',
 		a5: 'Filtrar dibujos',
-		j: 'Un gabinete de mecanismos.',
-		M: 'Dibujos en un lenguaje visual compartido. Filtra la colección o abre una receta de Elm para ver cómo se puede reutilizar una figura.',
+		o: 'Un gabinete de mecanismos.',
+		M: 'Dibujos en un lenguaje visual compartido. Filtra la colección para explorar los dibujos.',
 		bL: 'Biblioteca de dibujos — Antonio Andara',
-		bX: 'Receta de Elm',
 		q: 'DIBUJOS REUTILIZABLES'
 	},
 	bw: {
@@ -6901,16 +6899,16 @@ var $author$project$Copy$es = {
 		aN: 'MARKDOWNBOOK / SOFTWARE DE APRENDIZAJE',
 		a_: 'Prueba una lección de ejemplo ↗',
 		ac: 'MARKDOWNBOOK / ELM LMS',
-		j: 'Simple y directo.',
+		o: 'Simple y directo.',
 		G: 'Me gusta enseñar y este es mi intento de construir un sistema de gestión del aprendizaje bueno y fácil de usar.',
 		bP: 'Lector de MarkdownBook mostrando una lección binaria, navegación del curso y una calculadora interactiva de ocho bits',
 		bQ: 'Un vistazo al interior de la aplicación en funcionamiento. Abre la demo para alternar bits y responder una que otra pregunta.',
 		bR: 'MARKDOWNBOOK',
 		bS: 'VISTA PREVIA FUNCIONAL',
-		cd: _List_fromArray(
+		cc: _List_fromArray(
 			['Lecciones interactivas', 'Autoría en Markdown', 'Elm'])
 	},
-	b_: {aI: 'Volver a la superficie ↑', aP: 'Cerrar barra lateral', aT: 'Contacto', aU: 'Contenido', aW: 'CONSTRUIR / COMPARTIR / EXPERIMENTAR', aX: 'INGENIERÍA / SOFTWARE / MAGIA', aY: 'ANTONIO ANDARA', aZ: '● EDICIÓN DÍA', a$: 'EDICIÓN 02 / DÍA', a0: 'EDICIÓN 01 / NOCHE', a6: 'Biblioteca de dibujos ↗', a7: 'ANTONIO ANDARA / INGENIERÍA Y MAGIA', cz: 'GitHub ↗', ba: 'Explora mi trabajo', bb: 'Andara', bc: 'Antonio', bj: 'Diario', bk: 'Cambiar a inglés', bl: 'Cambiar a español', bo: 'Bloques Reutilizables.', bp: 'Colección de esquemas, patrones y objetos, dibujados en Elm.', bq: 'Explora los dibujos', br: 'biblioteca', bs: 'Dibujos', bB: '● EDICIÓN NOCHE', bG: 'Abrir barra lateral', H: 'LÁMINA 002', bN: 'LEER. PROCESAR. REPETIR.', bT: 'ANTONIO ANDARA', bY: 'DESPLAZA PARA INSPECCIONAR ↓', b$: 'Ingeniería de código abierto y un poco de prestidigitación.', b0: 'Una mirada.', b1: 'Saltar a la pagina', cf: 'Modo oscuro', cg: 'Modo claro', ch: 'Cambiar a modo oscuro', ci: 'Cambiar a modo claro', cl: 'Trabajo'},
+	bZ: {aI: 'Volver a la superficie ↑', aP: 'Cerrar barra lateral', aT: 'Contacto', aU: 'Contenido', aW: 'CONSTRUIR / COMPARTIR / EXPERIMENTAR', aX: 'INGENIERÍA / SOFTWARE / MAGIA', aY: 'ANTONIO ANDARA', aZ: '● EDICIÓN DÍA', a$: 'EDICIÓN 02 / DÍA', a0: 'EDICIÓN 01 / NOCHE', a6: 'Biblioteca de dibujos ↗', a7: 'ANTONIO ANDARA / INGENIERÍA Y MAGIA', cy: 'GitHub ↗', ba: 'Explora mi trabajo', bb: 'Andara', bc: 'Antonio', bj: 'Diario', bk: 'Cambiar a inglés', bl: 'Cambiar a español', bo: 'Bloques Reutilizables.', bp: 'Colección de esquemas, patrones y objetos, dibujados en Elm.', bq: 'Explora los dibujos', br: 'biblioteca', bs: 'Dibujos', bB: '● EDICIÓN NOCHE', bG: 'Abrir barra lateral', H: 'LÁMINA 002', bN: 'LEER. PROCESAR. REPETIR.', bT: 'ANTONIO ANDARA', bX: 'DESPLAZA PARA INSPECCIONAR ↓', b_: 'Ingeniería de código abierto y un poco de prestidigitación.', b$: 'Una mirada.', b0: 'Saltar a la pagina', ce: 'Modo oscuro', cf: 'Modo claro', cg: 'Cambiar a modo oscuro', ch: 'Cambiar a modo claro', ck: 'Trabajo'},
 	L: 'Antonio Andara — Ingeniero y mago'
 };
 var $author$project$Copy$forLanguage = function (language) {
@@ -7137,8 +7135,8 @@ var $author$project$FieldManual$Illustrations$formulaParser = function () {
 				[
 					A3($author$project$FieldManual$Illustrations$svgLabel, '20', '24', 'FORMULA / STRUCTURE / VALUE'),
 					A2($author$project$FieldManual$Illustrations$path, 'soft dash', 'M20 89 H340 M240 108 V267'),
-					A2($author$project$FieldManual$Illustrations$path, 'soft', 'M63 77 V81 H191 V77'),
-					A4($author$project$FieldManual$Illustrations$flowArrow, 127, 89, 127, 108),
+					A2($author$project$FieldManual$Illustrations$path, 'soft', 'M20 77 V81 H248 V77 M153 81 V89'),
+					A4($author$project$FieldManual$Illustrations$flowArrow, 153, 89, 153, 110),
 					A2($author$project$FieldManual$Illustrations$path, 'thick', 'M153 146 V160 H100 V171'),
 					A2($author$project$FieldManual$Illustrations$path, 'soft', 'M153 160 H203 V233'),
 					A2($author$project$FieldManual$Illustrations$path, 'thick', 'M100 207 V216'),
@@ -7205,12 +7203,12 @@ var $author$project$Generated$Content$journal = function (language) {
 	if (!language) {
 		return _List_fromArray(
 			[
-				{D: 'I want this website to be a place where the different parts of my work can meet. Engineering, software, experiments, and magic all have a home here.\n\nSome pages will explain a finished project. Others will follow an idea while it is still taking shape. I want to share the work and the thinking around it, and leave room for the site to grow.', l: 'PERSONAL', be: 'things-i-make', P: '001', b7: 'Why engineering, experiments, and magic belong in the same notebook.', L: 'Things I make'}
+				{D: 'I want this website to be a place where the different parts of my work can meet. Engineering, software, experiments, and magic all have a home here.\n\nSome pages will explain a finished project. Others will follow an idea while it is still taking shape. I want to share the work and the thinking around it, and leave room for the site to grow.', h: 'PERSONAL', be: 'things-i-make', P: '001', b6: 'Why engineering, experiments, and magic belong in the same notebook.', L: 'Things I make'}
 			]);
 	} else {
 		return _List_fromArray(
 			[
-				{D: 'Quiero que este sitio web sea un lugar donde las distintas partes de mi trabajo se encuentren. La ingeniería, el software, los experimentos y la magia tienen aquí un hogar.\n\nAlgunas páginas explicarán un proyecto terminado. Otras seguirán una idea mientras todavía toma forma. Quiero compartir el trabajo y el pensamiento que lo rodea, y dejar espacio para que el sitio crezca.', l: 'PERSONAL', be: 'things-i-make', P: '001', b7: 'Por qué la ingeniería, los experimentos y la magia pertenecen al mismo cuaderno.', L: 'Cosas que hago'}
+				{D: 'Quiero que este sitio web sea un lugar donde las distintas partes de mi trabajo se encuentren. La ingeniería, el software, los experimentos y la magia tienen aquí un hogar.\n\nAlgunas páginas explicarán un proyecto terminado. Otras seguirán una idea mientras todavía toma forma. Quiero compartir el trabajo y el pensamiento que lo rodea, y dejar espacio para que el sitio crezca.', h: 'PERSONAL', be: 'things-i-make', P: '001', b6: 'Por qué la ingeniería, los experimentos y la magia pertenecen al mismo cuaderno.', L: 'Cosas que hago'}
 			]);
 	}
 };
@@ -7299,8 +7297,8 @@ var $dillonkearns$elm_markdown$Markdown$Html$attributesToString = function (attr
 		A2(
 			$elm$core$List$map,
 			function (_v0) {
-				var name = _v0.cM;
-				var value = _v0.c3;
+				var name = _v0.cL;
+				var value = _v0.c2;
 				return name + ('=\"' + (value + '\"'));
 			},
 			attributes));
@@ -7437,9 +7435,9 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$defaultHtmlRenderer = {
 		return A2($elm$html$Html$em, _List_Nil, children);
 	},
 	a8: A2($elm$html$Html$br, _List_Nil, _List_Nil),
-	j: function (_v3) {
-		var level = _v3.cI;
-		var children = _v3.cs;
+	o: function (_v3) {
+		var level = _v3.cH;
+		var children = _v3.cr;
 		switch (level) {
 			case 0:
 				return A2($elm$html$Html$h1, _List_Nil, children);
@@ -7464,7 +7462,7 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$defaultHtmlRenderer = {
 				$elm$html$Html$img,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$src(imageInfo.b2),
+						$elm$html$Html$Attributes$src(imageInfo.b1),
 						$elm$html$Html$Attributes$alt(imageInfo.aH),
 						$elm$html$Html$Attributes$title(title)
 					]),
@@ -7474,7 +7472,7 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$defaultHtmlRenderer = {
 				$elm$html$Html$img,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$src(imageInfo.b2),
+						$elm$html$Html$Attributes$src(imageInfo.b1),
 						$elm$html$Html$Attributes$alt(imageInfo.aH)
 					]),
 				_List_Nil);
@@ -7489,7 +7487,7 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$defaultHtmlRenderer = {
 					$elm$html$Html$a,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$href(link.de),
+							$elm$html$Html$Attributes$href(link.dd),
 							$elm$html$Html$Attributes$title(title)
 						]),
 					content);
@@ -7498,7 +7496,7 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$defaultHtmlRenderer = {
 					$elm$html$Html$a,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$href(link.de)
+							$elm$html$Html$Attributes$href(link.dd)
 						]),
 					content);
 			}
@@ -7525,15 +7523,15 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$defaultHtmlRenderer = {
 					items));
 		}),
 	bM: $elm$html$Html$p(_List_Nil),
-	b4: function (children) {
+	b3: function (children) {
 		return A2($elm$html$Html$del, _List_Nil, children);
 	},
-	b5: function (children) {
+	b4: function (children) {
 		return A2($elm$html$Html$strong, _List_Nil, children);
 	},
-	b8: $elm$html$Html$table(_List_Nil),
-	b9: $elm$html$Html$tbody(_List_Nil),
-	ca: function (maybeAlignment) {
+	b7: $elm$html$Html$table(_List_Nil),
+	b8: $elm$html$Html$tbody(_List_Nil),
+	b9: function (maybeAlignment) {
 		var attrs = A2(
 			$elm$core$Maybe$withDefault,
 			_List_Nil,
@@ -7558,8 +7556,8 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$defaultHtmlRenderer = {
 						maybeAlignment))));
 		return $elm$html$Html$td(attrs);
 	},
-	cb: $elm$html$Html$thead(_List_Nil),
-	cc: function (maybeAlignment) {
+	ca: $elm$html$Html$thead(_List_Nil),
+	cb: function (maybeAlignment) {
 		var attrs = A2(
 			$elm$core$Maybe$withDefault,
 			_List_Nil,
@@ -7585,9 +7583,9 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$defaultHtmlRenderer = {
 		return $elm$html$Html$th(attrs);
 	},
 	aD: $elm$html$Html$tr(_List_Nil),
-	k: $elm$html$Html$text,
-	ce: A2($elm$html$Html$hr, _List_Nil, _List_Nil),
-	cj: function (items) {
+	p: $elm$html$Html$text,
+	cd: A2($elm$html$Html$hr, _List_Nil, _List_Nil),
+	ci: function (items) {
 		return A2(
 			$elm$html$Html$ul,
 			_List_Nil,
@@ -7848,13 +7846,13 @@ var $elm$parser$Parser$Advanced$chompWhileHelp = F5(
 	function (isGood, offset, row, col, s0) {
 		chompWhileHelp:
 		while (true) {
-			var newOffset = A3($elm$parser$Parser$Advanced$isSubChar, isGood, offset, s0.b2);
+			var newOffset = A3($elm$parser$Parser$Advanced$isSubChar, isGood, offset, s0.b1);
 			if (_Utils_eq(newOffset, -1)) {
 				return A3(
 					$elm$parser$Parser$Advanced$Good,
 					_Utils_cmp(s0.d, offset) < 0,
 					0,
-					{ct: col, f: s0.f, h: s0.h, d: offset, dw: row, b2: s0.b2});
+					{cs: col, f: s0.f, k: s0.k, d: offset, dv: row, b1: s0.b1});
 			} else {
 				if (_Utils_eq(newOffset, -2)) {
 					var $temp$isGood = isGood,
@@ -7886,7 +7884,7 @@ var $elm$parser$Parser$Advanced$chompWhileHelp = F5(
 	});
 var $elm$parser$Parser$Advanced$chompWhile = function (isGood) {
 	return function (s) {
-		return A5($elm$parser$Parser$Advanced$chompWhileHelp, isGood, s.d, s.dw, s.ct, s);
+		return A5($elm$parser$Parser$Advanced$chompWhileHelp, isGood, s.d, s.dv, s.cs, s);
 	};
 };
 var $elm$core$Basics$always = F2(
@@ -8000,14 +7998,14 @@ var $elm$parser$Parser$Advanced$AddRight = F2(
 	});
 var $elm$parser$Parser$Advanced$DeadEnd = F4(
 	function (row, col, problem, contextStack) {
-		return {ct: col, dc: contextStack, dt: problem, dw: row};
+		return {cs: col, db: contextStack, ds: problem, dv: row};
 	});
 var $elm$parser$Parser$Advanced$fromState = F2(
 	function (s, x) {
 		return A2(
 			$elm$parser$Parser$Advanced$AddRight,
 			$elm$parser$Parser$Advanced$Empty,
-			A4($elm$parser$Parser$Advanced$DeadEnd, s.dw, s.ct, x, s.f));
+			A4($elm$parser$Parser$Advanced$DeadEnd, s.dv, s.cs, x, s.f));
 	});
 var $elm$parser$Parser$Advanced$isSubString = _Parser_isSubString;
 var $elm$parser$Parser$Advanced$token = function (_v0) {
@@ -8015,7 +8013,7 @@ var $elm$parser$Parser$Advanced$token = function (_v0) {
 	var expecting = _v0.b;
 	var progress = !$elm$core$String$isEmpty(str);
 	return function (s) {
-		var _v1 = A5($elm$parser$Parser$Advanced$isSubString, str, s.d, s.dw, s.ct, s.b2);
+		var _v1 = A5($elm$parser$Parser$Advanced$isSubString, str, s.d, s.dv, s.cs, s.b1);
 		var newOffset = _v1.a;
 		var newRow = _v1.b;
 		var newCol = _v1.c;
@@ -8026,7 +8024,7 @@ var $elm$parser$Parser$Advanced$token = function (_v0) {
 			$elm$parser$Parser$Advanced$Good,
 			progress,
 			0,
-			{ct: newCol, f: s.f, h: s.h, d: newOffset, dw: newRow, b2: s.b2});
+			{cs: newCol, f: s.f, k: s.k, d: newOffset, dv: newRow, b1: s.b1});
 	};
 };
 var $dillonkearns$elm_markdown$Whitespace$lineEnd = $elm$parser$Parser$Advanced$oneOf(
@@ -8140,7 +8138,7 @@ var $elm$parser$Parser$Advanced$mapChompedString = F2(
 					p,
 					A2(
 						func,
-						A3($elm$core$String$slice, s0.d, s1.d, s0.b2),
+						A3($elm$core$String$slice, s0.d, s1.d, s0.b1),
 						a),
 					s1);
 			}
@@ -8156,7 +8154,7 @@ var $elm$parser$Parser$Advanced$keeper = F2(
 var $elm$parser$Parser$Advanced$end = function (x) {
 	return function (s) {
 		return _Utils_eq(
-			$elm$core$String$length(s.b2),
+			$elm$core$String$length(s.b1),
 			s.d) ? A3($elm$parser$Parser$Advanced$Good, false, 0, s) : A2(
 			$elm$parser$Parser$Advanced$Bad,
 			false,
@@ -8239,7 +8237,7 @@ var $dillonkearns$elm_markdown$Markdown$Parser$problemToString = function (probl
 	}
 };
 var $dillonkearns$elm_markdown$Markdown$Parser$deadEndToString = function (deadEnd) {
-	return 'Problem at row ' + ($elm$core$String$fromInt(deadEnd.dw) + ('\n' + $dillonkearns$elm_markdown$Markdown$Parser$problemToString(deadEnd.dt)));
+	return 'Problem at row ' + ($elm$core$String$fromInt(deadEnd.dv) + ('\n' + $dillonkearns$elm_markdown$Markdown$Parser$problemToString(deadEnd.ds)));
 };
 var $dillonkearns$elm_markdown$Markdown$Parser$deadEndsToString = function (deadEnds) {
 	return A2(
@@ -8300,7 +8298,7 @@ var $dillonkearns$elm_markdown$HtmlParser$Text = function (a) {
 var $elm$parser$Parser$Advanced$chompIf = F2(
 	function (isGood, expecting) {
 		return function (s) {
-			var newOffset = A3($elm$parser$Parser$Advanced$isSubChar, isGood, s.d, s.b2);
+			var newOffset = A3($elm$parser$Parser$Advanced$isSubChar, isGood, s.d, s.b1);
 			return _Utils_eq(newOffset, -1) ? A2(
 				$elm$parser$Parser$Advanced$Bad,
 				false,
@@ -8308,11 +8306,11 @@ var $elm$parser$Parser$Advanced$chompIf = F2(
 				$elm$parser$Parser$Advanced$Good,
 				true,
 				0,
-				{ct: 1, f: s.f, h: s.h, d: s.d + 1, dw: s.dw + 1, b2: s.b2}) : A3(
+				{cs: 1, f: s.f, k: s.k, d: s.d + 1, dv: s.dv + 1, b1: s.b1}) : A3(
 				$elm$parser$Parser$Advanced$Good,
 				true,
 				0,
-				{ct: s.ct + 1, f: s.f, h: s.h, d: newOffset, dw: s.dw, b2: s.b2}));
+				{cs: s.cs + 1, f: s.f, k: s.k, d: newOffset, dv: s.dv, b1: s.b1}));
 		};
 	});
 var $dillonkearns$elm_markdown$HtmlParser$expectTagNameCharacter = $elm$parser$Parser$Expecting('at least 1 tag name character');
@@ -9220,23 +9218,23 @@ var $dillonkearns$elm_markdown$HtmlParser$attributes = A2(
 			function (key, value, accum) {
 				return A2(
 					$elm$core$List$cons,
-					{cM: key, c3: value},
+					{cL: key, c2: value},
 					accum);
 			}),
 		_List_Nil),
 	A2($elm$parser$Parser$Advanced$loop, $elm$core$Dict$empty, $dillonkearns$elm_markdown$HtmlParser$attributesStep));
 var $elm$parser$Parser$Advanced$chompUntilEndOr = function (str) {
 	return function (s) {
-		var _v0 = A5(_Parser_findSubString, str, s.d, s.dw, s.ct, s.b2);
+		var _v0 = A5(_Parser_findSubString, str, s.d, s.dv, s.cs, s.b1);
 		var newOffset = _v0.a;
 		var newRow = _v0.b;
 		var newCol = _v0.c;
-		var adjustedOffset = (newOffset < 0) ? $elm$core$String$length(s.b2) : newOffset;
+		var adjustedOffset = (newOffset < 0) ? $elm$core$String$length(s.b1) : newOffset;
 		return A3(
 			$elm$parser$Parser$Advanced$Good,
 			_Utils_cmp(s.d, adjustedOffset) < 0,
 			0,
-			{ct: newCol, f: s.f, h: s.h, d: adjustedOffset, dw: newRow, b2: s.b2});
+			{cs: newCol, f: s.f, k: s.k, d: adjustedOffset, dv: newRow, b1: s.b1});
 	};
 };
 var $dillonkearns$elm_markdown$HtmlParser$cdata = A2(
@@ -9612,10 +9610,10 @@ var $dillonkearns$elm_markdown$Markdown$Parser$innerParagraphParser = A2(
 var $dillonkearns$elm_markdown$Markdown$Parser$openBlockOrParagraphParser = A2($elm$parser$Parser$Advanced$ignorer, $dillonkearns$elm_markdown$Markdown$Parser$innerParagraphParser, $dillonkearns$elm_markdown$Helpers$lineEndOrEnd);
 var $dillonkearns$elm_markdown$Markdown$OrderedList$ListItem = F4(
 	function (order, intended, marker, body) {
-		return {D: body, dl: intended, dn: marker, ds: order};
+		return {D: body, dk: intended, dm: marker, dr: order};
 	});
 var $elm$parser$Parser$Advanced$getCol = function (s) {
-	return A3($elm$parser$Parser$Advanced$Good, false, s.ct, s);
+	return A3($elm$parser$Parser$Advanced$Good, false, s.cs, s);
 };
 var $dillonkearns$elm_markdown$Markdown$OrderedList$orderedListEmptyItemParser = A2(
 	$elm$parser$Parser$Advanced$keeper,
@@ -9817,7 +9815,7 @@ var $dillonkearns$elm_markdown$Markdown$Parser$orderedListBlock = function (prev
 	return A2(
 		$elm$parser$Parser$Advanced$map,
 		function (item) {
-			return A6($dillonkearns$elm_markdown$Markdown$RawBlock$OrderedListBlock, true, item.dl, item.dn, item.ds, _List_Nil, item.D);
+			return A6($dillonkearns$elm_markdown$Markdown$RawBlock$OrderedListBlock, true, item.dk, item.dm, item.dr, _List_Nil, item.D);
 		},
 		$dillonkearns$elm_markdown$Markdown$OrderedList$parser(previousWasBody));
 };
@@ -9847,11 +9845,11 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$matchToInline = function (_
 	var _v1 = match.r;
 	switch (_v1.$) {
 		case 0:
-			return $dillonkearns$elm_markdown$Markdown$Inline$Text(match.k);
+			return $dillonkearns$elm_markdown$Markdown$Inline$Text(match.p);
 		case 1:
 			return $dillonkearns$elm_markdown$Markdown$Inline$HardLineBreak;
 		case 2:
-			return $dillonkearns$elm_markdown$Markdown$Inline$CodeInline(match.k);
+			return $dillonkearns$elm_markdown$Markdown$Inline$CodeInline(match.p);
 		case 3:
 			var _v2 = _v1.a;
 			var text = _v2.a;
@@ -9902,7 +9900,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$matchesToInlines = function
 var $dillonkearns$elm_markdown$Markdown$InlineParser$Match = $elm$core$Basics$identity;
 var $dillonkearns$elm_markdown$Markdown$InlineParser$prepareChildMatch = F2(
 	function (parentMatch, childMatch) {
-		return {g: childMatch.g - parentMatch.y, w: childMatch.w, i: childMatch.i - parentMatch.y, k: childMatch.k, C: childMatch.C - parentMatch.y, y: childMatch.y - parentMatch.y, r: childMatch.r};
+		return {g: childMatch.g - parentMatch.y, w: childMatch.w, n: childMatch.n - parentMatch.y, p: childMatch.p, C: childMatch.C - parentMatch.y, y: childMatch.y - parentMatch.y, r: childMatch.r};
 	});
 var $dillonkearns$elm_markdown$Markdown$InlineParser$addChild = F2(
 	function (parentMatch, childMatch) {
@@ -9912,8 +9910,8 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$addChild = F2(
 				$elm$core$List$cons,
 				A2($dillonkearns$elm_markdown$Markdown$InlineParser$prepareChildMatch, parentMatch, childMatch),
 				parentMatch.w),
-			i: parentMatch.i,
-			k: parentMatch.k,
+			n: parentMatch.n,
+			p: parentMatch.p,
 			C: parentMatch.C,
 			y: parentMatch.y,
 			r: parentMatch.r
@@ -9925,8 +9923,8 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$organizeChildren = function
 	return {
 		g: match.g,
 		w: $dillonkearns$elm_markdown$Markdown$InlineParser$organizeMatches(match.w),
-		i: match.i,
-		k: match.k,
+		n: match.n,
+		p: match.p,
 		C: match.C,
 		y: match.y,
 		r: match.r
@@ -9937,7 +9935,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$organizeMatches = function 
 		$elm$core$List$sortBy,
 		function (_v3) {
 			var match = _v3;
-			return match.i;
+			return match.n;
 		},
 		matches);
 	if (!_v2.b) {
@@ -9961,7 +9959,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$organizeMatchesHelp = F3(
 			} else {
 				var match = remaining.a;
 				var rest = remaining.b;
-				if (_Utils_cmp(prevMatch.g, match.i) < 1) {
+				if (_Utils_cmp(prevMatch.g, match.n) < 1) {
 					var $temp$remaining = rest,
 						$temp$_v0 = match,
 						$temp$matchesTail = A2(
@@ -9973,7 +9971,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$organizeMatchesHelp = F3(
 					matchesTail = $temp$matchesTail;
 					continue organizeMatchesHelp;
 				} else {
-					if ((_Utils_cmp(prevMatch.i, match.i) < 0) && (_Utils_cmp(prevMatch.g, match.g) > 0)) {
+					if ((_Utils_cmp(prevMatch.n, match.n) < 0) && (_Utils_cmp(prevMatch.g, match.g) > 0)) {
 						var $temp$remaining = rest,
 							$temp$_v0 = A2($dillonkearns$elm_markdown$Markdown$InlineParser$addChild, prevMatch, match),
 							$temp$matchesTail = matchesTail;
@@ -10000,13 +9998,13 @@ var $dillonkearns$elm_markdown$Markdown$Helpers$containsAmpersand = function (st
 };
 var $elm$regex$Regex$Match = F4(
 	function (match, index, number, submatches) {
-		return {c: index, ak: match, P: number, b6: submatches};
+		return {c: index, ak: match, P: number, b5: submatches};
 	});
 var $elm$regex$Regex$fromStringWith = _Regex_fromStringWith;
 var $elm$regex$Regex$fromString = function (string) {
 	return A2(
 		$elm$regex$Regex$fromStringWith,
-		{da: false, $7: false},
+		{c9: false, dn: false},
 		string);
 };
 var $elm$regex$Regex$never = _Regex_never;
@@ -10029,7 +10027,7 @@ var $dillonkearns$elm_markdown$Markdown$Entity$validUnicode = function (_int) {
 		$elm$core$Char$fromCode(65533));
 };
 var $dillonkearns$elm_markdown$Markdown$Entity$replaceDecimal = function (match) {
-	var _v0 = match.b6;
+	var _v0 = match.b5;
 	if (_v0.b && (!_v0.a.$)) {
 		var first = _v0.a.a;
 		var _v1 = $elm$core$String$toInt(first);
@@ -10306,7 +10304,7 @@ var $dillonkearns$elm_markdown$Markdown$Entity$entities = $elm$core$Dict$fromLis
 			_Utils_Tuple2('diams', 9830)
 		]));
 var $dillonkearns$elm_markdown$Markdown$Entity$replaceEntity = function (match) {
-	var _v0 = match.b6;
+	var _v0 = match.b5;
 	if (_v0.b && (!_v0.a.$)) {
 		var first = _v0.a.a;
 		var _v1 = A2($elm$core$Dict$get, first, $dillonkearns$elm_markdown$Markdown$Entity$entities);
@@ -10330,7 +10328,7 @@ var $dillonkearns$elm_markdown$Markdown$Helpers$replaceEscapable = A2(
 	$elm$regex$Regex$replace,
 	$dillonkearns$elm_markdown$Markdown$Helpers$escapableRegex,
 	function (regexMatch) {
-		var _v0 = regexMatch.b6;
+		var _v0 = regexMatch.b5;
 		if (((_v0.b && (!_v0.a.$)) && _v0.b.b) && (!_v0.b.a.$)) {
 			var backslashes = _v0.a.a;
 			var _v1 = _v0.b;
@@ -10365,7 +10363,7 @@ var $dillonkearns$elm_markdown$Markdown$Entity$hexToInt = function (string) {
 		$elm$core$String$toLower(string));
 };
 var $dillonkearns$elm_markdown$Markdown$Entity$replaceHexadecimal = function (match) {
-	var _v0 = match.b6;
+	var _v0 = match.b5;
 	if (_v0.b && (!_v0.a.$)) {
 		var first = _v0.a.a;
 		return $dillonkearns$elm_markdown$Markdown$Entity$validUnicode(
@@ -10385,8 +10383,8 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$normalMatch = function (tex
 	return {
 		g: 0,
 		w: _List_Nil,
-		i: 0,
-		k: $dillonkearns$elm_markdown$Markdown$Helpers$formatStr(text),
+		n: 0,
+		p: $dillonkearns$elm_markdown$Markdown$Helpers$formatStr(text),
 		C: 0,
 		y: 0,
 		r: $dillonkearns$elm_markdown$Markdown$InlineParser$NormalType
@@ -10397,9 +10395,9 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$parseTextMatch = F3(
 		var matchModel = _v2;
 		var updtMatch = {
 			g: matchModel.g,
-			w: A3($dillonkearns$elm_markdown$Markdown$InlineParser$parseTextMatches, matchModel.k, _List_Nil, matchModel.w),
-			i: matchModel.i,
-			k: matchModel.k,
+			w: A3($dillonkearns$elm_markdown$Markdown$InlineParser$parseTextMatches, matchModel.p, _List_Nil, matchModel.w),
+			n: matchModel.n,
+			p: matchModel.p,
 			C: matchModel.C,
 			y: matchModel.y,
 			r: matchModel.r
@@ -10418,13 +10416,13 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$parseTextMatch = F3(
 			if (!_v4.$) {
 				return A2($elm$core$List$cons, updtMatch, parsedMatches);
 			} else {
-				return _Utils_eq(matchModel.g, matchHead.i) ? A2($elm$core$List$cons, updtMatch, parsedMatches) : ((_Utils_cmp(matchModel.g, matchHead.i) < 0) ? A2(
+				return _Utils_eq(matchModel.g, matchHead.n) ? A2($elm$core$List$cons, updtMatch, parsedMatches) : ((_Utils_cmp(matchModel.g, matchHead.n) < 0) ? A2(
 					$elm$core$List$cons,
 					updtMatch,
 					A2(
 						$elm$core$List$cons,
 						$dillonkearns$elm_markdown$Markdown$InlineParser$normalMatch(
-							A3($elm$core$String$slice, matchModel.g, matchHead.i, rawText)),
+							A3($elm$core$String$slice, matchModel.g, matchHead.n, rawText)),
 						parsedMatches)) : parsedMatches);
 			}
 		}
@@ -10441,10 +10439,10 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$parseTextMatches = F3(
 						]);
 				} else {
 					var matchModel = parsedMatches.a;
-					return (matchModel.i > 0) ? A2(
+					return (matchModel.n > 0) ? A2(
 						$elm$core$List$cons,
 						$dillonkearns$elm_markdown$Markdown$InlineParser$normalMatch(
-							A2($elm$core$String$left, matchModel.i, rawText)),
+							A2($elm$core$String$left, matchModel.n, rawText)),
 						parsedMatches) : parsedMatches;
 				}
 			} else {
@@ -10549,7 +10547,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$angleBracketLTokenRegex = A
 var $elm$regex$Regex$find = _Regex_findAtMost(_Regex_infinity);
 var $dillonkearns$elm_markdown$Markdown$InlineParser$AngleBracketOpen = {$: 4};
 var $dillonkearns$elm_markdown$Markdown$InlineParser$regMatchToAngleBracketLToken = function (regMatch) {
-	var _v0 = regMatch.b6;
+	var _v0 = regMatch.b5;
 	if ((_v0.b && _v0.b.b) && (!_v0.b.a.$)) {
 		var maybeBackslashes = _v0.a;
 		var _v1 = _v0.b;
@@ -10579,7 +10577,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$AngleBracketClose = functio
 var $dillonkearns$elm_markdown$Markdown$InlineParser$Escaped = 0;
 var $dillonkearns$elm_markdown$Markdown$InlineParser$NotEscaped = 1;
 var $dillonkearns$elm_markdown$Markdown$InlineParser$regMatchToAngleBracketRToken = function (regMatch) {
-	var _v0 = regMatch.b6;
+	var _v0 = regMatch.b5;
 	if ((_v0.b && _v0.b.b) && (!_v0.b.a.$)) {
 		var maybeBackslashes = _v0.a;
 		var _v1 = _v0.b;
@@ -10711,7 +10709,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$getFringeRank = function (m
 };
 var $dillonkearns$elm_markdown$Markdown$InlineParser$regMatchToEmphasisToken = F3(
 	function (_char, rawText, regMatch) {
-		var _v0 = regMatch.b6;
+		var _v0 = regMatch.b5;
 		if ((((_v0.b && _v0.b.b) && _v0.b.b.b) && (!_v0.b.b.a.$)) && _v0.b.b.b.b) {
 			var maybeBackslashes = _v0.a;
 			var _v1 = _v0.b;
@@ -10780,7 +10778,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$CodeToken = function (a) {
 	return {$: 0, a: a};
 };
 var $dillonkearns$elm_markdown$Markdown$InlineParser$regMatchToCodeToken = function (regMatch) {
-	var _v0 = regMatch.b6;
+	var _v0 = regMatch.b5;
 	if ((_v0.b && _v0.b.b) && (!_v0.b.a.$)) {
 		var maybeBackslashes = _v0.a;
 		var _v1 = _v0.b;
@@ -10811,7 +10809,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$hardBreakTokenRegex = A2(
 	$elm$regex$Regex$fromString('(?:(\\\\+)|( {2,}))\\n'));
 var $dillonkearns$elm_markdown$Markdown$InlineParser$HardLineBreakToken = {$: 8};
 var $dillonkearns$elm_markdown$Markdown$InlineParser$regMatchToHardBreakToken = function (regMatch) {
-	var _v0 = regMatch.b6;
+	var _v0 = regMatch.b5;
 	_v0$2:
 	while (true) {
 		if (_v0.b) {
@@ -10840,7 +10838,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$regMatchToHardBreakToken = 
 	return $elm$core$Maybe$Nothing;
 };
 var $dillonkearns$elm_markdown$Markdown$InlineParser$regMatchToSoftHardBreakToken = function (regMatch) {
-	var _v0 = regMatch.b6;
+	var _v0 = regMatch.b5;
 	_v0$2:
 	while (true) {
 		if (_v0.b) {
@@ -10889,7 +10887,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$linkImageCloseTokenRegex = 
 	$elm$regex$Regex$fromString('(\\\\*)(\\])'));
 var $dillonkearns$elm_markdown$Markdown$InlineParser$SquareBracketClose = {$: 3};
 var $dillonkearns$elm_markdown$Markdown$InlineParser$regMatchToLinkImageCloseToken = function (regMatch) {
-	var _v0 = regMatch.b6;
+	var _v0 = regMatch.b5;
 	if ((_v0.b && _v0.b.b) && (!_v0.b.a.$)) {
 		var maybeBackslashes = _v0.a;
 		var _v1 = _v0.b;
@@ -10919,7 +10917,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$LinkOpenToken = function (a
 	return {$: 1, a: a};
 };
 var $dillonkearns$elm_markdown$Markdown$InlineParser$regMatchToLinkImageOpenToken = function (regMatch) {
-	var _v0 = regMatch.b6;
+	var _v0 = regMatch.b5;
 	if (((_v0.b && _v0.b.b) && _v0.b.b.b) && (!_v0.b.b.a.$)) {
 		var maybeBackslashes = _v0.a;
 		var _v1 = _v0.b;
@@ -10969,7 +10967,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$StrikethroughToken = functi
 	return {$: 9, a: a};
 };
 var $dillonkearns$elm_markdown$Markdown$InlineParser$regMatchToStrikethroughToken = function (regMatch) {
-	var _v0 = regMatch.b6;
+	var _v0 = regMatch.b5;
 	if ((_v0.b && _v0.b.b) && (!_v0.b.a.$)) {
 		var maybeBackslashes = _v0.a;
 		var _v1 = _v0.b;
@@ -11118,14 +11116,14 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$urlRegex = A2(
 	$elm$regex$Regex$fromString('^([A-Za-z][A-Za-z0-9.+\\-]{1,31}:[^<>\\x00-\\x20]*)$'));
 var $dillonkearns$elm_markdown$Markdown$InlineParser$autolinkToMatch = function (_v0) {
 	var match = _v0;
-	return A2($elm$regex$Regex$contains, $dillonkearns$elm_markdown$Markdown$InlineParser$urlRegex, match.k) ? $elm$core$Result$Ok(
+	return A2($elm$regex$Regex$contains, $dillonkearns$elm_markdown$Markdown$InlineParser$urlRegex, match.p) ? $elm$core$Result$Ok(
 		_Utils_update(
 			match,
 			{
 				r: $dillonkearns$elm_markdown$Markdown$InlineParser$AutolinkType(
 					_Utils_Tuple2(
-						match.k,
-						$dillonkearns$elm_markdown$Markdown$InlineParser$encodeUrl(match.k)))
+						match.p,
+						$dillonkearns$elm_markdown$Markdown$InlineParser$encodeUrl(match.p)))
 			})) : $elm$core$Result$Err(match);
 };
 var $elm$regex$Regex$findAtMost = _Regex_findAtMost;
@@ -11157,11 +11155,11 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$prepareUrlAndTitle = F2(
 var $dillonkearns$elm_markdown$Markdown$InlineParser$refRegexToMatch = F3(
 	function (matchModel, references, maybeRegexMatch) {
 		var refLabel = function (str) {
-			return $elm$core$String$isEmpty(str) ? matchModel.k : str;
+			return $elm$core$String$isEmpty(str) ? matchModel.p : str;
 		}(
 			A2(
 				$elm$core$Maybe$withDefault,
-				matchModel.k,
+				matchModel.p,
 				A2(
 					$elm$core$Maybe$withDefault,
 					$elm$core$Maybe$Nothing,
@@ -11170,7 +11168,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$refRegexToMatch = F3(
 						A2(
 							$elm$core$Basics$composeR,
 							function ($) {
-								return $.b6;
+								return $.b5;
 							},
 							$elm$core$List$head),
 						maybeRegexMatch))));
@@ -11240,7 +11238,7 @@ var $dillonkearns$elm_markdown$Markdown$Helpers$returnFirstJust = function (mayb
 };
 var $dillonkearns$elm_markdown$Markdown$InlineParser$inlineLinkTypeOrImageTypeRegexToMatch = F2(
 	function (matchModel, regexMatch) {
-		var _v0 = regexMatch.b6;
+		var _v0 = regexMatch.b5;
 		if ((((_v0.b && _v0.b.b) && _v0.b.b.b) && _v0.b.b.b.b) && _v0.b.b.b.b.b) {
 			var maybeRawUrlAngleBrackets = _v0.a;
 			var _v1 = _v0.b;
@@ -11303,7 +11301,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$checkParsedAheadOverlapping
 		var overlappingMatches = $elm$core$List$filter(
 			function (_v1) {
 				var testMatch = _v1;
-				return (_Utils_cmp(match.g, testMatch.i) > 0) && (_Utils_cmp(match.g, testMatch.g) < 0);
+				return (_Utils_cmp(match.g, testMatch.n) > 0) && (_Utils_cmp(match.g, testMatch.g) < 0);
 			});
 		return ($elm$core$List$isEmpty(remainMatches) || $elm$core$List$isEmpty(
 			overlappingMatches(remainMatches))) ? $elm$core$Maybe$Just(
@@ -11315,14 +11313,14 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$emailRegex = A2(
 	$elm$regex$Regex$fromString('^([a-zA-Z0-9.!#$%&\'*+\\/=?^_`{|}~\\-]+@[a-zA-Z0-9](?:[a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?)*)$'));
 var $dillonkearns$elm_markdown$Markdown$InlineParser$emailAutolinkTypeToMatch = function (_v0) {
 	var match = _v0;
-	return A2($elm$regex$Regex$contains, $dillonkearns$elm_markdown$Markdown$InlineParser$emailRegex, match.k) ? $elm$core$Result$Ok(
+	return A2($elm$regex$Regex$contains, $dillonkearns$elm_markdown$Markdown$InlineParser$emailRegex, match.p) ? $elm$core$Result$Ok(
 		_Utils_update(
 			match,
 			{
 				r: $dillonkearns$elm_markdown$Markdown$InlineParser$AutolinkType(
 					_Utils_Tuple2(
-						match.k,
-						'mailto:' + $dillonkearns$elm_markdown$Markdown$InlineParser$encodeUrl(match.k)))
+						match.p,
+						'mailto:' + $dillonkearns$elm_markdown$Markdown$InlineParser$encodeUrl(match.p)))
 			})) : $elm$core$Result$Err(match);
 };
 var $dillonkearns$elm_markdown$Markdown$InlineParser$findTokenHelp = F3(
@@ -11394,7 +11392,7 @@ var $elm$parser$Parser$Advanced$run = F2(
 	function (_v0, src) {
 		var parse = _v0;
 		var _v1 = parse(
-			{ct: 1, f: _List_Nil, h: 1, d: 0, dw: 1, b2: src});
+			{cs: 1, f: _List_Nil, k: 1, d: 0, dv: 1, b1: src});
 		if (!_v1.$) {
 			var value = _v1.b;
 			return $elm$core$Result$Ok(value);
@@ -11416,7 +11414,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$htmlToToken = F2(
 					$elm$parser$Parser$Advanced$succeed(
 						F3(
 							function (startOffset, htmlTag, endOffset) {
-								return {cC: htmlTag, bm: endOffset - startOffset};
+								return {cB: htmlTag, bm: endOffset - startOffset};
 							})),
 					$elm$parser$Parser$Advanced$getOffset),
 				$dillonkearns$elm_markdown$HtmlParser$html),
@@ -11424,13 +11422,13 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$htmlToToken = F2(
 		var parsed = A2(
 			$elm$parser$Parser$Advanced$run,
 			consumedCharacters,
-			A2($elm$core$String$dropLeft, match.i, rawText));
+			A2($elm$core$String$dropLeft, match.n, rawText));
 		if (!parsed.$) {
-			var htmlTag = parsed.a.cC;
+			var htmlTag = parsed.a.cB;
 			var length = parsed.a.bm;
 			var htmlToken = A2($dillonkearns$elm_markdown$Markdown$InlineParser$HtmlToken, 0, htmlTag);
 			return $elm$core$Maybe$Just(
-				{c: match.i, bm: length, e: htmlToken});
+				{c: match.n, bm: length, e: htmlToken});
 		} else {
 			return $elm$core$Maybe$Nothing;
 		}
@@ -11527,7 +11525,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$isStrikethroughTokenPair = 
 var $dillonkearns$elm_markdown$Markdown$InlineParser$HardLineBreakType = {$: 1};
 var $dillonkearns$elm_markdown$Markdown$InlineParser$tokenToMatch = F2(
 	function (token, type_) {
-		return {g: token.c + token.bm, w: _List_Nil, i: token.c, k: '', C: 0, y: 0, r: type_};
+		return {g: token.c + token.bm, w: _List_Nil, n: token.c, p: '', C: 0, y: 0, r: type_};
 	});
 var $dillonkearns$elm_markdown$Markdown$InlineParser$lineBreakTTM = F2(
 	function (remaining, matches) {
@@ -12250,7 +12248,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$tokenPairToMatch = F7(
 			A3($elm$core$String$slice, textStart, textEnd, rawText));
 		var start = openToken.c;
 		var end = closeToken.c + closeToken.bm;
-		var match = {g: end, w: _List_Nil, i: start, k: text, C: textEnd, y: textStart, r: type_};
+		var match = {g: end, w: _List_Nil, n: start, p: text, C: textEnd, y: textStart, r: type_};
 		var matches = A2(
 			$elm$core$List$map,
 			function (_v0) {
@@ -12258,7 +12256,7 @@ var $dillonkearns$elm_markdown$Markdown$InlineParser$tokenPairToMatch = F7(
 				return A2($dillonkearns$elm_markdown$Markdown$InlineParser$prepareChildMatch, match, matchModel);
 			},
 			A4($dillonkearns$elm_markdown$Markdown$InlineParser$tokensToMatches, innerTokens, _List_Nil, references, rawText));
-		return {g: end, w: matches, i: start, k: text, C: textEnd, y: textStart, r: type_};
+		return {g: end, w: matches, n: start, p: text, C: textEnd, y: textStart, r: type_};
 	});
 var $dillonkearns$elm_markdown$Markdown$InlineParser$tokensToMatches = F4(
 	function (tokens, matches, references, rawText) {
@@ -12674,7 +12672,7 @@ var $dillonkearns$elm_markdown$Markdown$CodeBlock$codeBlockLine = function (inde
 			$dillonkearns$elm_markdown$Helpers$lineEndOrEnd));
 };
 var $elm$parser$Parser$Advanced$getSource = function (s) {
-	return A3($elm$parser$Parser$Advanced$Good, false, s.b2, s);
+	return A3($elm$parser$Parser$Advanced$Good, false, s.b1, s);
 };
 var $dillonkearns$elm_markdown$Markdown$CodeBlock$remainingBlockHelp = function (_v0) {
 	var fence = _v0.a;
@@ -12847,7 +12845,7 @@ var $elm$parser$Parser$Advanced$chompUntil = function (_v0) {
 	var str = _v0.a;
 	var expecting = _v0.b;
 	return function (s) {
-		var _v1 = A5($elm$parser$Parser$Advanced$findSubString, str, s.d, s.dw, s.ct, s.b2);
+		var _v1 = A5($elm$parser$Parser$Advanced$findSubString, str, s.d, s.dv, s.cs, s.b1);
 		var newOffset = _v1.a;
 		var newRow = _v1.b;
 		var newCol = _v1.c;
@@ -12858,7 +12856,7 @@ var $elm$parser$Parser$Advanced$chompUntil = function (_v0) {
 			$elm$parser$Parser$Advanced$Good,
 			_Utils_cmp(s.d, newOffset) < 0,
 			0,
-			{ct: newCol, f: s.f, h: s.h, d: newOffset, dw: newRow, b2: s.b2});
+			{cs: newCol, f: s.f, k: s.k, d: newOffset, dv: newRow, b1: s.b1});
 	};
 };
 var $dillonkearns$elm_markdown$Parser$Token$greaterThan = A2(
@@ -12867,11 +12865,11 @@ var $dillonkearns$elm_markdown$Parser$Token$greaterThan = A2(
 	$elm$parser$Parser$Expecting('a `>`'));
 var $elm$parser$Parser$Advanced$Located = F3(
 	function (row, col, context) {
-		return {ct: col, f: context, dw: row};
+		return {cs: col, f: context, dv: row};
 	});
 var $elm$parser$Parser$Advanced$changeContext = F2(
 	function (newContext, s) {
-		return {ct: s.ct, f: newContext, h: s.h, d: s.d, dw: s.dw, b2: s.b2};
+		return {cs: s.cs, f: newContext, k: s.k, d: s.d, dv: s.dv, b1: s.b1};
 	});
 var $elm$parser$Parser$Advanced$inContext = F2(
 	function (context, _v0) {
@@ -12882,7 +12880,7 @@ var $elm$parser$Parser$Advanced$inContext = F2(
 					$elm$parser$Parser$Advanced$changeContext,
 					A2(
 						$elm$core$List$cons,
-						A3($elm$parser$Parser$Advanced$Located, s0.dw, s0.ct, context),
+						A3($elm$parser$Parser$Advanced$Located, s0.dv, s0.cs, context),
 						s0.f),
 					s0));
 			if (!_v1.$) {
@@ -13069,7 +13067,7 @@ var $dillonkearns$elm_markdown$Markdown$LinkReferenceDefinition$parser = A2(
 							function (label, destination, title) {
 								return _Utils_Tuple2(
 									label,
-									{de: destination, L: title});
+									{dd: destination, L: title});
 							})),
 					$dillonkearns$elm_markdown$Whitespace$upToThreeSpaces),
 				A2(
@@ -13325,7 +13323,7 @@ var $dillonkearns$elm_markdown$Markdown$TableParser$delimiterToAlignment = funct
 var $dillonkearns$elm_markdown$Markdown$TableParser$delimiterRowParser = A2(
 	$elm$parser$Parser$Advanced$andThen,
 	function (delimiterRow) {
-		var trimmed = delimiterRow.a.c2;
+		var trimmed = delimiterRow.a.c1;
 		var headers = delimiterRow.b;
 		return $elm$core$List$isEmpty(headers) ? $elm$parser$Parser$Advanced$problem(
 			$elm$parser$Parser$Expecting('Must have at least one column in delimiter row.')) : ((($elm$core$List$length(headers) === 1) && (!(A2($elm$core$String$startsWith, '|', trimmed) && A2($elm$core$String$endsWith, '|', trimmed)))) ? $elm$parser$Parser$Advanced$problem(
@@ -13338,8 +13336,8 @@ var $dillonkearns$elm_markdown$Markdown$TableParser$delimiterRowParser = A2(
 				return A2(
 					$dillonkearns$elm_markdown$Markdown$Table$TableDelimiterRow,
 					{
-						cV: delimiterText,
-						c2: $elm$core$String$trim(delimiterText)
+						cU: delimiterText,
+						c1: $elm$core$String$trim(delimiterText)
 					},
 					A2(
 						$elm$core$List$map,
@@ -13719,7 +13717,7 @@ var $dillonkearns$elm_markdown$Markdown$Parser$unorderedListBlock = function (pr
 					var body = unparsedListItem.b;
 					return {
 						D: body,
-						dn: listmarker,
+						dm: listmarker,
 						s: $elm$core$Maybe$Just(
 							function () {
 								if (completion === 1) {
@@ -13731,9 +13729,9 @@ var $dillonkearns$elm_markdown$Markdown$Parser$unorderedListBlock = function (pr
 					};
 				case 1:
 					var body = unparsedListItem.a;
-					return {D: body, dn: listmarker, s: $elm$core$Maybe$Nothing};
+					return {D: body, dm: listmarker, s: $elm$core$Maybe$Nothing};
 				default:
-					return {D: '', dn: listmarker, s: $elm$core$Maybe$Nothing};
+					return {D: '', dm: listmarker, s: $elm$core$Maybe$Nothing};
 			}
 		});
 	return A2(
@@ -14260,7 +14258,7 @@ var $dillonkearns$elm_markdown$Markdown$Parser$completeOrMergeBlocks = F2(
 							case 3:
 								var intended2 = newRawBlock.b;
 								var openListItem1 = newRawBlock.d;
-								if (_Utils_eq(openListItem2.dn, openListItem1.dn)) {
+								if (_Utils_eq(openListItem2.dm, openListItem1.dm)) {
 									var _v59 = A2(
 										$elm$parser$Parser$Advanced$run,
 										$dillonkearns$elm_markdown$Markdown$Parser$cyclic$rawBlockParser(),
@@ -14586,7 +14584,7 @@ var $dillonkearns$elm_markdown$Markdown$Parser$completeOrMergeBlocks = F2(
 											b: A2(
 												$elm$core$List$cons,
 												$dillonkearns$elm_markdown$Markdown$RawBlock$OpenBlockOrParagraph(
-													A3($dillonkearns$elm_markdown$Markdown$Parser$joinRawStringsWith, '\n', rawHeaders, text.cV)),
+													A3($dillonkearns$elm_markdown$Markdown$Parser$joinRawStringsWith, '\n', rawHeaders, text.cU)),
 												rest)
 										});
 								}
@@ -14768,7 +14766,7 @@ var $dillonkearns$elm_markdown$Markdown$Parser$inlineParseHelper = F2(
 				$elm$core$List$map,
 				$elm$core$Tuple$mapSecond(
 					function (_v37) {
-						var destination = _v37.de;
+						var destination = _v37.dd;
 						var title = _v37.L;
 						return _Utils_Tuple2(destination, title);
 					}),
@@ -15124,7 +15122,7 @@ var $dillonkearns$elm_markdown$Markdown$Parser$parseInlines = F2(
 				var text = _v23.a;
 				return $dillonkearns$elm_markdown$Markdown$Parser$ParsedBlock(
 					$dillonkearns$elm_markdown$Markdown$Block$Paragraph(
-						A2($dillonkearns$elm_markdown$Markdown$Parser$inlineParseHelper, linkReferences, text.cV)));
+						A2($dillonkearns$elm_markdown$Markdown$Parser$inlineParseHelper, linkReferences, text.cU)));
 			default:
 				var raw = rawBlock.b;
 				return $dillonkearns$elm_markdown$Markdown$Parser$ParsedBlock(
@@ -16105,11 +16103,11 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$renderHelperSingle = function (
 					A2(
 						$elm$core$Result$map,
 						function (children) {
-							return renderer.j(
+							return renderer.o(
 								{
-									cs: children,
-									cI: level,
-									du: $dillonkearns$elm_markdown$Markdown$Block$extractInlineText(content)
+									cr: children,
+									cH: level,
+									dt: $dillonkearns$elm_markdown$Markdown$Block$extractInlineText(content)
 								});
 						},
 						A2($dillonkearns$elm_markdown$Markdown$Renderer$renderStyled, renderer, content)));
@@ -16138,7 +16136,7 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$renderHelperSingle = function (
 					A2(
 						$elm$core$Result$map,
 						function (listItems) {
-							return renderer.cj(
+							return renderer.ci(
 								A2(
 									$elm$core$List$map,
 									function (_v7) {
@@ -16233,7 +16231,7 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$renderHelperSingle = function (
 						renderer.aQ(codeBlock)));
 			case 8:
 				return $elm$core$Maybe$Just(
-					$elm$core$Result$Ok(renderer.ce));
+					$elm$core$Result$Ok(renderer.cd));
 			case 3:
 				var nestedBlocks = block.a;
 				return $elm$core$Maybe$Just(
@@ -16260,7 +16258,7 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$renderHelperSingle = function (
 				var renderedHeader = A2(
 					$elm$core$Result$map,
 					function (listListView) {
-						return renderer.cb(
+						return renderer.ca(
 							$elm$core$List$singleton(
 								renderer.aD(
 									A2(
@@ -16268,7 +16266,7 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$renderHelperSingle = function (
 										function (_v10) {
 											var maybeAlignment = _v10.a;
 											var item = _v10.b;
-											return A2(renderer.cc, maybeAlignment, item);
+											return A2(renderer.cb, maybeAlignment, item);
 										},
 										listListView))));
 					},
@@ -16276,7 +16274,7 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$renderHelperSingle = function (
 				var renderedBody = function (r) {
 					return $elm$core$List$isEmpty(r) ? _List_Nil : _List_fromArray(
 						[
-							renderer.b9(r)
+							renderer.b8(r)
 						]);
 				};
 				var alignmentForColumn = function (columnIndex) {
@@ -16298,7 +16296,7 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$renderHelperSingle = function (
 								F2(
 									function (index, cell) {
 										return A2(
-											renderer.ca,
+											renderer.b9,
 											alignmentForColumn(index),
 											cell);
 									})),
@@ -16315,7 +16313,7 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$renderHelperSingle = function (
 						$elm$core$Result$map2,
 						F2(
 							function (h, r) {
-								return renderer.b8(
+								return renderer.b7(
 									A2(
 										$elm$core$List$cons,
 										h,
@@ -16344,7 +16342,7 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$renderSingleInline = F2(
 				return $elm$core$Maybe$Just(
 					A2(
 						$elm$core$Result$map,
-						renderer.b5,
+						renderer.b4,
 						A2($dillonkearns$elm_markdown$Markdown$Renderer$renderStyled, renderer, innerInlines)));
 			case 3:
 				var innerInlines = inline.a;
@@ -16358,7 +16356,7 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$renderSingleInline = F2(
 				return $elm$core$Maybe$Just(
 					A2(
 						$elm$core$Result$map,
-						renderer.b4,
+						renderer.b3,
 						A2($dillonkearns$elm_markdown$Markdown$Renderer$renderStyled, renderer, innerInlines)));
 			case 2:
 				var src = inline.a;
@@ -16369,14 +16367,14 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$renderSingleInline = F2(
 						renderer.bf(
 							{
 								aH: $dillonkearns$elm_markdown$Markdown$Block$extractInlineText(children),
-								b2: src,
+								b1: src,
 								L: title
 							})));
 			case 7:
 				var string = inline.a;
 				return $elm$core$Maybe$Just(
 					$elm$core$Result$Ok(
-						renderer.k(string)));
+						renderer.p(string)));
 			case 6:
 				var string = inline.a;
 				return $elm$core$Maybe$Just(
@@ -16393,7 +16391,7 @@ var $dillonkearns$elm_markdown$Markdown$Renderer$renderSingleInline = F2(
 							return $elm$core$Result$Ok(
 								A2(
 									renderer.bt,
-									{de: destination, L: title},
+									{dd: destination, L: title},
 									children));
 						},
 						A2($dillonkearns$elm_markdown$Markdown$Renderer$renderStyled, renderer, inlines)));
@@ -16476,7 +16474,7 @@ var $author$project$Main$journalEntry = function (entry) {
 							]),
 						_List_fromArray(
 							[
-								$elm$html$Html$text(entry.P + (' / ' + entry.l))
+								$elm$html$Html$text(entry.P + (' / ' + entry.h))
 							])),
 						A2(
 						$elm$html$Html$h3,
@@ -16490,7 +16488,7 @@ var $author$project$Main$journalEntry = function (entry) {
 						_List_Nil,
 						_List_fromArray(
 							[
-								$elm$html$Html$text(entry.b7)
+								$elm$html$Html$text(entry.b6)
 							]))
 					])),
 				A2(
@@ -16532,9 +16530,9 @@ var $author$project$Main$links = function (items) {
 };
 var $author$project$Generated$Content$magic = function (language) {
 	if (!language) {
-		return {D: 'Magic belongs alongside engineering. Both are part of my work and my curiosity: the mechanics of making something happen, and the experience of using it.\n\nThis corner of the field manual is for performances, reflections, and experiments in wonder. I’ll build it out with my own material as the collection grows.', j: 'Magic exists in the mind', G: 'I do sleight of hand, too.', Q: 'Engineering is about how things work. Magic is about what they feel like.', H: 'ANOTHER KIND OF CRAFT', R: 'attention / possibility / surprise', q: 'MAGIC & THE HUMAN SIDE'};
+		return {D: 'Magic belongs alongside engineering. Both are part of my work and my curiosity: the mechanics of making something happen, and the experience of using it.\n\nThis corner of the field manual is for performances, reflections, and experiments in wonder. I’ll build it out with my own material as the collection grows.', o: 'Magic exists in the mind', G: 'I do sleight of hand, too.', Q: 'Engineering is about how things work. Magic is about what they feel like.', H: 'ANOTHER KIND OF CRAFT', R: 'attention / possibility / surprise', q: 'MAGIC & THE HUMAN SIDE'};
 	} else {
-		return {D: 'La magia va junto a la ingeniería. Ambas forman parte de mi trabajo y de mi curiosidad: la mecánica de hacer que algo suceda y la experiencia de usarlo.\n\nEste rincón del manual de campo es para actuaciones, reflexiones y experimentos con el asombro. Lo iré ampliando con mi propio material a medida que crezca la colección.', j: 'La magia existe en la mente', G: 'También hago juegos de manos.', Q: 'La ingeniería trata de cómo funcionan las cosas. La magia trata de cómo se sienten.', H: 'OTRO TIPO DE OFICIO', R: 'atención / posibilidad / sorpresa', q: 'MAGIA Y EL LADO HUMANO'};
+		return {D: 'La magia va junto a la ingeniería. Ambas forman parte de mi trabajo y de mi curiosidad: la mecánica de hacer que algo suceda y la experiencia de usarlo.\n\nEste rincón del manual de campo es para actuaciones, reflexiones y experimentos con el asombro. Lo iré ampliando con mi propio material a medida que crezca la colección.', o: 'La magia existe en la mente', G: 'También hago juegos de manos.', Q: 'La ingeniería trata de cómo funcionan las cosas. La magia trata de cómo se sienten.', H: 'OTRO TIPO DE OFICIO', R: 'atención / posibilidad / sorpresa', q: 'MAGIA Y EL LADO HUMANO'};
 	}
 };
 var $elm$core$List$map3 = _List_map3;
@@ -16685,14 +16683,14 @@ var $author$project$I18n$pick = F3(
 	});
 var $author$project$Content$profile = function (language) {
 	return {
-		cz: 'https://github.com/antonioandara',
-		cD: A3($author$project$I18n$pick, language, 'Computers. Embedded. Open-source. Sleight of hand.', 'Computadoras. Eletrónica. Programación. Código abierto. Prestidigitación.'),
-		cG: A3($author$project$I18n$pick, language, 'I’m Antonio and I like to make things. Here I share some of my work, experiments, and writing. I hope you find something that sparks your curiosity.', 'Soy Antonio y me gusta hacer cosas. Aquí comparto parte de mi trabajo, experimentos y mis algunos articulos. Espero que algo que despierte tu curiosidad.'),
-		cJ: 'https://www.linkedin.com/in/antonio-alejandro-andara-lara-ab5453a4/',
-		cK: 'https://www.youtube.com/@viamagus',
-		cM: 'Antonio Andara Lara',
-		c5: 'https://x.com/A3L',
-		c7: 'https://www.youtube.com/@andaralabs'
+		cy: 'https://github.com/antonioandara',
+		cC: A3($author$project$I18n$pick, language, 'Computers. Embedded. Open-source. Sleight of hand.', 'Computadoras. Electrónica. Programación. Código abierto. Prestidigitación.'),
+		cF: A3($author$project$I18n$pick, language, 'I’m Antonio and I like to make things. Here I share some of my work, experiments, and writing. I hope you find something that sparks your curiosity.', 'Soy Antonio y me gusta hacer cosas. Aquí comparto parte de mi trabajo, experimentos y mis algunos articulos. Espero que algo que despierte tu curiosidad.'),
+		cI: 'https://www.linkedin.com/in/antonio-alejandro-andara-lara-ab5453a4/',
+		cJ: 'https://www.youtube.com/@viamagus',
+		cL: 'Antonio Andara Lara',
+		c4: 'https://x.com/A3L',
+		c6: 'https://www.youtube.com/@andaralabs'
 	};
 };
 var $author$project$Main$profileLink = F4(
@@ -16833,7 +16831,7 @@ var $author$project$LmsProject$view = function (language) {
 						_List_Nil,
 						_List_fromArray(
 							[
-								$elm$html$Html$text(copy.j)
+								$elm$html$Html$text(copy.o)
 							])),
 						A2(
 						$elm$html$Html$p,
@@ -16869,7 +16867,7 @@ var $author$project$LmsProject$view = function (language) {
 											$elm$html$Html$text(tag)
 										]));
 							},
-							copy.cd)),
+							copy.cc)),
 						A2(
 						$elm$html$Html$div,
 						_List_fromArray(
@@ -16958,7 +16956,7 @@ var $author$project$Main$body = function (language) {
 				$author$project$Main$chapter,
 				'engineering',
 				'01',
-				home.a3.j,
+				home.a3.o,
 				home.a3.q,
 				_List_fromArray(
 					[
@@ -17005,8 +17003,8 @@ var $author$project$Main$body = function (language) {
 										$author$project$Main$links(
 										_List_fromArray(
 											[
-												_Utils_Tuple2(person.cJ, home.a3.bu),
-												_Utils_Tuple2(person.cz, home.a3.ad)
+												_Utils_Tuple2(person.cI, home.a3.bu),
+												_Utils_Tuple2(person.cy, home.a3.ad)
 											]))
 									]))
 							])),
@@ -17094,7 +17092,7 @@ var $author$project$Main$body = function (language) {
 				$author$project$Main$chapter,
 				'open-source',
 				'02',
-				home.bH.j,
+				home.bH.o,
 				home.bH.q,
 				_List_fromArray(
 					[
@@ -17136,7 +17134,7 @@ var $author$project$Main$body = function (language) {
 										_List_fromArray(
 											[
 												$elm$html$Html$Attributes$class('read-link'),
-												$elm$html$Html$Attributes$href(person.cz)
+												$elm$html$Html$Attributes$href(person.cy)
 											]),
 										_List_fromArray(
 											[
@@ -17150,7 +17148,7 @@ var $author$project$Main$body = function (language) {
 				$author$project$Main$chapter,
 				'experiments',
 				'03',
-				home.a4.j,
+				home.a4.o,
 				home.a4.q,
 				_List_fromArray(
 					[
@@ -17196,7 +17194,7 @@ var $author$project$Main$body = function (language) {
 				$author$project$Main$chapter,
 				'magic',
 				'05',
-				magic.j,
+				magic.o,
 				magic.q,
 				_List_fromArray(
 					[
@@ -17231,8 +17229,8 @@ var $author$project$Main$body = function (language) {
 										$author$project$Main$links(
 										_List_fromArray(
 											[
-												_Utils_Tuple2(person.cK, home.bx.by),
-												_Utils_Tuple2(person.c5, home.bx.cm)
+												_Utils_Tuple2(person.cJ, home.bx.by),
+												_Utils_Tuple2(person.c4, home.bx.cl)
 											]))
 									]))
 							]))
@@ -17241,7 +17239,7 @@ var $author$project$Main$body = function (language) {
 				$author$project$Main$chapter,
 				'journal',
 				'06',
-				home.bi.j,
+				home.bi.o,
 				home.bi.q,
 				_List_fromArray(
 					[
@@ -17277,8 +17275,8 @@ var $author$project$Main$body = function (language) {
 				$author$project$Main$chapter,
 				'videos',
 				'07',
-				home.ck.j,
-				home.ck.q,
+				home.cj.o,
+				home.cj.q,
 				_List_fromArray(
 					[
 						A2(
@@ -17305,25 +17303,25 @@ var $author$project$Main$body = function (language) {
 											]),
 										_List_fromArray(
 											[
-												$elm$html$Html$text(home.ck.G)
+												$elm$html$Html$text(home.cj.G)
 											])),
 										A2(
 										$elm$html$Html$p,
 										_List_Nil,
 										_List_fromArray(
 											[
-												$elm$html$Html$text(home.ck.D)
+												$elm$html$Html$text(home.cj.D)
 											])),
 										A2(
 										$elm$html$Html$a,
 										_List_fromArray(
 											[
 												$elm$html$Html$Attributes$class('read-link'),
-												$elm$html$Html$Attributes$href(person.c7)
+												$elm$html$Html$Attributes$href(person.c6)
 											]),
 										_List_fromArray(
 											[
-												$elm$html$Html$text(home.ck.cn)
+												$elm$html$Html$text(home.cj.cm)
 											]))
 									])),
 								A2(
@@ -17331,11 +17329,11 @@ var $author$project$Main$body = function (language) {
 								_List_fromArray(
 									[
 										$elm$html$Html$Attributes$class('video-link'),
-										$elm$html$Html$Attributes$href(person.c7)
+										$elm$html$Html$Attributes$href(person.c6)
 									]),
 								_List_fromArray(
 									[
-										A4($author$project$FieldManual$Components$figurePlate, home.ck.H, home.ck.R, $author$project$PersonalArtwork$video, home.ck.Q)
+										A4($author$project$FieldManual$Components$figurePlate, home.cj.H, home.cj.R, $author$project$PersonalArtwork$video, home.cj.Q)
 									]))
 							]))
 					])),
@@ -17343,7 +17341,7 @@ var $author$project$Main$body = function (language) {
 				$author$project$Main$chapter,
 				'connect',
 				'08',
-				home.aS.j,
+				home.aS.o,
 				home.aS.q,
 				_List_fromArray(
 					[
@@ -17394,7 +17392,7 @@ var $author$project$Main$body = function (language) {
 												}),
 											home.aS.bv,
 											_List_fromArray(
-												[person.cJ, person.cz, person.c7, person.c5])))
+												[person.cI, person.cy, person.c6, person.c4])))
 									]))
 							]))
 					]))
@@ -17612,8 +17610,8 @@ var $author$project$SiteShell$view = F4(
 	function (libraryPage, chapters, body, model) {
 		var person = $author$project$Content$profile(model.X);
 		var copy = $author$project$Copy$forLanguage(model.X);
-		var shell = copy.b_;
-		var themeLabel = $author$project$FieldManual$Reader$isLight(model) ? shell.cg : shell.cf;
+		var shell = copy.bZ;
+		var themeLabel = $author$project$FieldManual$Reader$isLight(model) ? shell.cf : shell.ce;
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -17640,7 +17638,7 @@ var $author$project$SiteShell$view = F4(
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text(shell.b1)
+							$elm$html$Html$text(shell.b0)
 						])),
 					A2(
 					$elm$html$Html$aside,
@@ -17712,7 +17710,7 @@ var $author$project$SiteShell$view = F4(
 										]),
 									_List_fromArray(
 										[
-											$elm$html$Html$text(shell.b0)
+											$elm$html$Html$text(shell.b$)
 										])),
 									A2(
 									$elm$html$Html$p,
@@ -17722,7 +17720,7 @@ var $author$project$SiteShell$view = F4(
 										]),
 									_List_fromArray(
 										[
-											$elm$html$Html$text(shell.b$)
+											$elm$html$Html$text(shell.b_)
 										])),
 									A2(
 									$elm$html$Html$nav,
@@ -17789,11 +17787,11 @@ var $author$project$SiteShell$view = F4(
 									$elm$html$Html$a,
 									_List_fromArray(
 										[
-											$elm$html$Html$Attributes$href(person.cz)
+											$elm$html$Html$Attributes$href(person.cy)
 										]),
 									_List_fromArray(
 										[
-											$elm$html$Html$text(shell.cz)
+											$elm$html$Html$text(shell.cy)
 										]))
 								]))
 						])),
@@ -17900,7 +17898,7 @@ var $author$project$SiteShell$view = F4(
 													_List_fromArray(
 														[
 															$elm$html$Html$text(
-															libraryPage ? shell.bo : person.cD)
+															libraryPage ? shell.bo : person.cC)
 														])),
 													A2(
 													$elm$html$Html$p,
@@ -17911,7 +17909,7 @@ var $author$project$SiteShell$view = F4(
 													_List_fromArray(
 														[
 															$elm$html$Html$text(
-															libraryPage ? shell.bp : person.cG)
+															libraryPage ? shell.bp : person.cF)
 														])),
 													A2(
 													$elm$html$Html$a,
@@ -18002,7 +18000,7 @@ var $author$project$SiteShell$view = F4(
 												]),
 											_List_fromArray(
 												[
-													$elm$html$Html$text(shell.bY)
+													$elm$html$Html$text(shell.bX)
 												]))
 										]))
 								])),
@@ -18099,7 +18097,7 @@ var $author$project$SiteShell$view = F4(
 												]),
 											_List_fromArray(
 												[
-													$elm$html$Html$text(shell.cl)
+													$elm$html$Html$text(shell.ck)
 												])),
 											A2(
 											$elm$html$Html$a,
@@ -18139,7 +18137,7 @@ var $author$project$SiteShell$view = F4(
 													$elm$html$Html$Attributes$class('theme-toggle'),
 													$elm$html$Html$Events$onClick($author$project$FieldManual$Reader$ToggleTheme),
 													$elm$html$Html$Attributes$title(
-													$author$project$FieldManual$Reader$isLight(model) ? shell.ch : shell.ci),
+													$author$project$FieldManual$Reader$isLight(model) ? shell.cg : shell.ch),
 													$elm$html$Html$Attributes$type_('button'),
 													A2($elm$html$Html$Attributes$attribute, 'role', 'switch'),
 													A2(
@@ -18147,7 +18145,7 @@ var $author$project$SiteShell$view = F4(
 													'aria-checked',
 													$author$project$FieldManual$Reader$boolString(
 														$author$project$FieldManual$Reader$isLight(model))),
-													A2($elm$html$Html$Attributes$attribute, 'aria-label', shell.cg)
+													A2($elm$html$Html$Attributes$attribute, 'aria-label', shell.cf)
 												]),
 											_List_fromArray(
 												[
