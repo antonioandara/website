@@ -1,4 +1,4 @@
-module FieldManual.Illustrations exposing (processorStack, computerStack, explodedStackDiagram, cellularAutomaton, gameOfLife, functional, composable, fractal, turingMachine, touchDiagram, kernelDiagram, bezierDiagram, rasterDiagram, signal, orbit, chip, cube, network, contours, formulaParser)
+module FieldManual.Illustrations exposing (processorStack, computerStack, explodedStackDiagram, cellularAutomaton, gameOfLife, functional, composable, fractal, turingMachine, stateMachine, stackMachine, registerMachine, fifo, touchDiagram, kernelDiagram, bezierDiagram, rasterDiagram, signal, orbit, chip, cube, network, contours, formulaParser)
 
 import Bitwise
 import Set exposing (Set)
@@ -554,8 +554,8 @@ formulaParser =
     svgRoot "diagram formula-parser" "0 0 360 330"
         ([ svgLabel "20" "24" "FORMULA / STRUCTURE / VALUE"
          , path "soft dash" "M20 89 H340 M240 108 V267"
-         , path "soft" "M63 77 V81 H191 V77"
-         , flowArrow 127 89 127 108
+         , path "soft" "M20 77 V81 H248 V77 M153 81 V89"
+         , flowArrow 153 89 153 110
          -- The expression !(a & b) | c: NOT wraps AND; OR is the root.
          , path "thick" "M153 146 V160 H100 V171"
          , path "soft" "M153 160 H203 V233"
@@ -585,4 +585,140 @@ formulaParser =
             ++ leaf 203 247 "c" "0"
             ++ leaf 56 282 "a" "0"
             ++ leaf 144 282 "b" "1"
+        )
+
+
+{-| A binary parity recognizer: 0 preserves state; 1 toggles it.
+The double ring marks the accepting state, including the empty input.
+-}
+stateMachine : Html msg
+stateMachine =
+    svgRoot "diagram state-machine" "0 0 360 260"
+        [ svgLabel "24" "28" "STATE MACHINE / BINARY PARITY"
+        , flowArrow 24 130 69 130
+        , circle "fill-blue" 100 130 30
+        , circle "" 100 130 24
+        , circle "fill-paper" 260 130 30
+        , svgLabel "86" "135" "EVEN"
+        , svgLabel "249" "135" "ODD"
+        , path "" "M120 107 C151 66 209 66 240 107"
+        , flowArrow 233 98 240 107
+        , svgLabel "176" "64" "1"
+        , path "" "M240 153 C209 194 151 194 120 153"
+        , flowArrow 127 162 120 153
+        , svgLabel "176" "211" "1"
+        , path "" "M79 108 C42 61 123 50 113 103"
+        , flowArrow 115 93 113 103
+        , svgLabel "79" "53" "0"
+        , path "" "M247 103 C237 50 318 61 281 108"
+        , flowArrow 287 100 281 108
+        , svgLabel "273" "53" "0"
+        , svgLabel "24" "230" "ACCEPT / EVEN NUMBER OF 1s"
+        ]
+
+
+{-| Follow the operand stack through each instruction. The highlighted cell is
+always the top: PUSH adds a value there; ADD pops two values and pushes their sum.
+-}
+stackMachine : Html msg
+stackMachine =
+    let
+        cell x y value isTop =
+            [ svgEl "rect"
+                [ ( "class", "line " ++ (if isTop then "fill-blue" else "fill-faint") )
+                , ( "x", String.fromInt x ), ( "y", String.fromInt y )
+                , ( "width", "64" ), ( "height", "32" )
+                ] []
+            , svgLabel (String.fromInt (x + 28)) (String.fromInt (y + 21)) value
+            ]
+
+        frame x instruction topY =
+            [ svgLabel (String.fromInt (x - 2)) "68" instruction
+            , path "" ("M" ++ String.fromInt (x - 4) ++ " 100 V218 H" ++ String.fromInt (x + 68) ++ " V100")
+            , svgLabel (String.fromInt (x + 21)) (String.fromInt (topY - 12)) "TOP"
+            ]
+    in
+    svgRoot "diagram stack-machine" "0 0 360 300"
+        ([ svgLabel "24" "28" "STACK MACHINE / STEP BY STEP"
+         , flowArrow 108 113 132 113
+         , flowArrow 226 113 250 113
+         , svgLabel "24" "250" "ADD: POP 4 + 3 → PUSH 7"
+         , svgLabel "24" "278" "TOP / LAST IN, FIRST OUT"
+         ]
+            ++ frame 30 "01 PUSH 3" 182
+            ++ cell 30 182 "3" True
+            ++ frame 148 "02 PUSH 4" 150
+            ++ cell 148 182 "3" False
+            ++ cell 148 150 "4" True
+            ++ frame 266 "03 ADD" 182
+            ++ cell 266 182 "7" True
+        )
+
+
+{-| A three-address register machine reads two registers and writes a third. -}
+registerMachine : Html msg
+registerMachine =
+    let
+        register y name value filled =
+            [ svgLabel "24" (String.fromInt (y + 23)) name
+            , svgEl "rect"
+                [ ( "class", "line " ++ (if filled then "fill-blue" else "fill-faint") )
+                , ( "x", "60" ), ( "y", String.fromInt y ), ( "width", "64" ), ( "height", "34" )
+                ] []
+            , svgLabel "88" (String.fromInt (y + 23)) value
+            ]
+    in
+    svgRoot "diagram register-machine" "0 0 360 260"
+        ([ svgLabel "24" "28" "REGISTER MACHINE / NAMED STORAGE"
+         , svgLabel "24" "57" "ADD R2, R0, R1"
+         , box 214 101 90 62
+         , svgLabel "247" "137" "ADD"
+         , path "" "M124 94 H172 V117 H214 M124 144 H193 V147 H214"
+         , flowArrow 197 117 214 117
+         , flowArrow 197 147 214 147
+         , path "" "M304 132 H330 V194 H124"
+         , flowArrow 141 194 124 194
+         , svgLabel "24" "237" "READ R0, R1 / WRITE R2 = 7"
+         ]
+            ++ register 77 "R0" "3" False
+            ++ register 127 "R1" "4" False
+            ++ register 177 "R2" "7" True
+        )
+
+
+{-| A logical FIFO: writes append at the tail; reads remove from the head.
+Cell positions describe ordering rather than a physical shifting implementation.
+-}
+fifo : Html msg
+fifo =
+    let
+        item x value isHead =
+            [ svgEl "rect"
+                [ ( "class", "line " ++ (if isHead then "fill-blue" else "fill-faint") )
+                , ( "x", String.fromInt x ), ( "y", "108" )
+                , ( "width", "48" ), ( "height", "40" )
+                ] []
+            , svgLabel (String.fromInt (x + 20)) "133" value
+            ]
+    in
+    svgRoot "diagram fifo" "0 0 360 280"
+        ([ svgLabel "24" "28" "FIFO / FIRST IN, FIRST OUT"
+         , svgLabel "24" "53" "SOFTWARE QUEUE / HARDWARE BUFFER"
+         , svgLabel "24" "91" "WRITE"
+         , svgLabel "282" "91" "READ"
+         , box 24 108 36 40
+         , svgLabel "38" "133" "D"
+         , flowArrow 68 128 96 128
+         , path "" "M100 101 H260 M100 155 H260"
+         , flowArrow 268 128 332 128
+         , svgLabel "108" "180" "TAIL"
+         , svgLabel "223" "180" "HEAD"
+         , path "soft" "M128 159 V165 M232 159 V165"
+         , svgLabel "24" "216" "WRITE AT TAIL / READ FROM HEAD"
+         , svgLabel "24" "242" "A ARRIVED FIRST → A LEAVES FIRST"
+         , svgLabel "24" "267" "THEN B → C → D"
+         ]
+            ++ item 108 "C" False
+            ++ item 156 "B" False
+            ++ item 204 "A" True
         )

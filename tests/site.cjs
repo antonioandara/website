@@ -105,8 +105,8 @@ const server = http.createServer((req, res) => {
     await page.screenshot({path:'/tmp/antonio-andara-mobile.png',fullPage:true});
     await page.goto(base + '/library.html#library');
     await waitActive('library');
-    assert.equal(await page.locator('.library-item').count(),19);
-    for(const [category,count] of [['Concepts',4],['Patterns',3],['All',19]]) {
+    assert.equal(await page.locator('.library-item').count(),23);
+    for(const [category,count] of [['Concepts',8],['Patterns',3],['All',23]]) {
       await page.locator(`[data-filter="${category}"]`).click();
       await page.waitForFunction(expected => [...document.querySelectorAll('.library-item')].filter(node => !node.hidden).length === expected, count);
       assert.equal(await page.locator('.library-item:visible').count(),count);
@@ -157,7 +157,7 @@ const server = http.createServer((req, res) => {
     assert.match(await page.locator('#magic h2').innerText(), /La magia existe en la mente/);
     assert.match(await page.locator('#journal .field-note h3').innerText(), /Cosas que hago/);
     assert.equal(await page.locator('#journal .note-content p').count(), 2);
-    assert.match(await page.locator('h2').first().innerText(), /Trabajo/);
+    assert.equal(await page.locator('#engineering h2').innerText(), 'Mi trabajo.');
     await page.reload();
     await page.waitForFunction(() =>
       document.documentElement.lang === 'es' &&

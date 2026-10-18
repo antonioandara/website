@@ -3,11 +3,10 @@ module FieldManual.Library exposing (view, drawing)
 import Copy
 import FieldManual.Components exposing (figurePlate)
 import FieldManual.Illustrations as Ink
-import Html exposing (Html, article, button, code, details, div, p, summary, text)
+import Html exposing (Html, article, button, div, p, text)
 import Html.Attributes exposing (attribute, class, type_, hidden)
-import Html.Events exposing (onClick, on)
+import Html.Events exposing (onClick)
 import I18n exposing (Language)
-import Json.Decode as Decode
 
 
 drawing : String -> Html msg
@@ -64,6 +63,18 @@ drawing key =
         "formula-parser" ->
             Ink.formulaParser
 
+        "state-machine" ->
+            Ink.stateMachine
+
+        "stack-machine" ->
+            Ink.stackMachine
+
+        "fifo" ->
+            Ink.fifo
+
+        "register-machine" ->
+            Ink.registerMachine
+
         "turing" ->
             Ink.turingMachine
 
@@ -71,8 +82,8 @@ drawing key =
             Ink.rasterDiagram
 
 
-view : Language -> String -> (String -> msg) -> msg -> Html msg
-view language selected selectCategory changed =
+view : Language -> String -> (String -> msg) -> Html msg
+view language selected selectCategory =
     let
         libraryCopy =
             (Copy.forLanguage language).library
@@ -98,10 +109,6 @@ view language selected selectCategory changed =
             (List.indexedMap
                 (\index specimen -> article [ class "library-item", attribute "data-category" specimen.category, hidden (selected /= "All" && selected /= specimen.category) ]
                     [ figurePlate ("PLATE / " ++ String.padLeft 2 '0' (String.fromInt (index + 1))) specimen.title (drawing specimen.key) specimen.caption
-                    , details [ class "drawing-recipe", on "toggle" (Decode.succeed changed) ]
-                        [ summary [] [ text libraryCopy.recipe ]
-                        , Html.pre [] [ code [] [ text ("import FieldManual.Illustrations as Ink\n\n" ++ specimen.example) ] ]
-                        ]
                     ]
                 )
                 specimens
