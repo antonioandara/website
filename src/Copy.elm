@@ -222,8 +222,8 @@ en =
         , "Get in touch"
         ]
     , shell =
-        { skip = "Skip to the manual"
-        , contentsAria = "Manual contents"
+        { skip = "Skip to the main page"
+        , contentsAria = "Site contents"
         , closeSidebar = "Close sidebar"
         , openSidebar = "Open sidebar"
         , profileEyebrow = "ANTONIO ANDARA"
@@ -274,7 +274,7 @@ en =
             , plateTitle = "learning from first principles"
             , plateCaption = "Bottom up design."
             , eyebrow = "ELECTRONICS / SOFTWARE / MAGIC"
-            , projectTitle = "A personal field manual"
+            , projectTitle = "A personal website"
             , projectBody = "This site is a working example of my work and my explorations of web development and functional programming."
             , noteSummary = "Look at the implementation"
             , noteBody = "The main application is built in Elm using the Elm architecture of model, update, and view. This is the first site I have published."
@@ -385,7 +385,7 @@ es =
         , "Contacto"
         ]
     , shell =
-        { skip = "Saltar a la pagina"
+        { skip = "Saltar a la página"
         , contentsAria = "Contenido"
         , closeSidebar = "Cerrar barra lateral"
         , openSidebar = "Abrir barra lateral"
@@ -437,7 +437,7 @@ es =
             , plateTitle = "aprendizaje desde primeros principios"
             , plateCaption = "Diseño de abajo hacia arriba."
             , eyebrow = "ELECTRÓNICA / SOFTWARE / MAGIA"
-            , projectTitle = "Un manual de campo personal"
+            , projectTitle = "Una página personal"
             , projectBody = "Este sitio es un ejemplo de mi trabajo y de mis exploraciones en desarrollo web y programación funcional."
             , noteSummary = "Mira la implementación"
             , noteBody = "La aplicación principal está construida en Elm usando la arquitectura de Elm: modelo, actualización y vista. Este es el primer sitio que publico."
