@@ -31,3 +31,560 @@ body.color-experiment{margin:0;background:var(--paper);color:var(--ink)}.color-e
 
 
 .graph-panel{grid-column:1/-1;border-top:1px solid var(--line);padding-top:24px}.graph-panel .mosaic-map{max-width:800px;margin:auto}.graph-panel .mosaic-surface{max-height:480px!important}
+
+/* ── Modern region rendering for Formula Mosaic ───────────────────────────
+   Inspired by the full Three Color engine: pastel territories, cream seams,
+   a soft directional sheen, and quiet depth instead of outlined flat tiles. */
+:root {
+  --mosaic-ground: #101a1f;
+  --mosaic-grid: #ffffff0d;
+  --mosaic-border: #fbfcf4;
+  --mosaic-label: #20362e;
+  --mosaic-label-halo: #fbfcf4a8;
+  --mosaic-shadow: #040b0938;
+  --mosaic-accent: #8ec3aa;
+  --mosaic-panel-shadow: #00000029;
+}
+:root[data-theme=light] {
+  --mosaic-ground: #e7eee8;
+  --mosaic-grid: #3157460e;
+  --mosaic-border: #fcfcf7;
+  --mosaic-label: #223a31;
+  --mosaic-label-halo: #fcfcf7b8;
+  --mosaic-shadow: #2646381c;
+  --mosaic-accent: #3c765f;
+  --mosaic-panel-shadow: #26463812;
+}
+.color-experiment .mosaic-lab {
+  max-width: 1200px;
+  padding: clamp(34px, 4.5vw, 62px) 28px 48px;
+  background:
+    radial-gradient(circle at 78% 0%, var(--fill), transparent 36%),
+    var(--paper);
+}
+.color-experiment .mosaic-lab * { box-sizing: border-box; }
+.color-experiment .mosaic-hero {
+  max-width: 880px;
+  padding: 8px 0 30px;
+}
+.color-experiment .mosaic-hero .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--mosaic-accent);
+}
+.color-experiment .mosaic-hero .eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mosaic-accent);
+  box-shadow: 0 0 0 3px var(--fill);
+}
+.color-experiment .mosaic-hero h1 {
+  font-size: clamp(42px, 6vw, 74px);
+  line-height: 1.06;
+  letter-spacing: -.025em;
+  margin: 22px 0 16px;
+}
+.color-experiment .mosaic-hero p {
+  max-width: 62ch;
+  font-size: clamp(15px, 1.3vw, 17px);
+  line-height: 1.75;
+}
+.color-experiment .mosaic-bar,
+.color-experiment .mosaic-stage,
+.color-experiment .mosaic-table {
+  padding: clamp(18px, 2.4vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: 0 18px 50px -30px var(--mosaic-panel-shadow);
+}
+.color-experiment .mosaic-stage { padding: clamp(18px, 2.2vw, 26px); }
+.color-experiment .mosaic-lab button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 11px/1.5 var(--mono);
+  padding: 10px 15px;
+  min-height: 40px;
+  transition: background .16s ease, border-color .16s ease, color .16s ease, transform .16s ease;
+}
+.color-experiment .mosaic-lab button:hover {
+  border-color: var(--mosaic-accent);
+  background: var(--surface);
+  color: var(--mosaic-accent);
+  transform: translateY(-1px);
+}
+.color-experiment .mosaic-lab button:active { transform: none; }
+.color-experiment .mosaic-lab button:disabled {
+  opacity: .4;
+  transform: none;
+}
+.color-experiment .mosaic-lab button.new-tiling {
+  background: var(--mosaic-accent);
+  border-color: var(--mosaic-accent);
+  color: var(--paper);
+}
+.color-experiment .mosaic-lab input:not([type=range]):not([type=checkbox]) {
+  width: 100%;
+  min-width: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 15px/1.5 var(--mono);
+  box-shadow: inset 0 1px 0 #ffffff0b;
+}
+.color-experiment .mosaic-lab label { color: var(--prose); }
+.color-experiment .mosaic-row { gap: 9px; }
+.color-experiment .mosaic-row.wrap { margin-bottom: 18px; }
+.color-experiment .mosaic-tools {
+  gap: 12px;
+  margin-bottom: 10px;
+  font: 10px/1.6 var(--mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.color-experiment .mosaic-tools > span:first-of-type {
+  color: var(--ink);
+  letter-spacing: .04em;
+}
+.color-experiment .swatches { gap: 7px; }
+.color-experiment .swatch-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--muted);
+  font: 9px/1.6 var(--mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.color-experiment .swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--paper), 0 1px 2px var(--mosaic-shadow);
+}
+
+/* The map surface is the quiet stage; the territories carry the color. */
+.color-experiment .mosaic-map { margin: 4px 0 0; }
+.color-experiment .mosaic-surface {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--mosaic-ground);
+  box-shadow:
+    0 22px 48px -26px var(--mosaic-shadow),
+    inset 0 1px 0 #ffffff14;
+}
+.mosaic-ground { fill: var(--mosaic-ground); }
+.mosaic-dots { fill: url(#mosaic-dots); }
+.mosaic-frame {
+  stroke: var(--mosaic-border);
+  stroke-width: 1.25;
+  opacity: .7;
+}
+.mosaic-cell { cursor: default; }
+.mosaic-cell.is-input { cursor: pointer; }
+.mosaic-cell:focus { outline: none; }
+.color-experiment .mosaic-cell > path.mosaic-region {
+  stroke: var(--mosaic-border);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  filter: drop-shadow(0 2px 2px var(--mosaic-shadow));
+  transition: fill .28s ease, filter .2s ease, stroke .2s ease;
+}
+.mosaic-sheen-wrap { pointer-events: none; }
+.mosaic-sheen { pointer-events: none; }
+.color-experiment .mosaic-cell:hover > path.mosaic-region {
+  filter: drop-shadow(0 4px 7px var(--mosaic-shadow)) brightness(1.035);
+}
+.color-experiment .mosaic-cell:focus-visible > path.mosaic-region {
+  stroke: var(--mosaic-accent);
+  stroke-width: 3;
+}
+.color-experiment .mosaic-cell text {
+  fill: var(--mosaic-label);
+  stroke: var(--mosaic-label-halo);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 650;
+  letter-spacing: .015em;
+}
+.color-experiment .tile-highlight {
+  stroke: var(--mosaic-accent);
+  stroke-width: 3;
+  opacity: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px var(--mosaic-accent));
+  transition: opacity .16s ease;
+}
+.color-experiment .tile-highlight[data-changing=true] {
+  opacity: .95;
+  animation: mosaic-tile-pulse 900ms ease-in-out infinite;
+}
+@keyframes mosaic-tile-pulse {
+  0%, 100% { opacity: .55; }
+  50% { opacity: 1; }
+}
+.color-experiment .mosaic-boundary-note {
+  margin: 12px 2px 0;
+  font: 10px/1.8 var(--mono);
+  letter-spacing: .015em;
+  color: var(--muted);
+}
+.color-experiment .map-neighbor-inspector {
+  min-height: 4.2em;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  color: var(--prose);
+  font: 10px/1.8 var(--mono);
+}
+.color-experiment .map-region-info strong { color: var(--ink); }
+.color-experiment .propagation-controls {
+  gap: 14px;
+  margin: 14px 0;
+  padding-top: 2px;
+}
+.color-experiment .propagation-controls label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 11px/1.6 var(--mono);
+  color: var(--prose);
+  cursor: pointer;
+}
+.color-experiment .propagation-controls input[type=checkbox] {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 38px;
+  height: 22px;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease;
+}
+.color-experiment .propagation-controls input[type=checkbox]::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: transform .18s ease, background .18s ease;
+}
+.color-experiment .propagation-controls input[type=checkbox]:checked {
+  border-color: var(--mosaic-accent);
+  background: var(--mosaic-accent);
+}
+.color-experiment .propagation-controls input[type=checkbox]:checked::after {
+  transform: translateX(16px);
+  background: var(--paper);
+}
+.color-experiment .table-scroll {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--paper);
+}
+.color-experiment .mosaic-lab table { font: 11px/1.8 var(--mono); }
+.color-experiment .mosaic-lab th {
+  background: var(--paper);
+  color: var(--muted);
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.color-experiment .mosaic-lab td,
+.color-experiment .mosaic-lab th { border-bottom: 1px solid var(--line); }
+.color-experiment .mosaic-lab tr:last-child td { border-bottom: 0; }
+.color-experiment .mosaic-lab .selected-row { background: var(--fill); }
+.color-experiment .mosaic-lab .selected-row button {
+  background: var(--mosaic-accent);
+  border-color: var(--mosaic-accent);
+  color: var(--paper);
+}
+.color-experiment .mosaic-status { color: var(--mosaic-accent); }
+.color-experiment .mosaic-error {
+  padding: 12px 14px;
+  border: 1px solid #b45b4e66;
+  border-radius: 10px;
+  background: #b45b4e1a;
+  color: #e7a79d;
+}
+:root[data-theme=light] .color-experiment .mosaic-error { color: #8d3d32; }
+.color-experiment .mosaic-foot {
+  max-width: 74ch;
+  margin-top: 24px;
+  color: var(--muted);
+  font: 10px/1.9 var(--mono);
+}
+@media(max-width:760px) {
+  .color-experiment .mosaic-lab { padding: 28px 16px 36px; }
+  .color-experiment .mosaic-bar,
+  .color-experiment .mosaic-stage,
+  .color-experiment .mosaic-table { padding: 16px; border-radius: 16px; }
+  .color-experiment .swatches { margin-left: 0; }
+  .color-experiment .mosaic-tools { align-items: flex-start; }
+  .color-experiment .mosaic-cell > path.mosaic-region { stroke-width: 2; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .color-experiment .tile-highlight,
+  .color-experiment .tile-highlight[data-changing=true],
+  .color-experiment .mosaic-cell > path.mosaic-region { animation: none; transition: none; }
+}
+
+.mosaic-lab .mosaic-playback { margin: 16px 0; padding: 14px; border: 1px solid var(--line); border-radius: 8px; }
+.mosaic-lab .mosaic-playback-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 8px; }
+.mosaic-lab .mosaic-playback-state { font: 600 12px/1.6 var(--mono); color: var(--ink); }
+.mosaic-lab .mosaic-playback progress { width: 100%; height: 6px; accent-color: var(--mosaic-accent); }
+.mosaic-lab .mosaic-speed { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; font: 11px/1.6 var(--mono); }
+.mosaic-lab .mosaic-speed input { width: 220px; max-width: 100%; accent-color: var(--mosaic-accent); }
+.mosaic-lab .mosaic-speed output { min-width: 85px; color: var(--ink); }
+.mosaic-lab .mosaic-speed .hint { flex-basis: 100%; margin: 0; }
+.mosaic-lab .mosaic-playback .propagation-controls { display: flex; flex-wrap: wrap; gap: 8px; }
+.mosaic-lab .mosaic-playback-heading .hint { font: 11px/1.6 var(--mono); }
+.mosaic-lab .mosaic-playback-state { padding: 2px 8px; border: 1px solid var(--line); border-radius: 20px; background: var(--paper); }
+
+.mosaic-lab .mosaic-about-source { margin-bottom: 0; }
+.mosaic-lab .mosaic-about a { color: var(--blue); border-bottom: 1px solid var(--blue); }
+.mosaic-lab .mosaic-about a:hover { color: var(--ink); }
+
+/* ── Match the main site: square edges, flat surfaces, blue accent ──────── */
+.sat-experiment {
+  --mosaic-accent: var(--blue);
+  --mosaic-panel-shadow: transparent;
+  --mosaic-shadow: transparent;
+  --mosaic-ground: var(--surface);
+  --mosaic-grid: var(--grid);
+  --mosaic-border: var(--line);
+  --mosaic-label: var(--ink);
+  --mosaic-label-halo: var(--paper);
+}
+.sat-experiment .experiment-header {
+  max-width: 1320px;
+  height: var(--header);
+  padding: 0 6%;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  border-bottom: 1px solid var(--line);
+  background: var(--header-bg);
+  backdrop-filter: blur(16px);
+}
+.sat-experiment .experiment-header button {
+  border-radius: 0;
+  background: transparent;
+  color: var(--blue);
+  font: 11px/1.7 var(--mono);
+  padding: 10px 12px;
+}
+.sat-experiment .experiment-header button:hover {
+  border-color: var(--blue);
+  background: var(--surface);
+}
+.sat-experiment .experiment-footer {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 32px 6%;
+  border-top: 1px solid var(--line);
+  font: 10px/1.9 var(--mono);
+  color: var(--muted);
+}
+.sat-experiment .mosaic-lab {
+  max-width: 1320px;
+  padding: clamp(42px, 5vw, 76px) 6% 12px;
+  background: var(--paper);
+}
+.sat-experiment .mosaic-hero {
+  max-width: 880px;
+  padding: 0 0 38px;
+}
+.sat-experiment .mosaic-hero .eyebrow {
+  display: block;
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--blue);
+  font: 10px/1.7 var(--mono);
+  letter-spacing: .1em;
+}
+.sat-experiment .mosaic-hero .eyebrow::before { content: none; }
+.sat-experiment .mosaic-hero h1 {
+  margin: 0 0 25px;
+  font-size: clamp(42px, 5.1vw, 82px);
+  line-height: 1.12;
+  letter-spacing: normal;
+}
+.sat-experiment .mosaic-hero p {
+  max-width: 62ch;
+  font-size: clamp(15px, 1.3vw, 17px);
+  line-height: 1.9;
+  color: var(--prose);
+}
+.sat-experiment .mosaic-bar,
+.sat-experiment .mosaic-stage,
+.sat-experiment .mosaic-table {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: var(--surface);
+  box-shadow: none;
+}
+.sat-experiment .mosaic-stage { padding: 24px; }
+.sat-experiment .mosaic-lab button {
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 11px/1.7 var(--mono);
+  padding: 10px 16px;
+  min-height: 44px;
+  transition: background .16s ease, border-color .16s ease, color .16s ease;
+}
+.sat-experiment .mosaic-lab button:hover {
+  border-color: var(--blue);
+  background: var(--surface);
+  color: var(--blue);
+  transform: none;
+}
+.sat-experiment .mosaic-lab button:active { transform: none; }
+.sat-experiment .mosaic-lab button.new-tiling {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--paper);
+}
+.sat-experiment .mosaic-lab input:not([type=range]):not([type=checkbox]) {
+  padding: 12px 14px;
+  border-radius: 0;
+  background: var(--paper);
+  font: 14px/1.5 var(--mono);
+  box-shadow: none;
+}
+.sat-experiment .mosaic-tools {
+  margin-bottom: 12px;
+  font: 10px/1.8 var(--mono);
+  letter-spacing: .08em;
+}
+.sat-experiment .swatch-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--muted);
+  font: 10px/1.8 var(--mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.sat-experiment .swatch {
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  box-shadow: none;
+}
+.sat-experiment .mosaic-surface {
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: var(--surface);
+  box-shadow: none;
+}
+.sat-experiment .mosaic-frame {
+  stroke: var(--line);
+  stroke-width: 1.5;
+  opacity: 1;
+}
+.sat-experiment .mosaic-cell > path.mosaic-region {
+  stroke: var(--line);
+  stroke-width: 1.5;
+  filter: none;
+  transition: fill .28s ease, stroke .2s ease;
+}
+.sat-experiment .mosaic-cell:hover > path.mosaic-region {
+  stroke: var(--blue);
+  filter: none;
+}
+.sat-experiment .mosaic-cell:focus-visible > path.mosaic-region {
+  stroke: var(--blue);
+  stroke-width: 2;
+}
+.sat-experiment .mosaic-cell text {
+  fill: var(--ink);
+  stroke: var(--paper);
+  font-family: var(--mono);
+  font-weight: 500;
+  letter-spacing: .04em;
+}
+.sat-experiment .tile-highlight {
+  stroke: var(--blue);
+  filter: none;
+}
+.sat-experiment .map-neighbor-inspector,
+.sat-experiment .table-scroll {
+  border-radius: 0;
+}
+.sat-experiment .mosaic-lab .selected-row button {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--paper);
+}
+.sat-experiment .mosaic-playback {
+  margin: 18px 0;
+  padding: 16px 0 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: none;
+}
+.sat-experiment .mosaic-playback-state {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--blue);
+  font: 600 11px/1.8 var(--mono);
+  letter-spacing: .04em;
+}
+.sat-experiment .mosaic-playback progress,
+.sat-experiment .mosaic-speed input { accent-color: var(--blue); }
+.sat-experiment .mosaic-foot {
+  max-width: 74ch;
+  margin-top: 28px;
+  color: var(--muted);
+  font: 10px/1.9 var(--mono);
+}
+@media(max-width:800px) {
+  .sat-experiment .experiment-header { height: 62px; padding: 0 6%; }
+}
+@media(max-width:760px) {
+  .sat-experiment .mosaic-lab { padding: 42px 6% 12px; }
+  .sat-experiment .mosaic-bar,
+  .sat-experiment .mosaic-stage,
+  .sat-experiment .mosaic-table { padding: 16px; border-radius: 0; }
+  .sat-experiment .mosaic-cell > path.mosaic-region { stroke-width: 1.25; }
+}

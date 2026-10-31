@@ -1861,9 +1861,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.dj,
-		impl.dy,
-		impl.dx,
+		impl.dl,
+		impl.dA,
+		impl.dz,
 		function() { return function() {} }
 	);
 });
@@ -2728,8 +2728,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		T: func(record.T),
-		b2: record.b2,
-		bO: record.bO
+		b4: record.b4,
+		bQ: record.bQ
 	}
 });
 
@@ -2998,10 +2998,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.T;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.b2;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.b4;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.bO) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.bQ) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3951,11 +3951,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.dj,
-		impl.dy,
-		impl.dx,
+		impl.dl,
+		impl.dA,
+		impl.dz,
 		function(sendToApp, initialModel) {
-			var view = impl.dz;
+			var view = impl.dB;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3987,12 +3987,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.dj,
-		impl.dy,
-		impl.dx,
+		impl.dl,
+		impl.dA,
+		impl.dz,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.bY && impl.bY(sendToApp)
-			var view = impl.dz;
+			var divertHrefToApp = impl.b_ && impl.b_(sendToApp)
+			var view = impl.dB;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -4061,12 +4061,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.$7;
-	var onUrlRequest = impl.dp;
+	var onUrlChange = impl.dq;
+	var onUrlRequest = impl.dr;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		bY: function(sendToApp)
+		b_: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4082,9 +4082,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.cS === next.cS
-							&& curr.cA === next.cA
-							&& curr.cP.a === next.cP.a
+							&& curr.cU === next.cU
+							&& curr.cC === next.cC
+							&& curr.cR.a === next.cR.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4092,13 +4092,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		dj: function(flags)
+		dl: function(flags)
 		{
-			return A3(impl.dj, flags, _Browser_getUrl(), key);
+			return A3(impl.dl, flags, _Browser_getUrl(), key);
 		},
-		dz: impl.dz,
-		dy: impl.dy,
-		dx: impl.dx
+		dB: impl.dB,
+		dA: impl.dA,
+		dz: impl.dz
 	});
 }
 
@@ -4164,17 +4164,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { dh: 'hidden', da: 'visibilitychange' }
+		? { dj: 'hidden', dc: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { dh: 'mozHidden', da: 'mozvisibilitychange' }
+		? { dj: 'mozHidden', dc: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { dh: 'msHidden', da: 'msvisibilitychange' }
+		? { dj: 'msHidden', dc: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { dh: 'webkitHidden', da: 'webkitvisibilitychange' }
-		: { dh: 'hidden', da: 'visibilitychange' };
+		? { dj: 'webkitHidden', dc: 'webkitvisibilitychange' }
+		: { dj: 'hidden', dc: 'visibilitychange' };
 }
 
 
@@ -4255,11 +4255,11 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		dw: _Browser_getScene(),
+		dy: _Browser_getScene(),
 		aG: {
-			c4: _Browser_window.pageXOffset,
+			c6: _Browser_window.pageXOffset,
 			ar: _Browser_window.pageYOffset,
-			c3: _Browser_doc.documentElement.clientWidth,
+			c5: _Browser_doc.documentElement.clientWidth,
 			ay: _Browser_doc.documentElement.clientHeight
 		}
 	};
@@ -4270,7 +4270,7 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		c3: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		c5: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
 		ay: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
@@ -4294,14 +4294,14 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			dw: {
-				c3: node.scrollWidth,
+			dy: {
+				c5: node.scrollWidth,
 				ay: node.scrollHeight
 			},
 			aG: {
-				c4: node.scrollLeft,
+				c6: node.scrollLeft,
 				ar: node.scrollTop,
-				c3: node.clientWidth,
+				c5: node.clientWidth,
 				ay: node.clientHeight
 			}
 		};
@@ -4332,17 +4332,17 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			dw: _Browser_getScene(),
+			dy: _Browser_getScene(),
 			aG: {
-				c4: x,
+				c6: x,
 				ar: y,
-				c3: _Browser_doc.documentElement.clientWidth,
+				c5: _Browser_doc.documentElement.clientWidth,
 				ay: _Browser_doc.documentElement.clientHeight
 			},
 			ax: {
-				c4: x + rect.left,
+				c6: x + rect.left,
 				ar: y + rect.top,
-				c3: rect.width,
+				c5: rect.width,
 				ay: rect.height
 			}
 		};
@@ -4947,7 +4947,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {dg: fragment, cA: host, cN: path, cP: port_, cS: protocol, cT: query};
+		return {di: fragment, cC: host, cP: path, cR: port_, cU: protocol, cV: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5315,7 +5315,7 @@ var $author$project$FieldManual$Reader$measure = function (chapters) {
 						return A2(
 							$elm$core$Task$map,
 							function (viewport) {
-								return ((viewport.aG.ar > 0) && (_Utils_cmp(viewport.aG.ar + viewport.aG.ay, viewport.dw.ay - 2) > -1)) ? $elm$core$List$head(
+								return ((viewport.aG.ar > 0) && (_Utils_cmp(viewport.aG.ar + viewport.aG.ay, viewport.dy.ay - 2) > -1)) ? $elm$core$List$head(
 									$elm$core$List$reverse(chapters)) : A2(
 									$elm$core$Maybe$map,
 									$elm$core$Tuple$first,
@@ -5350,7 +5350,7 @@ var $elm$core$Maybe$withDefault = F2(
 		}
 	});
 var $author$project$FieldManual$Reader$navigate = function (url) {
-	var _v0 = url.dg;
+	var _v0 = url.di;
 	if (_v0.$ === 1) {
 		return $elm$core$Platform$Cmd$none;
 	} else {
@@ -5393,7 +5393,7 @@ var $elm$browser$Browser$Events$MySub = F3(
 	});
 var $elm$browser$Browser$Events$State = F2(
 	function (subs, pids) {
-		return {cO: pids, c_: subs};
+		return {cQ: pids, c0: subs};
 	});
 var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
@@ -5625,7 +5625,7 @@ var $elm$core$Dict$merge = F6(
 	});
 var $elm$browser$Browser$Events$Event = F2(
 	function (key, event) {
-		return {cv: event, j: key};
+		return {cx: event, j: key};
 	});
 var $elm$core$Platform$sendToSelf = _Platform_sendToSelf;
 var $elm$browser$Browser$Events$spawn = F3(
@@ -5700,7 +5700,7 @@ var $elm$browser$Browser$Events$onEffects = F3(
 			stepLeft,
 			stepBoth,
 			stepRight,
-			state.cO,
+			state.cQ,
 			$elm$core$Dict$fromList(newSubs),
 			_Utils_Tuple3(_List_Nil, $elm$core$Dict$empty, _List_Nil));
 		var deadPids = _v0.a;
@@ -5747,7 +5747,7 @@ var $elm$core$List$filterMap = F2(
 var $elm$browser$Browser$Events$onSelfMsg = F3(
 	function (router, _v0, state) {
 		var key = _v0.j;
-		var event = _v0.cv;
+		var event = _v0.cx;
 		var toMessage = function (_v2) {
 			var subKey = _v2.a;
 			var _v3 = _v2.b;
@@ -5756,7 +5756,7 @@ var $elm$browser$Browser$Events$onSelfMsg = F3(
 			var decoder = _v3.c;
 			return _Utils_eq(subKey, key) ? A2(_Browser_decodeEvent, decoder, event) : $elm$core$Maybe$Nothing;
 		};
-		var messages = A2($elm$core$List$filterMap, toMessage, state.c_);
+		var messages = A2($elm$core$List$filterMap, toMessage, state.c0);
 		return A2(
 			$elm$core$Task$andThen,
 			function (_v1) {
@@ -5828,17 +5828,17 @@ var $author$project$FieldManual$Reader$persistTheme = _Platform_outgoingPort(
 				[
 					_Utils_Tuple2(
 					'color',
-					$elm$json$Json$Encode$string($.ct)),
+					$elm$json$Json$Encode$string($.cv)),
 					_Utils_Tuple2(
 					'name',
-					$elm$json$Json$Encode$string($.cL))
+					$elm$json$Json$Encode$string($.cN))
 				]));
 	});
 var $author$project$FieldManual$Reader$saveTheme = function (model) {
 	return $author$project$FieldManual$Reader$persistTheme(
 		{
-			ct: $author$project$FieldManual$Reader$isLight(model) ? '#fbfaf4' : '#11171c',
-			cL: $author$project$FieldManual$Reader$isLight(model) ? 'light' : 'dark'
+			cv: $author$project$FieldManual$Reader$isLight(model) ? '#fbfaf4' : '#11171c',
+			cN: $author$project$FieldManual$Reader$isLight(model) ? 'light' : 'dark'
 		});
 };
 var $elm$json$Json$Decode$null = _Json_decodeNull;
@@ -5905,7 +5905,7 @@ var $elm$url$Url$addPrefixed = F3(
 	});
 var $elm$url$Url$toString = function (url) {
 	var http = function () {
-		var _v0 = url.cS;
+		var _v0 = url.cU;
 		if (!_v0) {
 			return 'http://';
 		} else {
@@ -5915,17 +5915,17 @@ var $elm$url$Url$toString = function (url) {
 	return A3(
 		$elm$url$Url$addPrefixed,
 		'#',
-		url.dg,
+		url.di,
 		A3(
 			$elm$url$Url$addPrefixed,
 			'?',
-			url.cT,
+			url.cV,
 			_Utils_ap(
 				A2(
 					$elm$url$Url$addPort,
-					url.cP,
-					_Utils_ap(http, url.cA)),
-				url.cN)));
+					url.cR,
+					_Utils_ap(http, url.cC)),
+				url.cP)));
 };
 var $elm$core$Result$withDefault = F2(
 	function (def, result) {
@@ -5991,7 +5991,7 @@ var $author$project$FieldManual$Reader$update = F3(
 				var request = msg.a;
 				if (!request.$) {
 					var url = request.a;
-					return (_Utils_eq(url.cN, model.aq.cN) && _Utils_eq(url.cT, model.aq.cT)) ? _Utils_Tuple2(
+					return (_Utils_eq(url.cP, model.aq.cP) && _Utils_eq(url.cV, model.aq.cV)) ? _Utils_Tuple2(
 						model,
 						A2(
 							$elm$browser$Browser$Navigation$pushUrl,
@@ -6047,7 +6047,7 @@ var $author$project$FieldManual$Reader$application = F3(
 	function (title, chapters, view) {
 		return $elm$browser$Browser$application(
 			{
-				dj: F3(
+				dl: F3(
 					function (flags, url, key) {
 						var model = {
 							as: $elm$core$Maybe$Nothing,
@@ -6070,9 +6070,9 @@ var $author$project$FieldManual$Reader$application = F3(
 										$author$project$FieldManual$Reader$measure(chapters)
 									])));
 					}),
-				$7: $author$project$FieldManual$Reader$UrlChanged,
-				dp: $author$project$FieldManual$Reader$LinkClicked,
-				dx: function (model) {
+				dq: $author$project$FieldManual$Reader$UrlChanged,
+				dr: $author$project$FieldManual$Reader$LinkClicked,
+				dz: function (model) {
 					return $elm$core$Platform$Sub$batch(
 						_List_fromArray(
 							[
@@ -6094,8 +6094,8 @@ var $author$project$FieldManual$Reader$application = F3(
 									A2($elm$json$Json$Decode$field, 'key', $elm$json$Json$Decode$string))) : $elm$core$Platform$Sub$none
 							]));
 				},
-				dy: $author$project$FieldManual$Reader$update(chapters),
-				dz: function (model) {
+				dA: $author$project$FieldManual$Reader$update(chapters),
+				dB: function (model) {
 					return {
 						D: _List_fromArray(
 							[
@@ -6168,23 +6168,23 @@ var $author$project$Copy$en = {
 				]),
 			q: 'WORK / COLLABORATION / CONVERSATION'
 		},
-		a3: {ac: 'ELECTRONICS / SOFTWARE / MAGIC', ad: 'My GitHub ↗', o: 'Look inside.', G: 'I’m an electronic engineer. I love to understand things deeply.', bu: 'Professional background ↗', bC: 'The main application is built in Elm using the Elm architecture of model, update, and view. This is the first site I have published.', bD: 'Look at the implementation', bJ: 'Some of my interests are electronics, microcontrollers (MCUs), mechatronics, programming languages and language design, distributed systems, decentralization, blockchain, and open source. I enjoy exploring the latest technology, helping people understand it, and staying up to date with the latest innovations.', bK: 'This is a place for anyone who wants to learn and have a good time doing it. I hope you find something interesting here.', Q: 'Bottom up design.', H: 'IN PRACTICE / 01', R: 'learning from first principles', bU: 'This site is a working example of my work and my explorations of web development and functional programming.', bV: 'A personal website', q: 'ENGINEERING & PRACTICE'},
+		a3: {ac: 'ELECTRONICS / SOFTWARE / MAGIC', ad: 'My GitHub ↗', o: 'Look inside.', G: 'I’m an electronic engineer. I love to understand things deeply.', bu: 'Professional background ↗', bE: 'The main application is built in Elm using the Elm architecture of model, update, and view. This is the first site I have published.', bF: 'Look at the implementation', bL: 'Some of my interests are electronics, microcontrollers (MCUs), mechatronics, programming languages and language design, distributed systems, decentralization, blockchain, and open source. I enjoy exploring the latest technology, helping people understand it, and staying up to date with the latest innovations.', bM: 'This is a place for anyone who wants to learn and have a good time doing it. I hope you find something interesting here.', Q: 'Bottom up design.', H: 'IN PRACTICE / 01', R: 'learning from first principles', bW: 'This site is a working example of my work and my explorations of web development and functional programming.', bX: 'A personal website', q: 'ENGINEERING & PRACTICE'},
 		a4: {
 			o: 'My workbench.',
 			M: 'These are experiments on different interesting topics. There is no real structure behind them, more like a stream of consciousness.',
 			bh: _List_fromArray(
 				[
-					{A: 'Connected logic tiles. Toggle an input and watch shared-border constraints carry the change toward the output.', L: 'Three-color formula tiles'},
+					{A: 'Explore Boolean satisfiability with connected logic tiles. Toggle an input and watch shared-border constraints carry the change toward the output.', L: '3-SAT'},
 					{A: 'Step through a Boolean formula, watch its syntax tree grow, and explore how inputs change the result.', L: 'Formula parser & AST explorer'}
 				]),
-			bz: 'EXPERIMENT',
-			bF: 'OPEN ↗',
+			bB: 'EXPERIMENT',
+			bH: 'OPEN ↗',
 			q: 'EXPERIMENTS & EXPLORATIONS'
 		},
-		bi: {a2: 'No notes yet. The first entries are still being written.', o: 'Project Notes.', M: 'Short notes on different topics.', q: 'A PERSONAL JOURNAL'},
-		bx: {by: 'Watch Via Magus on YouTube ↗', cl: 'Find me on X ↗'},
-		bH: {D: 'Open-source software is an important part of my work. This site connects the experiments and ideas with the places where the code and everything else lives.', ad: 'Explore my GitHub ↗', o: 'Share the knowledge.', Q: 'Innovation thrives at the intersection of seemingly disjointed topics.', H: 'PRINCIPLE / 01', R: 'find the connections', bW: 'Sharing is the most fundamental act of friendship. Because it is a way you can give something without losing something. — Richard Stallman', q: 'OPEN SOURCE'},
-		cj: {D: 'Andara Labs is my YouTube channel. It’s the place to follow the video side of my work; this section will grow into a collection of individual videos and the notes behind them.', o: 'My YouTube channel.', G: 'I don\'t make too many videos, but some things are better shown.', Q: 'Open the channel to explore the videos.', H: 'CHANNEL / @ANDARALABS', R: 'watch on youtube ↗', q: 'ANDARA LABS / VIDEO', cm: 'Visit Andara Labs on YouTube ↗'}
+		bi: {a2: 'No notes yet. The first entries are still being written.', o: 'Project Notes.', M: 'Short notes on different topics.', q: 'ARTICLES'},
+		bz: {bx: 'Download all eight issues of my magic magazine, Via Magus, as PDFs in one ZIP archive.', by: 'Download all 8 issues (ZIP, 27 MB) ↓', bA: 'Watch Via Magus on YouTube ↗', cn: 'Find me on X ↗'},
+		bJ: {D: 'Open-source software is an important part of my work. This site connects the experiments and ideas with the places where the code and everything else lives.', ad: 'Explore my GitHub ↗', o: 'Share the knowledge.', Q: 'Innovation thrives at the intersection of seemingly disjointed topics.', H: 'PRINCIPLE / 01', R: 'find the connections', bY: 'Sharing is the most fundamental act of friendship. Because it is a way you can give something without losing something. — Richard Stallman', q: 'OPEN SOURCE'},
+		cl: {D: 'Andara Labs is my YouTube channel. It’s the place to follow the video side of my work; this section will grow into a collection of individual videos and the notes behind them.', o: 'My YouTube channel.', G: 'I don\'t make too many videos, but some things are better shown.', Q: 'Open the channel to explore the videos.', H: 'CHANNEL / @ANDARALABS', R: 'watch on youtube ↗', q: 'ANDARA LABS / VIDEO', co: 'Visit Andara Labs on YouTube ↗'}
 	},
 	bn: {
 		aK: 'Drawing catalogue',
@@ -6201,7 +6201,7 @@ var $author$project$Copy$en = {
 		a5: 'Filter drawings',
 		o: 'A cabinet of mechanisms.',
 		M: 'All drawings share a visual language. Filter the collection to explore the drawings.',
-		bL: 'Drawing library — Antonio Andara',
+		bN: 'Drawing library — Antonio Andara',
 		q: 'REUSABLE DRAWINGS'
 	},
 	bw: {
@@ -6212,14 +6212,14 @@ var $author$project$Copy$en = {
 		ac: 'MARKDOWNBOOK / ELM LMS',
 		o: 'Simple and to the point.',
 		G: 'I like to teach and this is my attempt at building a good and easy to use learning management system.',
-		bP: 'MarkdownBook reader showing a binary lesson, course navigation, and an interactive eight-bit calculator',
-		bQ: 'A look inside the working app. Open the demo to toggle bits, answer a question or two.',
-		bR: 'MARKDOWNBOOK',
-		bS: 'WORKING PREVIEW',
-		cc: _List_fromArray(
+		bR: 'MarkdownBook reader showing a binary lesson, course navigation, and an interactive eight-bit calculator',
+		bS: 'A look inside the working app. Open the demo to toggle bits, answer a question or two.',
+		bT: 'MARKDOWNBOOK',
+		bU: 'WORKING PREVIEW',
+		ce: _List_fromArray(
 			['Interactive lessons', 'Markdown authoring', 'Elm'])
 	},
-	bZ: {aI: 'Back to the surface ↑', aP: 'Close sidebar', aT: 'Connect', aU: 'Site contents', aW: 'BUILD / SHARE / EXPERIMENT / WONDER', aX: 'ENGINEERING / SOFTWARE / MAGIC', aY: 'ANTONIO ANDARA', aZ: '● DAY EDITION', a$: 'EDITION 02 / DAY', a0: 'EDITION 01 / NIGHT', a6: 'Drawing library ↗', a7: 'ANTONIO ANDARA / ENGINEERING & MAGIC', cy: 'GitHub ↗', ba: 'Explore my work', bb: 'Andara', bc: 'Antonio', bj: 'Journal', bk: 'Switch to English', bl: 'Switch to Spanish', bo: 'Small, reusable pieces of a visual language.', bp: 'A collection of schematics, patterns, and objects, drawn in Elm.', bq: 'Browse the drawings', br: 'library', bs: 'Drawing', bB: '● NIGHT EDITION', bG: 'Open sidebar', H: 'PLATE 002', bN: 'READ. COMPUTE. REPEAT.', bT: 'ANTONIO ANDARA', bX: 'SCROLL TO INSPECT ↓', b_: 'Open source engineering and a little sleight of hand.', b$: 'A closer look.', b0: 'Skip to the main page', ce: 'Dark mode', cf: 'Light mode', cg: 'Switch to dark mode', ch: 'Switch to light mode', ck: 'Work'},
+	b$: {aI: 'Back to the surface ↑', aP: 'Close sidebar', aT: 'Connect', aU: 'Site contents', aW: 'BUILD / SHARE / EXPERIMENT / WONDER', aX: 'ENGINEERING / SOFTWARE / MAGIC', aY: 'ANTONIO ANDARA', aZ: '● DAY EDITION', a$: 'EDITION 02 / DAY', a0: 'EDITION 01 / NIGHT', a6: 'Drawing library ↗', a7: 'ANTONIO ANDARA / ENGINEERING & MAGIC', cA: 'GitHub ↗', ba: 'Explore my work', bb: 'Andara', bc: 'Antonio', bj: 'Journal', bk: 'Switch to English', bl: 'Switch to Spanish', bo: 'Small, reusable pieces of a visual language.', bp: 'A collection of schematics, patterns, and objects, drawn in Elm.', bq: 'Browse the drawings', br: 'library', bs: 'Drawing', bD: '● NIGHT EDITION', bI: 'Open sidebar', H: 'PLATE 002', bP: 'READ. COMPUTE. REPEAT.', bV: 'ANTONIO ANDARA', bZ: 'SCROLL TO INSPECT ↓', b0: 'Open source engineering and a little sleight of hand.', b1: 'A closer look.', b2: 'Skip to the main page', cg: 'Dark mode', ch: 'Light mode', ci: 'Switch to dark mode', cj: 'Switch to light mode', cm: 'Work'},
 	L: 'Antonio Andara — Engineering & Magic'
 };
 var $author$project$Copy$es = {
@@ -6239,23 +6239,23 @@ var $author$project$Copy$es = {
 				]),
 			q: 'TRABAJO / COLABORACIÓN / CONVERSACIÓN'
 		},
-		a3: {ac: 'ELECTRÓNICA / SOFTWARE / MAGIA', ad: 'Mi GitHub ↗', o: 'Mi trabajo.', G: 'Soy ingeniero electrónico. Me encanta entender las cosas a fondo.', bu: 'Trayectoria profesional ↗', bC: 'La aplicación principal está construida en Elm usando la arquitectura de Elm: modelo, actualización y vista. Este es el primer sitio que publico.', bD: 'Mira la implementación', bJ: 'Algunos de mis intereses son la electrónica, los microcontroladores (MCU), la mecatrónica, los lenguajes de programación, el diseño de lenguajes, los sistemas distribuidos, la descentralización, blockchain y el código abierto. Disfruto explorar la tecnología más reciente, ayudar a las personas a entenderla y mantenerme al día con las últimas innovaciones.', bK: 'Este es un lugar para cualquiera que quiera aprender y pasarlo bien haciéndolo. Espero que encuentres algo interesante aquí.', Q: 'Diseño de abajo hacia arriba.', H: 'EN LA PRÁCTICA / 01', R: 'aprendizaje desde primeros principios', bU: 'Este sitio es un ejemplo de mi trabajo y de mis exploraciones en desarrollo web y programación funcional.', bV: 'Una página personal', q: 'INGENIERÍA Y PRÁCTICA'},
+		a3: {ac: 'ELECTRÓNICA / SOFTWARE / MAGIA', ad: 'Mi GitHub ↗', o: 'Mi trabajo.', G: 'Soy ingeniero electrónico. Me encanta entender las cosas a fondo.', bu: 'Trayectoria profesional ↗', bE: 'La aplicación principal está construida en Elm usando la arquitectura de Elm: modelo, actualización y vista. Este es el primer sitio que publico.', bF: 'Mira la implementación', bL: 'Algunos de mis intereses son la electrónica, los microcontroladores (MCU), la mecatrónica, los lenguajes de programación, el diseño de lenguajes, los sistemas distribuidos, la descentralización, blockchain y el código abierto. Disfruto explorar la tecnología más reciente, ayudar a las personas a entenderla y mantenerme al día con las últimas innovaciones.', bM: 'Este es un lugar para cualquiera que quiera aprender y pasarlo bien haciéndolo. Espero que encuentres algo interesante aquí.', Q: 'Diseño de abajo hacia arriba.', H: 'EN LA PRÁCTICA / 01', R: 'aprendizaje desde primeros principios', bW: 'Este sitio es un ejemplo de mi trabajo y de mis exploraciones en desarrollo web y programación funcional.', bX: 'Una página personal', q: 'INGENIERÍA Y PRÁCTICA'},
 		a4: {
 			o: 'Mi taller.',
 			M: 'Estos son experimentos sobre distintos temas interesantes. No hay una estructura real detrás, más bien un flujo de conciencia.',
 			bh: _List_fromArray(
 				[
-					{A: 'Cambia una entrada y observa cómo las nuevas restricciones se propagan hacia la salida.', L: 'Mapas de tres colores'},
+					{A: 'Explora la satisfacibilidad booleana con fichas lógicas conectadas. Cambia una entrada y observa cómo las restricciones se propagan hacia la salida.', L: '3-SAT'},
 					{A: 'Recorre paso a paso una fórmula booleana, observa cómo crece su árbol de sintaxis.', L: 'Parseo de fórmulas y explorador de AST'}
 				]),
-			bz: 'EXPERIMENTO',
-			bF: 'ABRIR ↗',
+			bB: 'EXPERIMENTO',
+			bH: 'ABRIR ↗',
 			q: 'EXPERIMENTOS Y EXPLORACIONES'
 		},
 		bi: {a2: 'Aún no hay notas. Las primeras entradas todavía se están escribiendo.', o: 'Notas.', M: 'Notas breves sobre distintos temas.', q: 'DIARIO'},
-		bx: {by: 'Mira Via Magus en YouTube ↗', cl: 'Encuéntrame en X ↗'},
-		bH: {D: 'El software de código abierto es una parte importante de mi trabajo. Este sitio conecta los experimentos y las ideas con los lugares donde vive el código y todo lo demás.', ad: 'Explora mi GitHub ↗', o: 'Compartiendo el conocimiento.', Q: 'La innovación prospera en la intersección de temas aparentemente inconexos.', H: 'PRINCIPIO / 01', R: 'encuentra las conexiones', bW: 'Compartir es el acto más fundamental de la amistad. Porque es una forma de dar algo sin perder nada. — Richard Stallman', q: 'CÓDIGO ABIERTO'},
-		cj: {D: 'Andara Labs es mi canal de YouTube. Es el lugar para seguir el lado audiovisual de mi trabajo; esta sección crecerá hasta convertirse en una colección de vídeos individuales y las notas que hay detrás.', o: 'Mi canal de YouTube.', G: 'No hago muchos vídeos, pero algunas cosas es mejor mostrarlas.', Q: 'Abre el canal para explorar los vídeos.', H: 'CANAL / @ANDARALABS', R: 'ver en youtube ↗', q: 'ANDARA LABS / VIDEO', cm: 'Visita Andara Labs en YouTube ↗'}
+		bz: {bx: 'Descarga los ocho números de mi revista de magia, Via Magus, en PDF dentro de un archivo ZIP.', by: 'Descargar los 8 números (ZIP, 27 MB) ↓', bA: 'Mira Via Magus en YouTube ↗', cn: 'Encuéntrame en X ↗'},
+		bJ: {D: 'El software de código abierto es una parte importante de mi trabajo. Este sitio conecta los experimentos y las ideas con los lugares donde vive el código y todo lo demás.', ad: 'Explora mi GitHub ↗', o: 'Compartiendo el conocimiento.', Q: 'La innovación prospera en la intersección de temas aparentemente inconexos.', H: 'PRINCIPIO / 01', R: 'encuentra las conexiones', bY: 'Compartir es el acto más fundamental de la amistad. Porque es una forma de dar algo sin perder nada. — Richard Stallman', q: 'CÓDIGO ABIERTO'},
+		cl: {D: 'Andara Labs es mi canal de YouTube. Es el lugar para seguir el lado audiovisual de mi trabajo; esta sección crecerá hasta convertirse en una colección de vídeos individuales y las notas que hay detrás.', o: 'Mi canal de YouTube.', G: 'No hago muchos vídeos, pero algunas cosas es mejor mostrarlas.', Q: 'Abre el canal para explorar los vídeos.', H: 'CANAL / @ANDARALABS', R: 'ver en youtube ↗', q: 'ANDARA LABS / VIDEO', co: 'Visita Andara Labs en YouTube ↗'}
 	},
 	bn: {
 		aK: 'Catálogo de dibujos',
@@ -6270,9 +6270,9 @@ var $author$project$Copy$es = {
 			]),
 		aV: 'dibujos /',
 		a5: 'Filtrar dibujos',
-		o: 'Un gabinete de mecanismos.',
+		o: 'Colección de mecanismos.',
 		M: 'Dibujos en un lenguaje visual compartido. Filtra la colección para explorar los dibujos.',
-		bL: 'Biblioteca de dibujos — Antonio Andara',
+		bN: 'Biblioteca de dibujos — Antonio Andara',
 		q: 'DIBUJOS REUTILIZABLES'
 	},
 	bw: {
@@ -6283,14 +6283,14 @@ var $author$project$Copy$es = {
 		ac: 'MARKDOWNBOOK / ELM LMS',
 		o: 'Simple y directo.',
 		G: 'Me gusta enseñar y este es mi intento de construir un sistema de gestión del aprendizaje bueno y fácil de usar.',
-		bP: 'Lector de MarkdownBook mostrando una lección binaria, navegación del curso y una calculadora interactiva de ocho bits',
-		bQ: 'Un vistazo al interior de la aplicación en funcionamiento. Abre la demo para alternar bits y responder una que otra pregunta.',
-		bR: 'MARKDOWNBOOK',
-		bS: 'VISTA PREVIA FUNCIONAL',
-		cc: _List_fromArray(
+		bR: 'Lector de MarkdownBook mostrando una lección binaria, navegación del curso y una calculadora interactiva de ocho bits',
+		bS: 'Un vistazo al interior de la aplicación en funcionamiento. Abre la demo para alternar bits y responder una que otra pregunta.',
+		bT: 'MARKDOWNBOOK',
+		bU: 'VISTA PREVIA FUNCIONAL',
+		ce: _List_fromArray(
 			['Lecciones interactivas', 'Autoría en Markdown', 'Elm'])
 	},
-	bZ: {aI: 'Volver a la superficie ↑', aP: 'Cerrar barra lateral', aT: 'Contacto', aU: 'Contenido', aW: 'CONSTRUIR / COMPARTIR / EXPERIMENTAR', aX: 'INGENIERÍA / SOFTWARE / MAGIA', aY: 'ANTONIO ANDARA', aZ: '● EDICIÓN DÍA', a$: 'EDICIÓN 02 / DÍA', a0: 'EDICIÓN 01 / NOCHE', a6: 'Biblioteca de dibujos ↗', a7: 'ANTONIO ANDARA / INGENIERÍA Y MAGIA', cy: 'GitHub ↗', ba: 'Explora mi trabajo', bb: 'Andara', bc: 'Antonio', bj: 'Diario', bk: 'Cambiar a inglés', bl: 'Cambiar a español', bo: 'Bloques Reutilizables.', bp: 'Colección de esquemas, patrones y objetos, dibujados en Elm.', bq: 'Explora los dibujos', br: 'biblioteca', bs: 'Dibujos', bB: '● EDICIÓN NOCHE', bG: 'Abrir barra lateral', H: 'LÁMINA 002', bN: 'LEER. PROCESAR. REPETIR.', bT: 'ANTONIO ANDARA', bX: 'DESPLAZA PARA INSPECCIONAR ↓', b_: 'Ingeniería de código abierto y un poco de prestidigitación.', b$: 'Una mirada.', b0: 'Saltar a la página', ce: 'Modo oscuro', cf: 'Modo claro', cg: 'Cambiar a modo oscuro', ch: 'Cambiar a modo claro', ck: 'Trabajo'},
+	b$: {aI: 'Volver a la superficie ↑', aP: 'Cerrar barra lateral', aT: 'Contacto', aU: 'Contenido', aW: 'CONSTRUIR / COMPARTIR / EXPERIMENTAR', aX: 'INGENIERÍA / SOFTWARE / MAGIA', aY: 'ANTONIO ANDARA', aZ: '● EDICIÓN DÍA', a$: 'EDICIÓN 02 / DÍA', a0: 'EDICIÓN 01 / NOCHE', a6: 'Biblioteca de dibujos ↗', a7: 'ANTONIO ANDARA / INGENIERÍA Y MAGIA', cA: 'GitHub ↗', ba: 'Explora mi trabajo', bb: 'Andara', bc: 'Antonio', bj: 'Diario', bk: 'Cambiar a inglés', bl: 'Cambiar a español', bo: 'Bloques Reutilizables.', bp: 'Colección de esquemas, patrones y objetos, dibujados en Elm.', bq: 'Explora los dibujos', br: 'personal', bs: 'Biblioteca', bD: '● EDICIÓN NOCHE', bI: 'Abrir barra lateral', H: 'LÁMINA 002', bP: 'LEER. PROCESAR. REPETIR.', bV: 'ANTONIO ANDARA', bZ: 'DESPLAZA PARA INSPECCIONAR ↓', b0: 'Ingeniería de código abierto y un poco de prestidigitación.', b1: 'Una mirada.', b2: 'Saltar a la página', cg: 'Modo oscuro', ch: 'Modo claro', ci: 'Cambiar a modo oscuro', cj: 'Cambiar a modo claro', cm: 'Trabajo'},
 	L: 'Antonio Andara — Ingeniero y mago'
 };
 var $author$project$Copy$forLanguage = function (language) {
@@ -7781,8 +7781,8 @@ var $author$project$FieldManual$Illustrations$signal = function (config) {
 	var point = function (i) {
 		var x = i / 120;
 		return $elm$core$String$fromFloat(30 + (x * 300)) + (',' + $elm$core$String$fromFloat(
-			130 - (A3($elm$core$Basics$clamp, 0, 85, config.c7) * $elm$core$Basics$sin(
-				((x * 2) * $elm$core$Basics$pi) * A3($elm$core$Basics$clamp, 0.5, 8, config.dc)))));
+			130 - (A3($elm$core$Basics$clamp, 0, 85, config.c9) * $elm$core$Basics$sin(
+				((x * 2) * $elm$core$Basics$pi) * A3($elm$core$Basics$clamp, 0.5, 8, config.de)))));
 	};
 	return A3(
 		$author$project$FieldManual$Illustrations$svgRoot,
@@ -8077,7 +8077,7 @@ var $author$project$FieldManual$Library$drawing = function (key) {
 			return $author$project$FieldManual$Illustrations$network;
 		case 'signal':
 			return $author$project$FieldManual$Illustrations$signal(
-				{c7: 65, dc: 2});
+				{c9: 65, de: 2});
 		case 'kernel':
 			return $author$project$FieldManual$Illustrations$kernelDiagram;
 		case 'bezier':
@@ -8229,36 +8229,36 @@ var $author$project$Copy$specimenRows = _List_fromArray(
 	[
 		{
 		h: 'Systems',
-		l: _Utils_Tuple2('Computer stack', 'Processor board, paired memory sticks, solid-state storage.'),
-		m: _Utils_Tuple2('Arquitectura del computador', 'Procesador, memoria de estado sólido.'),
+		l: _Utils_Tuple2('Computer stack', 'Processor board, paired with memory and solid-state storage.'),
+		m: _Utils_Tuple2('Arquitectura del computador', 'Procesador, RAM y ROM.'),
 		i: 'Ink.computerStack',
 		j: 'stack'
 	},
 		{
 		h: 'Systems',
-		l: _Utils_Tuple2('From gates to a CPU', 'Logic gates build muxes and an ALU; connected into a datapath, they become a CPU core. Follow the arrows.'),
-		m: _Utils_Tuple2('De puertas lógicas a una CPU', 'Las puertas lógicas construyen multiplexores y una ALU; conectadas de la forma correcta, se convierten en un CPU. Sigue las flechas.'),
+		l: _Utils_Tuple2('From gates to CPU', 'Logic gates build muxes and an ALU; a datapath and some registers become a CPU core. Follow the arrows.'),
+		m: _Utils_Tuple2('De compuertas lógicas al CPU', 'Compuertas lógicas construyen multiplexores y una ALU; conectadas de la forma correcta, se convierten en un CPU. Sigue las flechas.'),
 		i: 'Ink.processorStack',
 		j: 'processor'
 	},
 		{
 		h: 'Systems',
 		l: _Utils_Tuple2('Capacitive surface', 'A measured field becomes a coordinate.'),
-		m: _Utils_Tuple2('Superficie capacitiva', 'Un campo medido se convierte en una coordenada.'),
+		m: _Utils_Tuple2('Superficie capacitiva', 'La medición de un campo se convierte en una coordenada.'),
 		i: 'Ink.touchDiagram',
 		j: 'touch'
 	},
 		{
 		h: 'Systems',
-		l: _Utils_Tuple2('Logic core', 'A 24-pin package with a visible core.'),
-		m: _Utils_Tuple2('Núcleo lógico', 'Un encapsulado de 24 patillas con un núcleo visible.'),
+		l: _Utils_Tuple2('Logic core', '24-pin package with visible core.'),
+		m: _Utils_Tuple2('Núcleo lógico', 'Encapsulado de 24 pines.'),
 		i: 'Ink.chip',
 		j: 'chip'
 	},
 		{
 		h: 'Systems',
-		l: _Utils_Tuple2('Connected nodes', 'Solid paths, potential connections, shared state.'),
-		m: _Utils_Tuple2('Nodos conectados', 'Rutas sólidas, conexiones potenciales, estado compartido.'),
+		l: _Utils_Tuple2('Connected nodes', 'Solid paths, potential edges, shared state.'),
+		m: _Utils_Tuple2('Nodos conectados', 'Rutas, aristas potenciales, estado compartido.'),
 		i: 'Ink.network',
 		j: 'network'
 	},
@@ -8313,15 +8313,15 @@ var $author$project$Copy$specimenRows = _List_fromArray(
 	},
 		{
 		h: 'Patterns',
-		l: _Utils_Tuple2('Cellular automaton', 'Rule 30, grown from one live cell across 24 generations.'),
-		m: _Utils_Tuple2('Autómata celular', 'Regla 30, crecida desde una célula viva a lo largo de 24 generaciones.'),
+		l: _Utils_Tuple2('Cellular automaton', 'Rule 30, grown from one live cell.'),
+		m: _Utils_Tuple2('Autómata celular', 'Regla 30, desde una célula viva.'),
 		i: 'Ink.cellularAutomaton 30',
 		j: 'automaton'
 	},
 		{
 		h: 'Patterns',
-		l: _Utils_Tuple2('Game of Life', 'A glider at generations 0, 4, and 8. Local rules create traveling structure.'),
-		m: _Utils_Tuple2('Juego de la vida', 'Un planeador en las generaciones 0, 4 y 8. Las reglas locales crean estructura viajera.'),
+		l: _Utils_Tuple2('Game of Life', 'A glider creates a traveling structure.'),
+		m: _Utils_Tuple2('Juego de la vida', 'Un planeador crea una estructura móvil.'),
 		i: 'Ink.gameOfLife',
 		j: 'life'
 	},
@@ -8335,7 +8335,7 @@ var $author$project$Copy$specimenRows = _List_fromArray(
 		{
 		h: 'Concepts',
 		l: _Utils_Tuple2('Composable', 'Follow A into f, B into g, and C out. The same pipeline becomes one reusable function.'),
-		m: _Utils_Tuple2('Componible', 'Sigue A hacia f, B hacia g y C hacia la salida. La misma tubería se convierte en una función reutilizable.'),
+		m: _Utils_Tuple2('Componible', 'Sigue A hacia f, B hacia g y C hacia la salida. La misma secuencia se convierte en una función reutilizable.'),
 		i: 'Ink.composable',
 		j: 'composable'
 	},
@@ -8355,8 +8355,8 @@ var $author$project$Copy$specimenRows = _List_fromArray(
 	},
 		{
 		h: 'Concepts',
-		l: _Utils_Tuple2('Turing machine', 'A tape, a state, and a head. Read a symbol, write a symbol, then move.'),
-		m: _Utils_Tuple2('Máquina de Turing', 'Una cinta, un estado y un cabezal. Lee un símbolo, escribe un símbolo y luego muévete.'),
+		l: _Utils_Tuple2('Turing machine', 'A tape, a state, and a head.'),
+		m: _Utils_Tuple2('Máquina de Turing', 'Una cinta, un estado y un cabezal.'),
 		i: 'Ink.turingMachine',
 		j: 'turing'
 	},
@@ -8383,8 +8383,8 @@ var $author$project$Copy$specimenRows = _List_fromArray(
 	},
 		{
 		h: 'Concepts',
-		l: _Utils_Tuple2('FIFO queue', 'Software queues and hardware buffers preserve arrival order: write at the tail, read from the head. A arrived first and leaves before B, C, and the incoming D.'),
-		m: _Utils_Tuple2('Cola FIFO', 'Las colas de software y los búferes de hardware conservan el orden de llegada: se escribe al final y se lee del frente. A llegó primero y sale antes que B, C y el nuevo D.'),
+		l: _Utils_Tuple2('FIFO queue', 'Preserve arrival order: write at the tail, read from the head. A arrived first and leaves before B, C, and the incoming D.'),
+		m: _Utils_Tuple2('Cola FIFO', 'El orden de llegada es conservado: se escribe al final y se lee del frente. A llegó primero y sale antes que B, C y el nuevo D.'),
 		i: 'Ink.fifo',
 		j: 'fifo'
 	}
@@ -8402,7 +8402,7 @@ var $author$project$Copy$specimens = function (language) {
 			}();
 			var title = _v0.a;
 			var caption = _v0.b;
-			return {cp: caption, h: row.h, i: row.i, j: row.j, L: title};
+			return {cr: caption, h: row.h, i: row.i, j: row.j, L: title};
 		},
 		$author$project$Copy$specimenRows);
 };
@@ -8513,7 +8513,7 @@ var $author$project$FieldManual$Library$view = F3(
 												$elm$core$String$fromInt(index + 1)),
 											specimen.L,
 											$author$project$FieldManual$Library$drawing(specimen.j),
-											specimen.cp)
+											specimen.cr)
 										]));
 							}),
 						specimens))
@@ -8585,14 +8585,14 @@ var $author$project$I18n$pick = F3(
 	});
 var $author$project$Content$profile = function (language) {
 	return {
-		cy: 'https://github.com/antonioandara',
-		cC: A3($author$project$I18n$pick, language, 'Computers. Embedded. Open-source. Sleight of hand.', 'Computadoras. Electrónica. Programación. Código abierto. Prestidigitación.'),
-		cF: A3($author$project$I18n$pick, language, 'I’m Antonio and I like to make things. Here I share some of my work, experiments, and writing. I hope you find something that sparks your curiosity.', 'Soy Antonio y me gusta hacer cosas. Aquí comparto parte de mi trabajo, experimentos y mis algunos articulos. Espero que algo que despierte tu curiosidad.'),
-		cI: 'https://www.linkedin.com/in/antonio-alejandro-andara-lara-ab5453a4/',
-		cJ: 'https://www.youtube.com/@viamagus',
-		cL: 'Antonio Andara Lara',
-		c4: 'https://x.com/A3L',
-		c6: 'https://www.youtube.com/@andaralabs'
+		cA: 'https://github.com/antonioandara',
+		cE: A3($author$project$I18n$pick, language, 'Computers. Embedded. Open-source. Sleight of hand.', 'Computadoras. Electrónica. Programación. Código abierto. Prestidigitación.'),
+		cH: A3($author$project$I18n$pick, language, 'I’m Antonio and I like to make things. Here I share some of my work, experiments, and writing. I hope you find something that sparks your curiosity.', 'Soy Antonio y me gusta hacer cosas. Aquí comparto parte de mi trabajo, experimentos y mis algunos articulos. Espero que algo que despierte tu curiosidad.'),
+		cK: 'https://www.linkedin.com/in/antonio-alejandro-andara-lara-ab5453a4/',
+		cL: 'https://www.youtube.com/@viamagus',
+		cN: 'Antonio Andara Lara',
+		c6: 'https://x.com/A3L',
+		c8: 'https://www.youtube.com/@andaralabs'
 	};
 };
 var $elm$virtual_dom$VirtualDom$property = F2(
@@ -8609,8 +8609,8 @@ var $author$project$SiteShell$view = F4(
 	function (libraryPage, chapters, body, model) {
 		var person = $author$project$Content$profile(model.X);
 		var copy = $author$project$Copy$forLanguage(model.X);
-		var shell = copy.bZ;
-		var themeLabel = $author$project$FieldManual$Reader$isLight(model) ? shell.cf : shell.ce;
+		var shell = copy.b$;
+		var themeLabel = $author$project$FieldManual$Reader$isLight(model) ? shell.ch : shell.cg;
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -8637,7 +8637,7 @@ var $author$project$SiteShell$view = F4(
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text(shell.b0)
+							$elm$html$Html$text(shell.b2)
 						])),
 					A2(
 					$elm$html$Html$aside,
@@ -8699,7 +8699,7 @@ var $author$project$SiteShell$view = F4(
 										]),
 									_List_fromArray(
 										[
-											$elm$html$Html$text(shell.bT)
+											$elm$html$Html$text(shell.bV)
 										])),
 									A2(
 									$elm$html$Html$p,
@@ -8709,7 +8709,7 @@ var $author$project$SiteShell$view = F4(
 										]),
 									_List_fromArray(
 										[
-											$elm$html$Html$text(shell.b$)
+											$elm$html$Html$text(shell.b1)
 										])),
 									A2(
 									$elm$html$Html$p,
@@ -8719,7 +8719,7 @@ var $author$project$SiteShell$view = F4(
 										]),
 									_List_fromArray(
 										[
-											$elm$html$Html$text(shell.b_)
+											$elm$html$Html$text(shell.b0)
 										])),
 									A2(
 									$elm$html$Html$nav,
@@ -8786,11 +8786,11 @@ var $author$project$SiteShell$view = F4(
 									$elm$html$Html$a,
 									_List_fromArray(
 										[
-											$elm$html$Html$Attributes$href(person.cy)
+											$elm$html$Html$Attributes$href(person.cA)
 										]),
 									_List_fromArray(
 										[
-											$elm$html$Html$text(shell.cy)
+											$elm$html$Html$text(shell.cA)
 										]))
 								]))
 						])),
@@ -8835,7 +8835,7 @@ var $author$project$SiteShell$view = F4(
 											_List_fromArray(
 												[
 													$elm$html$Html$text(
-													$author$project$FieldManual$Reader$isLight(model) ? shell.aZ : shell.bB)
+													$author$project$FieldManual$Reader$isLight(model) ? shell.aZ : shell.bD)
 												]))
 										])),
 									A2(
@@ -8897,7 +8897,7 @@ var $author$project$SiteShell$view = F4(
 													_List_fromArray(
 														[
 															$elm$html$Html$text(
-															libraryPage ? shell.bo : person.cC)
+															libraryPage ? shell.bo : person.cE)
 														])),
 													A2(
 													$elm$html$Html$p,
@@ -8908,7 +8908,7 @@ var $author$project$SiteShell$view = F4(
 													_List_fromArray(
 														[
 															$elm$html$Html$text(
-															libraryPage ? shell.bp : person.cF)
+															libraryPage ? shell.bp : person.cH)
 														])),
 													A2(
 													$elm$html$Html$a,
@@ -8971,7 +8971,7 @@ var $author$project$SiteShell$view = F4(
 														]),
 													_List_fromArray(
 														[
-															$elm$html$Html$text(shell.bN)
+															$elm$html$Html$text(shell.bP)
 														]))
 												]))
 										])),
@@ -8999,7 +8999,7 @@ var $author$project$SiteShell$view = F4(
 												]),
 											_List_fromArray(
 												[
-													$elm$html$Html$text(shell.bX)
+													$elm$html$Html$text(shell.bZ)
 												]))
 										]))
 								])),
@@ -9031,7 +9031,7 @@ var $author$project$SiteShell$view = F4(
 													A2(
 													$elm$html$Html$Attributes$attribute,
 													'aria-label',
-													model._ ? shell.aP : shell.bG),
+													model._ ? shell.aP : shell.bI),
 													A2(
 													$elm$html$Html$Attributes$attribute,
 													'aria-expanded',
@@ -9096,7 +9096,7 @@ var $author$project$SiteShell$view = F4(
 												]),
 											_List_fromArray(
 												[
-													$elm$html$Html$text(shell.ck)
+													$elm$html$Html$text(shell.cm)
 												])),
 											A2(
 											$elm$html$Html$a,
@@ -9136,7 +9136,7 @@ var $author$project$SiteShell$view = F4(
 													$elm$html$Html$Attributes$class('theme-toggle'),
 													$elm$html$Html$Events$onClick($author$project$FieldManual$Reader$ToggleTheme),
 													$elm$html$Html$Attributes$title(
-													$author$project$FieldManual$Reader$isLight(model) ? shell.cg : shell.ch),
+													$author$project$FieldManual$Reader$isLight(model) ? shell.ci : shell.cj),
 													$elm$html$Html$Attributes$type_('button'),
 													A2($elm$html$Html$Attributes$attribute, 'role', 'switch'),
 													A2(
@@ -9144,7 +9144,7 @@ var $author$project$SiteShell$view = F4(
 													'aria-checked',
 													$author$project$FieldManual$Reader$boolString(
 														$author$project$FieldManual$Reader$isLight(model))),
-													A2($elm$html$Html$Attributes$attribute, 'aria-label', shell.cf)
+													A2($elm$html$Html$Attributes$attribute, 'aria-label', shell.ch)
 												]),
 											_List_fromArray(
 												[
@@ -9265,7 +9265,7 @@ var $author$project$SiteShell$view = F4(
 var $author$project$LibraryPage$main = A3(
 	$author$project$FieldManual$Reader$application,
 	function (model) {
-		return $author$project$Copy$forLanguage(model.X).bn.bL;
+		return $author$project$Copy$forLanguage(model.X).bn.bN;
 	},
 	_List_fromArray(
 		['library']),

@@ -120,7 +120,7 @@ type alias ExperimentCopy =
 
 
 type alias Magic =
-    { magicLink : String, xLink : String }
+    { magicLink : String, xLink : String, magazineDescription : String, magazineDownload : String }
 
 
 type alias Journal =
@@ -296,8 +296,8 @@ en =
             , metaPrefix = "EXPERIMENT"
             , openLabel = "OPEN ↗"
             , items =
-                [ { title = "Three-color formula tiles"
-                  , description = "Connected logic tiles. Toggle an input and watch shared-border constraints carry the change toward the output."
+                [ { title = "3-SAT"
+                  , description = "Explore Boolean satisfiability with connected logic tiles. Toggle an input and watch shared-border constraints carry the change toward the output."
                   }
                 , { title = "Formula parser & AST explorer"
                   , description = "Step through a Boolean formula, watch its syntax tree grow, and explore how inputs change the result."
@@ -305,12 +305,14 @@ en =
                 ]
             }
         , magic =
-            { magicLink = "Watch Via Magus on YouTube ↗"
+            { magazineDescription = "Download all eight issues of my magic magazine, Via Magus, as PDFs in one ZIP archive."
+            , magazineDownload = "Download all 8 issues (ZIP, 27 MB) ↓"
+            , magicLink = "Watch Via Magus on YouTube ↗"
             , xLink = "Find me on X ↗"
             }
         , journal =
             { heading = "Project Notes."
-            , subtitle = "A PERSONAL JOURNAL"
+            , subtitle = "ARTICLES"
             , intro = "Short notes on different topics."
             , empty = "No notes yet. The first entries are still being written."
             }
@@ -401,8 +403,8 @@ es =
         , coverEyebrow = "INGENIERÍA / SOFTWARE / MAGIA"
         , homeTitleTop = "Antonio"
         , homeTitleBottom = "Andara"
-        , libraryTitleTop = "Dibujos"
-        , libraryTitleBottom = "biblioteca"
+        , libraryTitleTop = "Biblioteca"
+        , libraryTitleBottom = "personal"
         , libraryDeck = "Bloques Reutilizables."
         , libraryDescription = "Colección de esquemas, patrones y objetos, dibujados en Elm."
         , homeReadLink = "Explora mi trabajo"
@@ -459,8 +461,8 @@ es =
             , metaPrefix = "EXPERIMENTO"
             , openLabel = "ABRIR ↗"
             , items =
-                [ { title = "Mapas de tres colores"
-                  , description = "Cambia una entrada y observa cómo las nuevas restricciones se propagan hacia la salida."
+                [ { title = "3-SAT"
+                  , description = "Explora la satisfacibilidad booleana con fichas lógicas conectadas. Cambia una entrada y observa cómo las restricciones se propagan hacia la salida."
                   }
                 , { title = "Parseo de fórmulas y explorador de AST"
                   , description = "Recorre paso a paso una fórmula booleana, observa cómo crece su árbol de sintaxis."
@@ -468,7 +470,9 @@ es =
                 ]
             }
         , magic =
-            { magicLink = "Mira Via Magus en YouTube ↗"
+            { magazineDescription = "Descarga los ocho números de mi revista de magia, Via Magus, en PDF dentro de un archivo ZIP."
+            , magazineDownload = "Descargar los 8 números (ZIP, 27 MB) ↓"
+            , magicLink = "Mira Via Magus en YouTube ↗"
             , xLink = "Encuéntrame en X ↗"
             }
         , journal =
@@ -503,7 +507,7 @@ es =
     , library =
         { pageTitle = "Biblioteca de dibujos — Antonio Andara"
         , catalogue = "Catálogo de dibujos"
-        , heading = "Un gabinete de mecanismos."
+        , heading = "Colección de mecanismos."
         , subtitle = "DIBUJOS REUTILIZABLES"
         , intro = "Dibujos en un lenguaje visual compartido. Filtra la colección para explorar los dibujos."
         , countSuffix = "dibujos /"
@@ -561,24 +565,24 @@ specimens language =
 specimenRows : List SpecimenRow
 specimenRows =
     [ { key = "stack", category = "Systems", example = "Ink.computerStack"
-      , en = ( "Computer stack", "Processor board, paired memory sticks, solid-state storage." )
-      , es = ( "Arquitectura del computador", "Procesador, memoria de estado sólido." )
+      , en = ( "Computer stack", "Processor board, paired with memory and solid-state storage." )
+      , es = ( "Arquitectura del computador", "Procesador, RAM y ROM." )
       }
     , { key = "processor", category = "Systems", example = "Ink.processorStack"
-      , en = ( "From gates to a CPU", "Logic gates build muxes and an ALU; connected into a datapath, they become a CPU core. Follow the arrows." )
-      , es = ( "De puertas lógicas a una CPU", "Las puertas lógicas construyen multiplexores y una ALU; conectadas de la forma correcta, se convierten en un CPU. Sigue las flechas." )
+      , en = ( "From gates to CPU", "Logic gates build muxes and an ALU; a datapath and some registers become a CPU core. Follow the arrows." )
+      , es = ( "De compuertas lógicas al CPU", "Compuertas lógicas construyen multiplexores y una ALU; conectadas de la forma correcta, se convierten en un CPU. Sigue las flechas." )
       }
     , { key = "touch", category = "Systems", example = "Ink.touchDiagram"
       , en = ( "Capacitive surface", "A measured field becomes a coordinate." )
-      , es = ( "Superficie capacitiva", "Un campo medido se convierte en una coordenada." )
+      , es = ( "Superficie capacitiva", "La medición de un campo se convierte en una coordenada." )
       }
     , { key = "chip", category = "Systems", example = "Ink.chip"
-      , en = ( "Logic core", "A 24-pin package with a visible core." )
-      , es = ( "Núcleo lógico", "Un encapsulado de 24 patillas con un núcleo visible." )
+      , en = ( "Logic core", "24-pin package with visible core." )
+      , es = ( "Núcleo lógico", "Encapsulado de 24 pines." )
       }
     , { key = "network", category = "Systems", example = "Ink.network"
-      , en = ( "Connected nodes", "Solid paths, potential connections, shared state." )
-      , es = ( "Nodos conectados", "Rutas sólidas, conexiones potenciales, estado compartido." )
+      , en = ( "Connected nodes", "Solid paths, potential edges, shared state." )
+      , es = ( "Nodos conectados", "Rutas, aristas potenciales, estado compartido." )
       }
     , { key = "signal", category = "Signals", example = "Ink.signal { amplitude = 65, cycles = 2 }"
       , en = ( "Wave study", "A sampled wave with adjustable amplitude and frequency." )
@@ -609,12 +613,12 @@ specimenRows =
       , es = ( "Letra de trama", "Las letras revelan su cuadrícula subyacente." )
       }
     , { key = "automaton", category = "Patterns", example = "Ink.cellularAutomaton 30"
-      , en = ( "Cellular automaton", "Rule 30, grown from one live cell across 24 generations." )
-      , es = ( "Autómata celular", "Regla 30, crecida desde una célula viva a lo largo de 24 generaciones." )
+      , en = ( "Cellular automaton", "Rule 30, grown from one live cell." )
+      , es = ( "Autómata celular", "Regla 30, desde una célula viva." )
       }
     , { key = "life", category = "Patterns", example = "Ink.gameOfLife"
-      , en = ( "Game of Life", "A glider at generations 0, 4, and 8. Local rules create traveling structure." )
-      , es = ( "Juego de la vida", "Un planeador en las generaciones 0, 4 y 8. Las reglas locales crean estructura viajera." )
+      , en = ( "Game of Life", "A glider creates a traveling structure." )
+      , es = ( "Juego de la vida", "Un planeador crea una estructura móvil." )
       }
     , { key = "functional", category = "Concepts", example = "Ink.functional"
       , en = ( "Functional", "A pure function: square the input, with no hidden state." )
@@ -622,7 +626,7 @@ specimenRows =
       }
     , { key = "composable", category = "Concepts", example = "Ink.composable"
       , en = ( "Composable", "Follow A into f, B into g, and C out. The same pipeline becomes one reusable function." )
-      , es = ( "Componible", "Sigue A hacia f, B hacia g y C hacia la salida. La misma tubería se convierte en una función reutilizable." )
+      , es = ( "Componible", "Sigue A hacia f, B hacia g y C hacia la salida. La misma secuencia se convierte en una función reutilizable." )
       }
     , { key = "fractal", category = "Patterns", example = "Ink.fractal 4"
       , en = ( "Fractal", "A Sierpiński triangle repeats the same structure at smaller scales." )
@@ -633,8 +637,8 @@ specimenRows =
       , es = ( "Analizador de fórmulas y AST", "Los tokens se convierten en un árbol de sintaxis: NOT envuelve a AND, OR une las ramas y los valores de entrada se evalúan hacia la raíz." )
       }
     , { key = "turing", category = "Concepts", example = "Ink.turingMachine"
-      , en = ( "Turing machine", "A tape, a state, and a head. Read a symbol, write a symbol, then move." )
-      , es = ( "Máquina de Turing", "Una cinta, un estado y un cabezal. Lee un símbolo, escribe un símbolo y luego muévete." )
+      , en = ( "Turing machine", "A tape, a state, and a head." )
+      , es = ( "Máquina de Turing", "Una cinta, un estado y un cabezal." )
       }
     , { key = "state-machine", category = "Concepts", example = "Ink.stateMachine"
       , en = ( "Finite state machine", "Read binary digits: 0 keeps the state, 1 toggles it. The double ring accepts an even number of ones." )
@@ -649,7 +653,7 @@ specimenRows =
       , es = ( "Máquina de registros", "ADD R2, R0, R1 lee 3 y 4 de los registros indicados y escribe 7 en R2." )
       }
     , { key = "fifo", category = "Concepts", example = "Ink.fifo"
-      , en = ( "FIFO queue", "Software queues and hardware buffers preserve arrival order: write at the tail, read from the head. A arrived first and leaves before B, C, and the incoming D." )
-      , es = ( "Cola FIFO", "Las colas de software y los búferes de hardware conservan el orden de llegada: se escribe al final y se lee del frente. A llegó primero y sale antes que B, C y el nuevo D." )
+      , en = ( "FIFO queue", "Preserve arrival order: write at the tail, read from the head. A arrived first and leaves before B, C, and the incoming D." )
+      , es = ( "Cola FIFO", "El orden de llegada es conservado: se escribe al final y se lee del frente. A llegó primero y sale antes que B, C y el nuevo D." )
       }
     ]

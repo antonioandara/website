@@ -1,5 +1,5 @@
 export const publicFiles = [
-  'index.html', 'library.html', '404.html',
+  'index.html', 'library.html', '404.html', 'via_magus.zip',
   'assets/styles.css', 'assets/app.js', 'assets/library-bridge.js',
   'assets/not-found.js', 'assets/not-found.css', 'assets/elm.js', 'assets/library.js',
   'experiments/three-color-mosaic.html', 'experiments/color-experiments.css',

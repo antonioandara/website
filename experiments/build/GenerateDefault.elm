@@ -1,6 +1,7 @@
 port module GenerateDefault exposing (main)
 
 import Dict
+import FormulaParser exposing (Expr(..))
 import GenerativeTiling
 import Json.Encode as E
 import Platform
@@ -9,10 +10,10 @@ import Platform
 port report : E.Value -> Cmd msg
 
 
-main : Program () () Never
+main : Program String () Never
 main =
     Platform.worker
-        { init = \_ -> ( (), report (encodeTiling (GenerativeTiling.generate GenerativeTiling.defaultConfig)) )
+        { init = \source -> ( (), report (encodeTiling (GenerativeTiling.generateOrganic 7 (FormulaParser.parse source |> Result.withDefault (Var "a")))) )
         , update = \msg _ -> never msg
         , subscriptions = \_ -> Sub.none
         }
@@ -28,37 +29,49 @@ optional encode value =
 
 region r =
     E.object
-        [ ( "id", E.int r.id ), ( "polygon", E.list point [] )
-        , ( "center", point r.center ), ( "neighbors", E.list E.int r.neighbors )
-        , ( "input", optional E.string r.input ), ( "constant", optional E.int r.constant )
+        [ ( "id", E.int r.id )
+        , ( "polygon", E.list point [] )
+        , ( "center", point r.center )
+        , ( "neighbors", E.list E.int r.neighbors )
+        , ( "input", optional E.string r.input )
+        , ( "constant", optional E.int r.constant )
         , ( "expression", E.string r.expression )
         ]
 
 
 constraint map =
     E.object
-        [ ( "regions", E.list region map.regions ), ( "output", E.int map.output )
-        , ( "width", E.float map.width ), ( "height", E.float map.height )
+        [ ( "regions", E.list region map.regions )
+        , ( "output", E.int map.output )
+        , ( "width", E.float map.width )
+        , ( "height", E.float map.height )
         ]
 
 
 tile t =
     E.object
-        [ ( "id", E.int t.id ), ( "site", point t.site )
-        , ( "polygon", E.list point [] ), ( "neighbors", E.list E.int t.neighbors )
-        , ( "centroid", point t.centroid ), ( "area", E.float t.area ), ( "baseColor", E.int t.baseColor )
+        [ ( "id", E.int t.id )
+        , ( "site", point t.site )
+        , ( "polygon", E.list point [] )
+        , ( "neighbors", E.list E.int t.neighbors )
+        , ( "centroid", point t.centroid )
+        , ( "area", E.float t.area )
+        , ( "baseColor", E.int t.baseColor )
         ]
 
 
-{-| Curved SVG outlines contain the rendered geometry. Sampled polygons are
+{-| Polygonal SVG outlines contain the rendered geometry. Sampled polygons are
 only needed while generating it, so leave them out of the browser cache.
 -}
 encodeTiling tiling =
     E.object
-        [ ( "width", E.float tiling.width ), ( "height", E.float tiling.height )
-        , ( "tiles", E.list tile tiling.tiles ), ( "seed", E.int tiling.seed )
+        [ ( "width", E.float tiling.width )
+        , ( "height", E.float tiling.height )
+        , ( "tiles", E.list tile tiling.tiles )
+        , ( "seed", E.int tiling.seed )
         , ( "rectangular", E.bool tiling.rectangular )
         , ( "outlines", E.list (\( id, path ) -> E.list identity [ E.int id, E.string path ]) (Dict.toList tiling.outlines) )
         , ( "constraint", optional constraint tiling.constraint )
-        , ( "coverage", E.float tiling.coverage ), ( "constraintsPreserved", E.bool tiling.constraintsPreserved )
+        , ( "coverage", E.float tiling.coverage )
+        , ( "constraintsPreserved", E.bool tiling.constraintsPreserved )
         ]

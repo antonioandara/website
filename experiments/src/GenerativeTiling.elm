@@ -31,13 +31,13 @@ import CellNetwork
 import ConstraintMap
 import Dict exposing (Dict)
 import FormulaParser exposing (Expr(..))
-import GraphColoring
 import Html exposing (Html)
 import Html.Attributes as A
 import Html.Events as E
 import Json.Decode as Decode
 import LabLogic exposing (SolveResult(..))
 import LogicCircuit
+import MosaicPalette
 import SignalPropagation
 import Svg exposing (Svg)
 import Svg.Attributes as S
@@ -143,7 +143,35 @@ propagateConstraints previous tiling assignment =
                         SignalPropagation.repair (List.map .neighbors tiling.tiles)
                             (ConstraintMap.fixedInputs assignment map)
                             (Array.fromList (List.map .colorIndex prior.tiles))
-                            |> List.map (\frame -> coloredFromColors tiling frame.colors frame.changed frame.status)
+                            |> List.foldl
+                                (\frame ( last, frames ) ->
+                                    let
+                                        next =
+                                            coloredFromColors tiling frame.colors frame.changed frame.status
+
+                                        tiles =
+                                            List.map2
+                                                (\old tile ->
+                                                    { tile
+                                                        | valueColor =
+                                                            if tile.colorIndex < 0 then
+                                                                old.valueColor
+
+                                                            else
+                                                                tile.colorIndex
+                                                    }
+                                                )
+                                                last.tiles
+                                                next.tiles
+
+                                        shaded =
+                                            { next | tiles = tiles }
+                                    in
+                                    ( shaded, shaded :: frames )
+                                )
+                                ( prior, [] )
+                            |> Tuple.second
+                            |> List.reverse
 
                     Nothing ->
                         [ graphColor Nothing tiling assignment ]
@@ -813,7 +841,7 @@ paint onTile colored =
         [ A.class "mosaic-map"
         , A.attribute "data-view" (mapKind colored.tiling)
         , A.attribute "data-propagating"
-            (if String.startsWith "Propagating" colored.status then
+            (if String.startsWith "Propagating" colored.status || String.startsWith "Drawing" colored.status then
                 "true"
 
              else
@@ -828,15 +856,23 @@ paint onTile colored =
             , A.attribute "aria-label" "Formula map with closed edges; opposite sides do not connect"
             , S.preserveAspectRatio "xMidYMid meet"
             ]
-            (Svg.rect [ S.width (String.fromFloat w), S.height (String.fromFloat h), S.fill "#141e27" ] []
+            (Svg.defs []
+                [ Svg.radialGradient [ S.id "mosaic-sheen", S.cx "34%", S.cy "28%", S.r "88%" ]
+                    [ Svg.stop [ S.offset "0%", S.stopColor "#ffffff", S.stopOpacity "0.32" ] []
+                    , Svg.stop [ S.offset "46%", S.stopColor "#ffffff", S.stopOpacity "0.06" ] []
+                    , Svg.stop [ S.offset "100%", S.stopColor "#1e3b32", S.stopOpacity "0.16" ] []
+                    ]
+                , Svg.pattern [ S.id "mosaic-dots", S.width "24", S.height "24", S.patternUnits "userSpaceOnUse" ]
+                    [ Svg.circle [ S.cx "1", S.cy "1", S.r "1", S.fill "var(--mosaic-grid)" ] [] ]
+                ]
+                :: Svg.rect [ S.x "-12", S.y "-12", S.width (String.fromFloat (w + 24)), S.height (String.fromFloat (h + 24)), S.class "mosaic-ground" ] []
+                :: Svg.rect [ S.width (String.fromFloat w), S.height (String.fromFloat h), S.fill "url(#mosaic-dots)", S.class "mosaic-dots", S.pointerEvents "none" ] []
                 :: List.map (viewTile onTile colored.tiling colored.changed) colored.tiles
                 ++ List.map (interactionOutline colored.tiling colored.changed) colored.tiles
                 ++ [ Svg.rect
                         [ S.width (String.fromFloat w)
                         , S.height (String.fromFloat h)
                         , S.fill "none"
-                        , S.stroke "var(--ink)"
-                        , S.strokeWidth "2.5"
                         , S.class "mosaic-frame"
                         , S.pointerEvents "none"
                         , A.attribute "vector-effect" "non-scaling-stroke"
@@ -850,7 +886,7 @@ paint onTile colored =
                     "Original 6 × 5 tile map: every pair of tiles sharing a border must have different colors. Input and OUT clues use formula values. Opposite edges do not connect."
 
                  else if mapKind colored.tiling == "organic" then
-                    "Cells grow and merge into a fully packed map. Equal pins share territory; neutral and extra cells fill the remaining space. Shared borders preserve the logic, and OUT is forced by the inputs. Pale tiles are unresolved while the signal travels; opposite edges do not connect."
+                    "Cells grow and merge into a fully packed map. Equal pins share territory; neutral and extra cells fill the remaining space. Shared borders preserve the logic, and OUT is forced by the inputs. Shaded tiles retain their last color while the signal travels; opposite edges do not connect."
 
                  else
                     "The same nodes and colors before expansion. Every contact represents a three-color constraint."
@@ -864,11 +900,7 @@ viewTile : (Int -> msg) -> Tiling -> List Int -> ColoredTile -> Svg msg
 viewTile onTile tiling changed tile =
     let
         fill =
-            if tile.colorIndex < 0 then
-                "#b8c3cc"
-
-            else
-                GraphColoring.getColor tile.colorIndex
+            MosaicPalette.getColor tile.valueColor
 
         path =
             tilePath tiling tile.tile
@@ -920,14 +952,29 @@ viewTile onTile tiling changed tile =
         , Svg.path
             [ S.d path
             , S.fill fill
+            , A.style "filter"
+                (if tile.colorIndex < 0 then
+                    "brightness(0.82) saturate(0.8)"
+
+                 else
+                    ""
+                )
             , S.fillRule "evenodd"
-            , S.stroke "#11171c"
-            , S.strokeWidth "0.7"
+            , S.class "mosaic-region"
+            , A.style "stroke-linejoin" "miter"
+            , A.style "stroke-miterlimit" "2"
             , A.attribute "vector-effect" "non-scaling-stroke"
-            , S.strokeLinejoin "round"
-            , S.strokeLinecap "round"
             ]
             []
+        , Svg.g [ S.class "mosaic-sheen-wrap", S.pointerEvents "none" ]
+            [ Svg.path
+                [ S.d path
+                , S.fill "url(#mosaic-sheen)"
+                , S.fillRule "evenodd"
+                , S.class "mosaic-sheen"
+                ]
+                []
+            ]
         , if labeled then
             Svg.text_
                 [ S.x (String.fromFloat labelPoint.x)
@@ -941,13 +988,31 @@ viewTile onTile tiling changed tile =
                      else
                         "15"
                     )
-                , S.fill "#fffdf6"
-                , S.stroke "#142126"
-                , S.strokeWidth "1.5"
+                , A.style "fill"
+                    (if tile.valueColor == 2 then
+                        "#ffffff"
+
+                     else
+                        "var(--mosaic-label)"
+                    )
+                , A.style "stroke"
+                    (if tile.valueColor == 2 then
+                        "#101b35"
+
+                     else
+                        "var(--mosaic-label-halo)"
+                    )
+                , S.strokeWidth
+                    (if mapKind tiling == "graph" then
+                        "1.4"
+
+                     else
+                        "2.2"
+                    )
                 , S.strokeLinejoin "round"
                 , A.style "paint-order" "stroke"
-                , S.fontWeight "700"
-                , S.letterSpacing "0.04em"
+                , S.fontWeight "650"
+                , S.letterSpacing "0.015em"
                 , S.pointerEvents "none"
                 ]
                 [ Svg.text tile.label ]

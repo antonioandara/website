@@ -21,7 +21,8 @@ const server = http.createServer((req, res) => {
     assert.ok(example.transitions.every(Boolean), example.name+' must settle correctly using causal local repairs');
     assert.ok(example.inputToggles.every(Boolean), example.name+' must settle every input toggle and interrupted repair');
     assert.ok(Math.abs(example.coverage - 1) < 1e-10, example.name+" must fill the whole frame");
-    assert.ok(example.cachedDefaultMatches, "precomputed default must match generated outlines and constraints");
+    assert.ok(example.cachedDefaultMatches, "precomputed examples must match generated outlines and constraints");
+    assert.ok(example.minimumAreaValid, example.name+" must keep every region above the minimum visible area");
     assert.ok(example.connectionsValid,example.name+" must preserve the logic graph through actual shared borders");
   }
   console.log('PASS: 152 truth-table rows, unpinned outputs, actual border topology and causal propagation.');
@@ -37,16 +38,28 @@ const server = http.createServer((req, res) => {
     }));
     const frame = () => page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
     const settle = async () => { await frame(); await page.waitForFunction(() => !document.querySelector('.mosaic-map[data-propagating="true"]'), {}, { timeout: 30000 }); };
-    const click = async name => { await page.getByRole('button', { name, exact: true }).click(); await settle(); };
+    const click = async name => { const start = Date.now(); await page.getByRole('button', { name, exact: true }).click(); if(name === 'Majority of three') { const elapsed = Date.now() - start; console.log('Majority example: ' + elapsed + ' ms'); assert.ok(elapsed < 1000, 'cached Majority geometry must load promptly'); } await settle(); };
     const snapshot = view => view.locator('.mosaic-cell').evaluateAll(ns => ns.map(n => ({
       id: +n.dataset.region, label: n.getAttribute('aria-label'), neighbors: n.dataset.neighbors,
-      color: +n.dataset.color, fill: n.querySelector('path').getAttribute('fill'), d: n.querySelector('path').getAttribute('d')
+      color: +n.dataset.color, fill: n.querySelector('path').getAttribute('fill'), d: n.querySelector('path').getAttribute('d'), shade: n.querySelector('path').style.filter
     })));
     const checkGeometry = async view => {
       const result = await view.locator('svg.mosaic-surface').evaluate(svg => {
         const paths = [...svg.querySelectorAll('.mosaic-cell > path')].map(path => ({path, box:path.getBBox()}));
         const bounds = svg.viewBox.baseVal;
         const step = Math.max(1, Math.sqrt(bounds.width*bounds.height/18000));
+        const minimumArea = (bounds.width - 24) * (bounds.height - 24) / 800;
+        const undersized = paths.filter(({path}) => {
+          const twiceArea = (path.getAttribute('d').match(/M[^M]+/g) || []).reduce((sum, contour) => {
+            const coordinates = contour.match(/-?[0-9]+(?:\.[0-9]+)?(?:e[+-]?[0-9]+)?/g).map(Number);
+            for (let i = 0; i < coordinates.length; i += 2) {
+              const next = (i + 2) % coordinates.length;
+              sum += coordinates[i] * coordinates[next + 1] - coordinates[next] * coordinates[i + 1];
+            }
+            return sum;
+          }, 0);
+          return Math.abs(twiceArea) / 2 + 0.000001 < minimumArea;
+        }).length;
         const point = new DOMPoint();
         let overlaps = 0, gaps = 0;
         for(let y=0.37;y<bounds.height-24;y+=step) for(let x=0.31;x<bounds.width-24;x+=step) {
@@ -63,24 +76,80 @@ const server = http.createServer((req, res) => {
           const p = new DOMPoint(+label.getAttribute('x'),+label.getAttribute('y'));
           return !label.parentNode.querySelector('path').isPointInFill(p);
         }).length;
-        return {overlaps, gaps, escapedLabels, curves:paths.every(({path,box}) => box.width < 8 || box.height < 8 || path.getAttribute('d').includes(' Q '))};
+        return {overlaps, gaps, escapedLabels, undersized, polygons:paths.every(({path,box}) => box.width < 8 || box.height < 8 || !/[QC]/.test(path.getAttribute('d')) && path.getAttribute('d').includes(' L '))};
       });
-      assert.equal(result.gaps,0,'curved cells must fill the entire frame');
-      assert.equal(result.overlaps,0,'smooth cells must not overlap away from their shared outlines');
-      assert.equal(result.escapedLabels,0,'labels must stay inside their smoothed cell');
-      assert.ok(result.curves,'cells must render curved contours');
+      assert.equal(result.undersized,0,'every polygon must meet the minimum visible area');
+      assert.equal(result.gaps,0,'polygonal cells must fill the entire frame');
+      assert.equal(result.overlaps,0,'polygonal cells must not overlap away from their shared outlines');
+      assert.equal(result.escapedLabels,0,'labels must stay inside their polygonal cell');
+      assert.ok(result.polygons,'cells must render straight polygonal contours');
     };
     for (const file of ['three-color-mosaic.html']) {
       await page.goto(base + '/experiments/' + file);
       const tiles = page.locator('.mosaic-map[data-view="organic"]').first();
+      const progress = page.getByRole('progressbar', {name:'Coloring progress'});
+      const phase = page.locator('.mosaic-playback-state');
+      const setDelay = value => page.getByRole('slider', {name:'Time per step'}).evaluate((node,value) => {node.value=String(value);node.dispatchEvent(new Event('input',{bubbles:true}));}, value);
+      // Restart and pause in one turn so the timer cannot race the assertion.
+      await page.evaluate(() => {
+        [...document.querySelectorAll('button')].find(b=>b.textContent==='Replay coloring').click();
+        document.querySelector('.mosaic-playback input[type=checkbox]').click();
+      });
+      await frame();
+      assert.equal(await phase.innerText(), 'Ready');
+      assert.equal(await progress.getAttribute('value'), '0');
+      const unrevealed = await snapshot(tiles);
+      assert.ok(unrevealed.every(cell=>cell.color<0));
+      await page.getByRole('button',{name:'Next step',exact:true}).click(); await frame();
+      assert.equal(await phase.innerText(), 'Paused');
+      assert.equal(await progress.getAttribute('value'), '1');
+      assert.equal((await snapshot(tiles)).filter(cell=>cell.color>=0).length,1,'initial drawing reveals one region per step');
+      await page.getByRole('button',{name:'Previous step',exact:true}).click(); await frame();
+      assert.deepEqual((await snapshot(tiles)).map(cell=>cell.color),unrevealed.map(cell=>cell.color),'previous restores the prior frame');
+      await setDelay(1000);
+      await page.getByRole('button',{name:'Resume coloring',exact:true}).click(); await frame();
+      assert.equal(await phase.innerText(),'Drawing');
+      const slowStart = +(await progress.getAttribute('value'));
+      await page.waitForTimeout(300);
+      assert.ok(+(await progress.getAttribute('value'))-slowStart<=1,'slow playback must remain easy to follow');
+      await page.getByRole('button',{name:'Pause coloring',exact:true}).click(); await frame();
+      const pausedAt = await progress.getAttribute('value');
+      await page.waitForTimeout(180);
+      assert.equal(await progress.getAttribute('value'),pausedAt,'pause must stop advancement');
+      await setDelay(50);
+      await page.getByRole('button',{name:'Replay coloring',exact:true}).click(); await frame();
+      await page.waitForFunction(()=>+document.querySelector('.mosaic-playback progress').value>=3, {}, {timeout:1500});
+      await settle();
+      assert.equal(await phase.innerText(),'Finished');
+      assert.equal(await progress.getAttribute('value'),await progress.getAttribute('max'));
+      await page.getByRole('button',{name:'Selected',exact:true}).click(); await frame();
+      assert.equal(await phase.innerText(),'Finished');
+      assert.equal(await progress.getAttribute('value'),await progress.getAttribute('max'),'a no-op is still shown as complete');
+
       const startup = await page.evaluate(() => performance.getEntriesByName('map-startup')[0].duration);
       assert.ok(startup < 2000, `default map must avoid expensive startup generation (${startup} ms)`);
       for (const name of results.slice(0,12).map(e => e.name)) {
         await click(name);
         assert.equal(await page.getByRole('alert').count(), 0);
         await checkGeometry(tiles);
+        if (name === 'Majority of three') {
+          const packing = await tiles.locator('.mosaic-cell title').allTextContents().then(labels => labels.filter(label => label.includes('Packing cell')).length);
+          const islandArea = await tiles.locator('.mosaic-cell[data-region="32"] > path').evaluate(path => {
+            const values = path.getAttribute('d').match(/-?[0-9]+(?:\.[0-9]+)?(?:e[+-]?[0-9]+)?/g).map(Number);
+            let twiceArea = 0;
+            for (let i = 0; i < values.length; i += 2) {
+              const next = (i + 2) % values.length;
+              twiceArea += values[i] * values[next + 1] - values[next] * values[i + 1];
+            }
+            return Math.abs(twiceArea) / 2;
+          });
+          assert.ok(islandArea > 300, 'polygon simplification must preserve the small neutral island');
+          assert.ok(packing <= 6, 'repeated packing slivers must join into continuous separators');
+          assert.ok(await tiles.locator('.mosaic-cell').count() <= 78, 'Majority must avoid the repeated packing cells');
+        }
+        if (name === 'Enabled OR') assert.ok(await tiles.locator('.mosaic-cell').count() < 44, 'redundant physical packing cells should be absorbed');
         const cells = await snapshot(tiles);
-        assert.ok(cells.every(c => ['#397d68','#426f9f','#bb5961'].includes(c.fill)));
+        assert.ok(cells.every(c => ['#bb5961','#397d68','#426f9f'].includes(c.fill)));
         for(const cell of cells) for(const neighbor of cell.neighbors.split(',').filter(Boolean).map(Number)) assert.notEqual(cell.fill,cells[neighbor].fill,name+' must be a proper three-color map');
 
 
@@ -92,18 +161,20 @@ const server = http.createServer((req, res) => {
       await page.getByRole('checkbox', {name:'Animate coloring'}).uncheck();
       await page.getByRole('button', {name:'Toggle a',exact:true}).click(); await frame();
       assert.equal(await tiles.getAttribute('data-propagating'), 'true');
+      assert.ok((await page.locator('.mosaic-playback-heading').innerText()).includes('Recoloring'));
       assert.equal((await snapshot(tiles)).find(c=>c.label.startsWith('OUT=')).label, priorOutput, 'OUT must wait for the signal');
       const firstWave = await snapshot(tiles);
       assert.ok(firstWave.filter((c,i)=>c.fill!==before[i].fill).every(c=>c.label.startsWith('a=')), 'first frame changes only the toggled input regions');
+      assert.ok(firstWave.filter(c => c.color < 0).every(c => c.fill === before[c.id].fill && c.shade.includes('brightness')), 'unresolved tiles retain their previous hue with shading');
       let sawColorChanges = false;
-      for (let i=0; i<1000 && !(await page.getByRole('button',{name:'Step propagation',exact:true}).isDisabled()); i++) {
-        await page.getByRole('button',{name:'Step propagation',exact:true}).click(); await frame();
+      for (let i=0; i<1000 && !(await page.getByRole('button',{name:'Next step',exact:true}).isDisabled()); i++) {
+        await page.getByRole('button',{name:'Next step',exact:true}).click(); await frame();
         const current=await snapshot(tiles);
         if(current.some((c,i)=>c.color!==firstWave[i].color)) sawColorChanges=true;
         for(const cell of current) for(const neighbor of cell.neighbors.split(',').filter(Boolean).map(Number)) if(cell.color>=0 && current[neighbor].color>=0) assert.notEqual(cell.fill,current[neighbor].fill,'assigned neighbors must differ throughout propagation');
 
       }
-      assert.equal(await page.getByRole('button',{name:'Step propagation',exact:true}).isDisabled(), true);
+      assert.equal(await page.getByRole('button',{name:'Next step',exact:true}).isDisabled(), true);
       assert.ok(sawColorChanges,'stepping must change colors, not only highlights');
       assert.equal(await tiles.locator('[aria-label="OUT=1"]').count(), 1);
       assert.deepEqual((await snapshot(tiles)).map(c=>c.d), before.map(c=>c.d), 'values do not regenerate geometry');
@@ -161,12 +232,12 @@ const server = http.createServer((req, res) => {
           const p = new DOMPoint(+label.getAttribute('x'),+label.getAttribute('y'));
           return !label.parentNode.querySelector('path').isPointInFill(p);
         }).length;
-        return {overlaps, gaps, escapedLabels, curves:paths.every(({path,box}) => box.width < 8 || box.height < 8 || path.getAttribute('d').includes(' Q '))};
+        return {overlaps, gaps, escapedLabels, polygons:paths.every(({path,box}) => box.width < 8 || box.height < 8 || !/[QC]/.test(path.getAttribute('d')) && path.getAttribute('d').includes(' L '))};
       });
-      assert.equal(result.gaps,0,'curved cells must fill the entire frame');
-      assert.equal(result.overlaps,0,'smooth cells must not overlap away from their shared outlines');
-      assert.equal(result.escapedLabels,0,'labels must stay inside their smoothed cell');
-      assert.ok(result.curves,'cells must render curved contours');
+      assert.equal(result.gaps,0,'polygonal cells must fill the entire frame');
+      assert.equal(result.overlaps,0,'polygonal cells must not overlap away from their shared outlines');
+      assert.equal(result.escapedLabels,0,'labels must stay inside their polygonal cell');
+      assert.ok(result.polygons,'cells must render straight polygonal contours');
     };
     for (const file of ['three-color-mosaic.html']) {
         await page.goto(base+'/experiments/'+file);
@@ -174,6 +245,6 @@ const server = http.createServer((req, res) => {
       }
     }
     assert.deepEqual(errors,[]);
-    console.log('PASS: smooth cells without sampled overlaps, multiplexer propagation, stable geometry and responsive layouts.');
+    console.log('PASS: polygonal cells without sampled overlaps, multiplexer propagation, stable geometry and responsive layouts.');
   } finally { await browser.close(); await new Promise(r=>server.close(r)); }
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});
