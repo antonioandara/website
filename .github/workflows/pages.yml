@@ -42,14 +42,19 @@ jobs:
       - name: Build public artifact
         shell: bash
         run: |
-          for attempt in 1 2 3; do
+          # github.com/elm/* tarballs are served by codeload, which occasionally
+          # returns 5xx under load. Back off and retry rather than failing red.
+          delays=(20 45 90 180)
+          for attempt in 1 2 3 4 5; do
             if npm run build:production; then
               exit 0
             fi
-            echo "Build attempt ${attempt} failed; retrying in 15s..." >&2
-            sleep 15
+            if [ "$attempt" -eq 5 ]; then break; fi
+            wait_for=${delays[$((attempt-1))]}
+            echo "Build attempt ${attempt} failed; retrying in ${wait_for}s..." >&2
+            sleep "$wait_for"
           done
-          echo 'Build failed after 3 attempts' >&2
+          echo 'Build failed after 5 attempts' >&2
           exit 1
       - name: Test public artifact
         run: npm run test:production
