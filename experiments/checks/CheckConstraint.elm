@@ -1,12 +1,13 @@
 port module CheckConstraint exposing (main)
 
 import Array
+import CellNetwork
 import ConstraintMap
 import Dict
 import FormulaExamples
 import FormulaParser
+import Generated.ExampleTilings
 import GenerativeTiling
-import Generated.DefaultTiling
 import Json.Encode as E
 import LabLogic exposing (SolveResult(..))
 import Platform
@@ -224,19 +225,25 @@ check example =
             in
             E.object
                 [ ( "name", E.string example.name )
-                , ( "cachedDefaultMatches", E.bool
-                    (if example.source == "!(a & b)" then
-                        let
-                            strip geometry =
-                                { geometry
-                                    | tiles = List.map (\t -> { t | polygon = [] }) geometry.tiles
-                                    , constraint = Maybe.map (\cachedMap -> { cachedMap | regions = List.map (\r -> { r | polygon = [] }) cachedMap.regions }) geometry.constraint
-                                }
-                        in
-                        strip tiling == Generated.DefaultTiling.tiling
-                     else True)
+                , ( "cachedDefaultMatches"
+                  , E.bool
+                        (case Generated.ExampleTilings.get example.source of
+                            Just cached ->
+                                let
+                                    strip geometry =
+                                        { geometry
+                                            | tiles = List.map (\t -> { t | polygon = [] }) geometry.tiles
+                                            , constraint = Maybe.map (\cachedMap -> { cachedMap | regions = List.map (\r -> { r | polygon = [] }) cachedMap.regions }) geometry.constraint
+                                        }
+                                in
+                                strip tiling == cached
+
+                            Nothing ->
+                                True
+                        )
                   )
                 , ( "coverage", E.float tiling.coverage )
+                , ( "minimumAreaValid", E.bool (List.all (\tile -> tile.area + 0.000001 >= CellNetwork.minimumArea tiling.width tiling.height) tiling.tiles) )
                 , ( "regions", E.int (List.length tiling.tiles) )
                 , ( "rows", E.list rowCheck rows )
                 , ( "connectionsValid", E.bool connectionsValid )

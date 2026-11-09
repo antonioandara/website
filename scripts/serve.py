@@ -91,6 +91,7 @@ class SiteHandler(SimpleHTTPRequestHandler):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument('--host', default='127.0.0.1', help='interface to bind (use 0.0.0.0 for LAN access)')
     parser.add_argument('--port', type=int, default=8000)
     parser.add_argument('--directory', type=Path, default=ROOT)
     parser.add_argument('--pages', action='store_true')
@@ -100,6 +101,6 @@ if __name__ == '__main__':
         parser.error('Selected directory must contain 404.html; build the production site first.')
     REDIRECTS_FILE = ROOT / '_redirects'
     REDIRECTS = {} if args.pages else load_redirects()
-    server = ThreadingHTTPServer(('127.0.0.1', args.port), SiteHandler)
-    print(f'Preview: http://127.0.0.1:{server.server_port}', flush=True)
+    server = ThreadingHTTPServer((args.host, args.port), SiteHandler)
+    print(f'Preview: http://{args.host}:{server.server_port}', flush=True)
     server.serve_forever()

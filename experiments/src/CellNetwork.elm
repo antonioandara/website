@@ -1,4 +1,4 @@
-module CellNetwork exposing (Cell, Network, expand, path)
+module CellNetwork exposing (Cell, Network, expand, minimumArea, path)
 
 {-| Grow the embedded graph regions into territories. Existing contacts are
 seeds, not inferred from a fresh Voronoi diagram. Equal fixed/input pins
@@ -95,8 +95,14 @@ expand map =
         ( filled, extended ) =
             fillPacking contracted (Array.map (\id -> Dict.get id aliases |> Maybe.withDefault -1) guarded.owners) grown
 
-        ( grid, packed, preserved ) =
+        ( physicalGrid, physicalMap, _ ) =
             territories map guarded extended filled
+
+        ( joinedGrid, joinedMap, _ ) =
+            territories map guarded physicalMap (joinRepeatedPacking guarded physicalMap physicalGrid)
+
+        ( grid, packed, preserved ) =
+            territories map guarded joinedMap (absorbRedundantPacking joinedMap joinedGrid)
 
         contacts =
             adjacency grid
@@ -110,16 +116,64 @@ expand map =
         rawConnections =
             boundaryConnections boundaries
 
-        ( vertices, connections ) =
+        ( relaxedVertices, connections ) =
             collapseJunctions grid (smoothVertices grid rawConnections) rawConnections
+
+        outlines =
+            Dict.map (\_ edges -> trace edges) boundaries
+
+        facetedLoops kept =
+            Dict.map (\_ loops -> List.map (List.filter (\v -> Set.member v kept)) loops) outlines
+
+        faceArea positions loops =
+            abs (List.sum (List.map (List.filterMap (\v -> Dict.get v positions) >> contourArea) loops))
+
+        relaxedKept =
+            polygonVertices grid relaxedVertices connections
+
+        relaxedSafe =
+            Dict.values (facetedLoops relaxedKept) |> List.all (\loops -> faceArea relaxedVertices loops >= grid.dx * grid.dy)
+
+        ( rawVertices, rawLinks ) =
+            collapseJunctions grid (Dict.map (\id _ -> vertexPoint grid id) rawConnections) rawConnections
+
+        ( baseVertices, baseLinks ) =
+            if relaxedSafe then
+                ( relaxedVertices, connections )
+
+            else
+                ( rawVertices, rawLinks )
+
+        vertices =
+            growSmallRegions (toFloat grid.columns * grid.dx) (toFloat grid.rows * grid.dy) outlines baseVertices
+
+        preserveAreas budget kept =
+            let
+                undersized =
+                    facetedLoops kept |> Dict.filter (\_ loops -> faceArea vertices loops + 0.000001 < minimumArea packed.width packed.height)
+
+                protected =
+                    Dict.keys undersized |> List.concatMap (\id -> Dict.get id outlines |> Maybe.withDefault []) |> List.concat |> Set.fromList
+            in
+            if budget <= 0 || Set.isEmpty protected then
+                kept
+
+            else
+                preserveAreas (budget - 1) (Set.union kept protected)
+
+        retained =
+            preserveAreas (List.length packed.regions) (polygonVertices grid vertices baseLinks)
+
+        regionLoops =
+            facetedLoops retained
 
         cell region =
             let
                 loops =
-                    trace (Dict.get region.id boundaries |> Maybe.withDefault Dict.empty)
+                    Dict.get region.id regionLoops |> Maybe.withDefault []
 
                 contours =
-                    List.map (curveContour grid connections vertices) loops
+                    List.map (List.map (\v -> Dict.get v vertices |> Maybe.withDefault (vertexPoint grid v))) loops
 
                 stats =
                     Dict.get region.id centers
@@ -127,9 +181,9 @@ expand map =
             { id = region.id
             , contours = contours
             , center = interiorCenter (stats |> Maybe.map .point |> Maybe.withDefault region.center) contours
-            , area = abs (List.sum (List.map (List.map (\v -> Dict.get v vertices |> Maybe.withDefault (vertexPoint grid v)) >> contourArea) loops))
+            , area = abs (List.sum (List.map contourArea contours))
             , neighbors = Dict.get region.id contacts |> Maybe.withDefault Set.empty |> Set.toList
-            , outline = curvedOutline grid connections vertices loops
+            , outline = String.join " " (List.map polygonOutline contours)
             }
 
         cells =
@@ -141,6 +195,294 @@ expand map =
     , preserved = preserved
     , map = { packed | regions = List.map2 (\region grownCell -> { region | center = grownCell.center, polygon = grownCell.contours |> List.head |> Maybe.withDefault [] }) packed.regions cells }
     }
+
+
+{-| A screen-relative footprint, shared by the layout and its checks.
+-}
+minimumArea : Float -> Float -> Float
+minimumArea width height =
+    width * height / 800
+
+
+{-| Redistribute space through the shared polygon mesh. Compact radial
+expansions enlarge small faces while moving surrounding junctions together.
+The frame stays anchored, and every region keeps exactly the same borders.
+-}
+growSmallRegions : Float -> Float -> Dict Int (List (List Int)) -> Dict Int Point -> Dict Int Point
+growSmallRegions width height loops initial =
+    let
+        target =
+            1.15 * minimumArea width height
+
+        radius =
+            5 * sqrt target
+
+        contours positions ids =
+            List.map (List.filterMap (\id -> Dict.get id positions)) ids
+
+        area positions ids =
+            abs (List.sum (List.map contourArea (contours positions ids)))
+
+        enlargeFace ids positions =
+            let
+                current =
+                    area positions ids
+
+                polygons =
+                    contours positions ids
+
+                points =
+                    List.concat polygons
+
+                mean get =
+                    List.sum (List.map get points) / toFloat (max 1 (List.length points))
+
+                center =
+                    interiorCenter { x = mean .x, y = mean .y } polygons
+
+                strength =
+                    min 0.2 (0.03 + 0.1 * (target / max 0.000001 current - 1))
+
+                move p =
+                    let
+                        dx =
+                            p.x - center.x
+
+                        dy =
+                            p.y - center.y
+
+                        distance =
+                            sqrt (dx * dx + dy * dy)
+
+                        amount =
+                            strength * max 0 (1 - distance / radius) ^ 2
+
+                        boundaryX =
+                            clamp 0
+                                1
+                                ((if dx < 0 then
+                                    p.x
+
+                                  else
+                                    width - p.x
+                                 )
+                                    / radius
+                                )
+
+                        boundaryY =
+                            clamp 0
+                                1
+                                ((if dy < 0 then
+                                    p.y
+
+                                  else
+                                    height - p.y
+                                 )
+                                    / radius
+                                )
+                    in
+                    { x = p.x + dx * amount * boundaryX, y = p.y + dy * amount * boundaryY }
+            in
+            if current >= target then
+                positions
+
+            else
+                Dict.map (\_ p -> move p) positions
+
+        pass positions =
+            Dict.values loops |> List.sortBy (area positions) |> List.foldl enlargeFace positions
+
+        settle budget positions =
+            if budget <= 0 || (Dict.values loops |> List.all (\ids -> area positions ids >= minimumArea width height)) then
+                positions
+
+            else
+                settle (budget - 1) (pass positions)
+    in
+    settle 200 initial
+
+
+{-| Disconnected filler copies with identical neighbors need only one color.
+Join their diagonal contacts into real necks, preserving protected gadget
+contacts and the connectivity of the surrounding territories.
+-}
+joinRepeatedPacking : Grid -> Map -> Grid -> Grid
+joinRepeatedPacking protected map grid =
+    let
+        packing =
+            List.filter (\r -> r.expression == "Packing cell" && List.length r.neighbors == 2) map.regions
+
+        key r =
+            String.join "," (List.map String.fromInt (List.sort r.neighbors))
+
+        groups =
+            List.foldl (\r -> Dict.update (key r) (\old -> Just (r.id :: Maybe.withDefault [] old))) Dict.empty packing |> Dict.values
+
+        aliases =
+            List.concatMap (\ids -> List.map (\id -> ( id, List.minimum ids |> Maybe.withDefault id )) ids) groups |> Dict.fromList
+
+        allowed =
+            List.map (\r -> ( Dict.get r.id aliases |> Maybe.withDefault r.id, r.neighbors )) packing |> Dict.fromList
+
+        initial =
+            Array.map (\id -> Dict.get id aliases |> Maybe.withDefault id) grid.owners
+
+        donorSafe pixel owners =
+            let
+                donor =
+                    Array.get pixel owners
+
+                ring =
+                    adjacent True grid pixel |> List.filter (\n -> Array.get n owners == donor)
+
+                required =
+                    adjacent False grid pixel |> List.filter (\n -> Array.get n owners == donor)
+
+                visit front reached =
+                    case front of
+                        [] ->
+                            reached
+
+                        n :: rest ->
+                            let
+                                next =
+                                    adjacent False grid n |> List.filter (\k -> List.member k ring && not (Set.member k reached))
+                            in
+                            visit (rest ++ next) (List.foldl Set.insert reached next)
+            in
+            case required of
+                [] ->
+                    False
+
+                first :: rest ->
+                    List.all (\n -> Set.member n (visit [ first ] (Set.singleton first))) rest
+
+        bridgePacking index owners =
+            let
+                id =
+                    Array.get index owners |> Maybe.withDefault -1
+
+                neighbors =
+                    Dict.get id allowed |> Maybe.withDefault []
+
+                diagonals =
+                    adjacent True grid index |> List.filter (\n -> modBy grid.columns n > modBy grid.columns index && n // grid.columns /= index // grid.columns && Array.get n owners == Just id)
+
+                connect other current =
+                    let
+                        candidates =
+                            adjacent False grid index
+                                |> List.filter
+                                    (\pixel ->
+                                        List.member pixel (adjacent False grid other)
+                                            && Array.get pixel current
+                                            /= Just id
+                                            && owner protected pixel
+                                            < 0
+                                            && donorSafe pixel current
+                                            && List.all (\n -> List.member (Array.get n current |> Maybe.withDefault -1) (id :: neighbors)) (adjacent False grid pixel)
+                                    )
+                    in
+                    if List.any (\pixel -> Array.get pixel current == Just id) (adjacent False grid index |> List.filter (\pixel -> List.member pixel (adjacent False grid other))) then
+                        current
+
+                    else
+                        case List.head candidates of
+                            Just pixel ->
+                                Array.set pixel id current
+
+                            Nothing ->
+                                current
+            in
+            if Dict.member id allowed then
+                List.foldl connect owners diagonals
+
+            else
+                owners
+
+        pass owners =
+            List.foldl bridgePacking owners (List.range 0 (Array.length owners - 1))
+    in
+    { grid | owners = pass (pass initial) }
+
+
+{-| Absorb a packing region when its neighboring territory can take its place
+for every input assignment, without changing any original gate region.
+The territory pass rebuilds contiguous cells and their actual adjacency.
+-}
+absorbRedundantPacking : Map -> Grid -> Grid
+absorbRedundantPacking map grid =
+    let
+        absorb region current =
+            if region.expression /= "Packing cell" then
+                current
+
+            else
+                let
+                    contacts =
+                        adjacency current
+
+                    ns =
+                        Dict.get region.id contacts |> Maybe.withDefault Set.empty |> Set.toList
+
+                    try targets =
+                        case targets of
+                            [] ->
+                                current
+
+                            target :: rest ->
+                                let
+                                    others =
+                                        List.filter ((/=) target) ns
+
+                                    candidate =
+                                        { map
+                                            | regions =
+                                                List.map
+                                                    (\r ->
+                                                        let
+                                                            existing =
+                                                                Dict.get r.id contacts |> Maybe.withDefault Set.empty |> Set.remove region.id
+
+                                                            neighbors =
+                                                                if r.id == region.id then
+                                                                    Set.empty
+
+                                                                else if r.id == target then
+                                                                    Set.union existing (Set.fromList others)
+
+                                                                else if List.member r.id others then
+                                                                    Set.insert target existing
+
+                                                                else
+                                                                    existing
+                                                        in
+                                                        { r | neighbors = Set.toList neighbors }
+                                                    )
+                                                    map.regions
+                                        }
+                                in
+                                case PackingConstraints.initialWithBudget 256 candidate of
+                                    Just _ ->
+                                        { current
+                                            | owners =
+                                                Array.map
+                                                    (\id ->
+                                                        if id == region.id then
+                                                            target
+
+                                                        else
+                                                            id
+                                                    )
+                                                    current.owners
+                                        }
+
+                                    Nothing ->
+                                        try rest
+                in
+                try ns
+    in
+    List.foldl absorb grid map.regions
 
 
 {-| Palette pins and copies of the same input have identical values for
@@ -1397,129 +1739,174 @@ labelCenters grid =
     loop starts [] depths Dict.empty
 
 
-{-| Round each shared degree-two border vertex with the same quadratic
-curve in either direction. Junctions and frame corners stay anchored, so
-adjacent cells share precisely the same curve and separators stay open.
+{-| Simplify the shared border network together. A vertex is removed only
+when its replacement chord sweeps no other active vertex, keeping narrow
+separators and junctions intact. Spatial buckets keep the checks local.
 -}
-curvedOutline : Grid -> Dict Int (Set Int) -> Dict Int Point -> List (List Int) -> String
-curvedOutline grid connections positions loops =
+polygonVertices : Grid -> Dict Int Point -> Dict Int (Set Int) -> Set Int
+polygonVertices grid positions connections =
+    let
+        bucketSize =
+            16 * min grid.dx grid.dy
+
+        bucket p =
+            ( floor (p.x / bucketSize), floor (p.y / bucketSize) )
+
+        buckets =
+            Dict.foldl (\id p -> Dict.update (bucket p) (\old -> Just (id :: Maybe.withDefault [] old))) Dict.empty positions
+
+        position id =
+            Dict.get id positions |> Maybe.withDefault (vertexPoint grid id)
+
+        cross a b c =
+            (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)
+
+        inside a b c p =
+            let
+                signs =
+                    [ cross a b p, cross b c p, cross c a p ]
+            in
+            List.all (\n -> n >= -0.000001) signs || List.all (\n -> n <= 0.000001) signs
+
+        edgeKey a b =
+            if a < b then
+                ( a, b )
+
+            else
+                ( b, a )
+
+        originalPoints id a b samples =
+            position id :: (Dict.get (edgeKey a id) samples |> Maybe.withDefault []) ++ (Dict.get (edgeKey id b) samples |> Maybe.withDefault [])
+
+        removable id aId bId active samples =
+            let
+                p =
+                    position id
+
+                a =
+                    position aId
+
+                b =
+                    position bId
+
+                dx =
+                    b.x - a.x
+
+                dy =
+                    b.y - a.y
+
+                lengthSquared =
+                    dx * dx + dy * dy
+
+                deviationSquared q =
+                    let
+                        t =
+                            clamp 0 1 (((q.x - a.x) * dx + (q.y - a.y) * dy) / max 0.000001 lengthSquared)
+                    in
+                    (q.x - a.x - t * dx) ^ 2 + (q.y - a.y - t * dy) ^ 2
+
+                lowX =
+                    floor (min a.x (min b.x p.x) / bucketSize)
+
+                highX =
+                    floor (max a.x (max b.x p.x) / bucketSize)
+
+                lowY =
+                    floor (min a.y (min b.y p.y) / bucketSize)
+
+                highY =
+                    floor (max a.y (max b.y p.y) / bucketSize)
+
+                nearby =
+                    List.concatMap (\x -> List.concatMap (\y -> Dict.get ( x, y ) buckets |> Maybe.withDefault []) (List.range lowY highY)) (List.range lowX highX)
+
+                blocked other =
+                    if other == id || other == aId || other == bId || not (Dict.member other active) then
+                        False
+
+                    else
+                        let
+                            q =
+                                position other
+                        in
+                        q.x
+                            >= min a.x (min b.x p.x)
+                            - 0.000001
+                            && q.x
+                            <= max a.x (max b.x p.x)
+                            + 0.000001
+                            && q.y
+                            >= min a.y (min b.y p.y)
+                            - 0.000001
+                            && q.y
+                            <= max a.y (max b.y p.y)
+                            + 0.000001
+                            && inside a p b q
+            in
+            (abs (cross a b p)
+                < 0.000001
+                || (p.x
+                        > 0.000001
+                        && p.y
+                        > 0.000001
+                        && p.x
+                        < toFloat grid.columns
+                        * grid.dx
+                        - 0.000001
+                        && p.y
+                        < toFloat grid.rows
+                        * grid.dy
+                        - 0.000001
+                   )
+            )
+                && not (Dict.get aId active |> Maybe.map (Set.member bId) |> Maybe.withDefault False)
+                && lengthSquared
+                > 0.000001
+                && lengthSquared
+                <= 2500
+                && List.all (\q -> deviationSquared q <= (1.5 * min grid.dx grid.dy) ^ 2) (originalPoints id aId bId samples)
+                && not (List.any blocked nearby)
+
+        simplify id state =
+            case Dict.get id state.links |> Maybe.map Set.toList of
+                Just [ a, b ] ->
+                    if removable id a b state.links state.samples then
+                        { links =
+                            state.links
+                                |> Dict.remove id
+                                |> Dict.update a (Maybe.map (Set.remove id >> Set.insert b))
+                                |> Dict.update b (Maybe.map (Set.remove id >> Set.insert a))
+                        , samples =
+                            state.samples
+                                |> Dict.remove (edgeKey a id)
+                                |> Dict.remove (edgeKey id b)
+                                |> Dict.insert (edgeKey a b) (originalPoints id a b state.samples)
+                        }
+
+                    else
+                        state
+
+                _ ->
+                    state
+
+        pass state =
+            List.foldl simplify state (Dict.keys connections)
+    in
+    pass (pass (pass { links = connections, samples = Dict.empty })) |> .links |> Dict.keys |> Set.fromList
+
+
+polygonOutline : List Point -> String
+polygonOutline points =
     let
         point p =
             String.fromFloat p.x ++ " " ++ String.fromFloat p.y
-
-        segment before current after =
-            let
-                piece =
-                    curveCorner grid connections positions before current after
-            in
-            { entry = piece.entry
-            , exit = piece.exit
-            , command =
-                case piece.control of
-                    Just p ->
-                        " Q " ++ point p ++ " " ++ point piece.exit
-
-                    Nothing ->
-                        ""
-            }
-
-        contour vertices =
-            case vertices of
-                [] ->
-                    ""
-
-                _ ->
-                    let
-                        pieces =
-                            List.map3 segment
-                                (List.drop (List.length vertices - 1) vertices ++ List.take (List.length vertices - 1) vertices)
-                                vertices
-                                (List.drop 1 vertices ++ List.take 1 vertices)
-                    in
-                    case List.head pieces of
-                        Nothing ->
-                            ""
-
-                        Just first ->
-                            "M "
-                                ++ point first.entry
-                                ++ first.command
-                                ++ String.concat (List.map (\piece -> " L " ++ point piece.entry ++ piece.command) (List.drop 1 pieces))
-                                ++ " Z"
     in
-    String.join " " (List.map contour loops)
+    case points of
+        [] ->
+            ""
 
-
-curveCorner grid connections positions before current after =
-    let
-        position v =
-            Dict.get v positions |> Maybe.withDefault (vertexPoint grid v)
-
-        p =
-            position current
-
-        a =
-            position before
-
-        b =
-            position after
-
-        midpoint u v =
-            { x = (u.x + v.x) / 2, y = (u.y + v.y) / 2 }
-
-        rounded =
-            (Dict.get current connections |> Maybe.map Set.size)
-                == Just 2
-                && p.x
-                > 0.000001
-                && p.y
-                > 0.000001
-                && p.x
-                < toFloat grid.columns
-                * grid.dx
-                - 0.000001
-                && p.y
-                < toFloat grid.rows
-                * grid.dy
-                - 0.000001
-                && abs ((p.x - a.x) * (b.y - p.y) - (p.y - a.y) * (b.x - p.x))
-                > 0.000001
-    in
-    if rounded then
-        { entry = midpoint a p, exit = midpoint p b, control = Just p }
-
-    else
-        { entry = p, exit = p, control = Nothing }
-
-
-curveContour grid connections positions loop =
-    let
-        sample piece =
-            case piece.control of
-                Nothing ->
-                    [ piece.entry ]
-
-                Just p ->
-                    List.range 0 8
-                        |> List.map
-                            (\i ->
-                                let
-                                    t =
-                                        toFloat i / 8
-
-                                    u =
-                                        1 - t
-                                in
-                                { x = u * u * piece.entry.x + 2 * u * t * p.x + t * t * piece.exit.x
-                                , y = u * u * piece.entry.y + 2 * u * t * p.y + t * t * piece.exit.y
-                                }
-                            )
-    in
-    List.map3 (curveCorner grid connections positions)
-        (List.drop (List.length loop - 1) loop ++ List.take (List.length loop - 1) loop)
-        loop
-        (List.drop 1 loop ++ List.take 1 loop)
-        |> List.concatMap sample
+        first :: rest ->
+            "M " ++ point first ++ String.concat (List.map (\p -> " L " ++ point p) rest) ++ " Z"
 
 
 interiorCenter preferred contours =

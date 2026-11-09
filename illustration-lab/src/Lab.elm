@@ -78,7 +78,7 @@ view : Model -> Html Msg
 view m =
     div [ H.class "lab", H.attribute "data-theme" (if m.light then "light" else "dark") ]
         [ header [ H.class "lab-header" ] [ span [] [ text "A3L / ILLUSTRATION LAB" ], a [ H.href "../index.html" ] [ text "← Personal website" ], button [ onClick Theme ] [ text (if m.light then "Dark theme" else "Light theme") ] ]
-        , section [ H.class "lab-intro" ] [ span [ H.class "eyebrow blue" ] [ text "A WORKBENCH FOR VISUAL IDEAS / 001–009" ], h1 [] [ text "A little less static." ], p [] [ text "Pull a curve into shape. Tune a signal. Watch a simple rule become a pattern. An experimental home for the illustrations in my field manual." ] ]
+        , section [ H.class "lab-intro" ] [ span [ H.class "eyebrow blue" ] [ text "VISUAL IDEAS / 001–009" ], h1 [] [ text "A little less static." ], p [] [ text "Pull a curve into shape. Tune a signal. Watch a simple rule become a pattern. An experimental home for the illustrations that are part of the site." ] ]
         , nav [ H.class "lab-tabs", H.attribute "aria-label" "Experiments" ] (List.indexedMap (\i demo -> button [ onClick (Select demo), H.attribute "aria-pressed" (if m.demo == demo then "true" else "false") ] [ text ("0" ++ String.fromInt (i + 1) ++ " / " ++ title demo) ]) [ Bezier, Signal, Fractal, Automaton, DigitalDemo Digital.Map, DigitalDemo Digital.Mux, DigitalDemo Digital.Datapath, DigitalDemo Digital.Systolic, DigitalDemo Digital.Fabric ])
         , main_ []
             [ div [ H.class "bench" ]

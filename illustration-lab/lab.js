@@ -7811,7 +7811,7 @@ var $author$project$Lab$view = function (m) {
 							]),
 						_List_fromArray(
 							[
-								$elm$html$Html$text('A WORKBENCH FOR VISUAL IDEAS / 001–009')
+								$elm$html$Html$text('VISUAL IDEAS / 001–009')
 							])),
 						A2(
 						$elm$html$Html$h1,
@@ -7825,7 +7825,7 @@ var $author$project$Lab$view = function (m) {
 						_List_Nil,
 						_List_fromArray(
 							[
-								$elm$html$Html$text('Pull a curve into shape. Tune a signal. Watch a simple rule become a pattern. An experimental home for the illustrations in my field manual.')
+								$elm$html$Html$text('Pull a curve into shape. Tune a signal. Watch a simple rule become a pattern. An experimental home for the illustrations that are part of the site.')
 							]))
 					])),
 				A2(

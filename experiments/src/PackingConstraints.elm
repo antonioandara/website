@@ -1,4 +1,4 @@
-module PackingConstraints exposing (State, connect, contact, initial, spacer)
+module PackingConstraints exposing (State, connect, contact, initial, initialWithBudget, spacer)
 
 {-| Accept a packing contact only if it has a valid extension for every input
 assignment. Keep one witness coloring per row, so most redundant contacts need
@@ -21,7 +21,12 @@ type alias State =
 
 
 initial : Map -> Maybe State
-initial map =
+initial =
+    initialWithBudget 200000
+
+
+initialWithBudget : Int -> Map -> Maybe State
+initialWithBudget budget map =
     let
         names =
             map.regions |> List.filterMap .input |> Set.fromList |> Set.toList
@@ -34,7 +39,7 @@ initial map =
                 fixed =
                     ConstraintMap.fixedInputs assignment map
             in
-            case LabLogic.solve 200000 (List.map .neighbors map.regions) fixed of
+            case LabLogic.solve budget (List.map .neighbors map.regions) fixed of
                 Solved colors ->
                     Just { fixed = fixed, colors = colors }
 

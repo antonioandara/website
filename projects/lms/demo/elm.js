@@ -33455,7 +33455,7 @@ var $mdgriffith$elm_ui$Element$rgb255 = F3(
 var $author$project$MarkdownBook$View$Theme$themeInfo = function (theme) {
 	var dark = {
 		a2: {dW: 2, a7: 0, fh: 3},
-		b6: 'Antonio Andara’s night field manual: charcoal paper, pale blue annotations, serif type, and precise ruled panels.',
+		b6: 'Antonio Andara’s night theme: charcoal paper, pale blue annotations, serif type, and precise ruled panels.',
 		bx: 'Nocturne Fieldnotes',
 		fg: {
 			bO: A3($mdgriffith$elm_ui$Element$rgb255, 142, 189, 255),

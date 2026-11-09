@@ -8,7 +8,7 @@ import FieldManual.Components exposing (chapterHeading, figurePlate)
 import FieldManual.Illustrations as Ink
 import FieldManual.Reader as Reader exposing (Model, Msg(..))
 import Html exposing (Html, a, article, details, div, h3, p, section, span, summary, text)
-import Html.Attributes exposing (class, href, id, tabindex)
+import Html.Attributes exposing (class, download, href, id, tabindex)
 import Html.Events exposing (on)
 import I18n exposing (Language(..))
 import Json.Decode as Decode
@@ -101,6 +101,12 @@ body language =
                 , div [ class "prose" ]
                     [ p [ class "large-copy" ] [ text magic.lead ]
                     , EditorialMarkdown.view magic.body
+                    , h3 [] [ text "Via Magus" ]
+                    , p [] [ text home.magic.magazineDescription ]
+                    , p []
+                        [ a [ class "read-link", href "via_magus.zip", download "via_magus.zip" ]
+                            [ text home.magic.magazineDownload ]
+                        ]
                     , links [ ( person.magicYoutube, home.magic.magicLink ), ( person.x, home.magic.xLink ) ] ] ] ]
         , chapter "journal" "06" home.journal.heading home.journal.subtitle
             [ p [ class "section-intro" ] [ text home.journal.intro ]

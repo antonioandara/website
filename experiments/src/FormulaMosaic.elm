@@ -9,11 +9,12 @@ import Dict exposing (Dict)
 import FormulaExamples
 import FormulaParser exposing (Expr)
 import Generated.DefaultTiling
+import Generated.ExampleTilings
 import GenerativeTiling exposing (ColoredTiling, Tiling)
-import GraphColoring
-import Html exposing (Html, button, div, h1, h2, input, label, p, section, span, text)
+import Html exposing (Html, a, button, div, h1, h2, input, label, p, section, span, text)
 import Html.Attributes as A
 import Html.Events as E
+import MosaicPalette
 import Time
 
 
@@ -34,6 +35,10 @@ type alias Model =
     , density : Int
     , tiling : Tiling
     , pendingSignals : List ColoredTiling
+    , signalDelay : Int
+    , signalFrames : List ColoredTiling
+    , signalIndex : Int
+    , signalPhase : String
     , animateSignals : Bool
     , mosaic : Maybe ColoredTiling
     , organicTiling : Tiling
@@ -49,6 +54,10 @@ type Msg
     | ToggleInput String
     | ClickOrganicTile Int
     | ClickTile Int
+    | SignalTick
+    | PreviousSignal
+    | ReplaySignals
+    | SetSignalDelay String
     | SignalStep
     | AnimateSignals Bool
     | Reseed
@@ -64,7 +73,7 @@ main =
         , subscriptions =
             \model ->
                 if model.animateSignals && hasPending model then
-                    Time.every 180 (\_ -> SignalStep)
+                    Time.every (toFloat model.signalDelay) (\_ -> SignalTick)
 
                 else
                     Sub.none
@@ -82,6 +91,10 @@ init =
         , density = 44
         , tiling = Generated.DefaultTiling.tiling
         , pendingSignals = []
+        , signalDelay = 600
+        , signalFrames = []
+        , signalIndex = 0
+        , signalPhase = "Drawing"
         , animateSignals = True
         , mosaic = Nothing
         , organicTiling = Generated.DefaultTiling.tiling
@@ -93,13 +106,29 @@ init =
 update : Msg -> Model -> Model
 update msg model =
     case msg of
+        SignalTick ->
+            if model.animateSignals then
+                seekSignal (model.signalIndex + 1) model
+
+            else
+                model
+
         SignalStep ->
-            { model
-                | mosaic = List.head model.pendingSignals |> Maybe.map Just |> Maybe.withDefault model.mosaic
-                , pendingSignals = List.drop 1 model.pendingSignals
-                , organic = List.head model.pendingOrganicSignals |> Maybe.map Just |> Maybe.withDefault model.organic
-                , pendingOrganicSignals = List.drop 1 model.pendingOrganicSignals
-            }
+            seekSignal (model.signalIndex + 1) { model | animateSignals = False }
+
+        PreviousSignal ->
+            seekSignal (model.signalIndex - 1) { model | animateSignals = False }
+
+        ReplaySignals ->
+            seekSignal 0 { model | animateSignals = True }
+
+        SetSignalDelay raw ->
+            case String.toInt raw of
+                Just delay ->
+                    { model | signalDelay = clamp 50 2500 delay }
+
+                Nothing ->
+                    model
 
         AnimateSignals enabled ->
             { model | animateSignals = enabled }
@@ -108,7 +137,7 @@ update msg model =
             generate { model | formulaText = source, error = "" }
 
         Example source ->
-            generate { model | formulaText = source }
+            generate { model | formulaText = source, mosaic = Nothing }
 
         SelectRow index ->
             paintRow index model
@@ -160,7 +189,8 @@ generate model =
 
             Ok ast ->
                 let
-                    variables = FormulaParser.collectVariables ast
+                    variables =
+                        FormulaParser.collectVariables ast
                 in
                 if List.length variables > 6 then
                     { model | error = "For this lab, use at most six variables and 120 characters." }
@@ -168,8 +198,13 @@ generate model =
                 else
                     let
                         tiling =
-                            if model.formulaText == "!(a & b)" && model.seed == 7 then
-                                Generated.DefaultTiling.tiling
+                            if model.seed == 7 then
+                                case Generated.ExampleTilings.get model.formulaText of
+                                    Just cached ->
+                                        cached
+
+                                    Nothing ->
+                                        GenerativeTiling.generateOrganic model.seed ast
 
                             else
                                 GenerativeTiling.generateOrganic model.seed ast
@@ -223,19 +258,85 @@ paintRow index model =
 
                 Just r ->
                     let
-                        frames =
-                            GenerativeTiling.propagate model.mosaic model.tiling r formula.variables formula.source
+                        newMap =
+                            model.mosaic |> Maybe.map (\prior -> prior.tiling /= model.tiling) |> Maybe.withDefault True
 
-                        organicFrames =
-                            frames
+                        frames =
+                            if newMap then
+                                GenerativeTiling.recolor model.tiling r formula.variables formula.source |> drawingFrames
+
+                            else
+                                GenerativeTiling.propagate model.mosaic model.tiling r formula.variables formula.source
                     in
-                    { model
-                        | row = nextIndex
-                        , mosaic = List.head frames
-                        , pendingSignals = List.drop 1 frames
-                        , organic = List.head organicFrames
-                        , pendingOrganicSignals = List.drop 1 organicFrames
-                    }
+                    seekSignal 0
+                        { model
+                            | row = nextIndex
+                            , signalFrames = frames
+                            , signalPhase =
+                                if newMap then
+                                    "Drawing"
+
+                                else
+                                    "Recoloring"
+                        }
+
+
+{-| Show a new map filling one region at a time. The solver's final colors
+remain visible as shaded hints while each region waits for its turn.
+-}
+drawingFrames : ColoredTiling -> List ColoredTiling
+drawingFrames final =
+    let
+        count =
+            List.length final.tiles
+
+        frame step =
+            if step == count then
+                { final | changed = [] }
+
+            else
+                { final
+                    | tiles =
+                        List.indexedMap
+                            (\index tile ->
+                                if index < step then
+                                    tile
+
+                                else
+                                    { tile | colorIndex = -1 }
+                            )
+                            final.tiles
+                    , changed =
+                        if step > 0 then
+                            List.drop (step - 1) final.tiles |> List.head |> Maybe.map (\tile -> [ tile.tile.id ]) |> Maybe.withDefault []
+
+                        else
+                            []
+                    , status = "Drawing — revealing the next region."
+                }
+    in
+    List.range 0 count |> List.map frame
+
+
+seekSignal : Int -> Model -> Model
+seekSignal requested model =
+    let
+        index =
+            clamp 0 (max 0 (List.length model.signalFrames - 1)) requested
+
+        current =
+            List.drop index model.signalFrames |> List.head
+
+        pending =
+            List.drop (index + 1) model.signalFrames
+    in
+    { model
+        | signalIndex = index
+        , mosaic = current |> Maybe.map Just |> Maybe.withDefault model.mosaic
+        , organic = current |> Maybe.map Just |> Maybe.withDefault model.organic
+        , pendingSignals = pending
+        , pendingOrganicSignals = pending
+    }
 
 
 hasPending : Model -> Bool
@@ -283,26 +384,34 @@ viewComparison =
 viewPage : Bool -> Model -> Html Msg
 viewPage comparison model =
     div [ A.class "mosaic-lab" ]
-        [ Html.node "style" [] [ text css ]
-        , section [ A.class "mosaic-hero" ]
-            [ span [ A.class "eyebrow" ] [ text "FORMULA · MOSAIC · COLOR" ]
-            , h1 []
-                [ text
-                    (if comparison then
-                        "One formula, three views"
-
-                     else
-                        "Formula Mosaic"
-                    )
-                ]
+        [ section [ A.class "mosaic-hero" ]
+            [ span [ A.class "eyebrow" ] [ text "3-SAT · LOGIC · COLOR" ]
+            , h1 [] [ text "3-SAT" ]
             , p []
                 [ text
                     (if comparison then
-                        "Explore the original tiles, an expanded organic cell network, and the graph underneath. All three views share the same inputs."
+                        "Explore the original tiles."
 
                      else
-                        "Send a signal through connected logic tiles. Toggle an input and watch shared-border constraints carry the change toward OUT."
+                        "Explore Boolean satisfiability with connected logic regions."
                     )
+                ]
+            ]
+        , section [ A.class "mosaic-bar mosaic-about" ]
+            [ h2 [] [ text "What is 3-SAT?" ]
+            , p []
+                [ text "3-SAT is a special case of the Boolean satisfiability problem (SAT). It asks whether a Boolean formula, written in conjunctive normal form with at most three literals per clause, can be made true by assigning TRUE or FALSE to its variables. If such an assignment exists, the formula is satisfiable; otherwise it is unsatisfiable."
+                ]
+            , p []
+                [ text "3-SAT is NP-complete: it is one of Karp's 21 NP-complete problems and a standard starting point for proving that other problems are NP-hard. This experiment turns Boolean constraints into neighboring regions that settle through local repairs. The formula field accepts general Boolean expressions, and the truth table below shows whether the current formula is satisfiable."
+                ]
+            , p [ A.class "mosaic-about-source" ]
+                [ a
+                    [ A.href "https://en.wikipedia.org/wiki/Boolean_satisfiability_problem"
+                    , A.target "_blank"
+                    , A.rel "noopener noreferrer"
+                    ]
+                    [ text "Read more on Wikipedia ↗" ]
                 ]
             ]
         , div [ A.class "mosaic-bar" ]
@@ -359,20 +468,20 @@ viewPage comparison model =
                                 , swatch 2 "neutral"
                                 ]
                             ]
-                        , p [ A.class "hint" ] [ text "Input and output colors: red = false, green = true, blue = neutral. Pale tiles are unresolved while the signal travels. Click an input tile to toggle it." ]
+                        , p [ A.class "hint" ] [ text "Input and output colors: red = false, green = true, blue = neutral. Shaded tiles are waiting for the signal to settle. Click an input tile to toggle it." ]
                         , div [ A.class "mosaic-row wrap" ]
                             (List.map (\name -> button [ E.onClick (ToggleInput name) ] [ text ("Toggle " ++ name) ]) formula.variables)
-                        , GenerativeTiling.propagationControls model.animateSignals (hasPending model) AnimateSignals SignalStep
+                        , viewPlayback model
                         , if comparison then
                             div [ A.class "tile-comparison" ]
                                 [ div [ A.class "comparison-panel" ]
                                     [ h2 [] [ text "01 / Logic tiles" ]
-                                    , p [ A.class "hint" ] [ text "Shared-border constraints compute OUT from the input pins." ]
+                                    , p [ A.class "hint" ] [ text "Shared-border constraints compute OUT from the inputs." ]
                                     , model.mosaic |> Maybe.map (GenerativeTiling.paint ClickTile) |> Maybe.withDefault (text "")
                                     ]
                                 , div [ A.class "comparison-panel" ]
                                     [ h2 [] [ text "02 / Organic cells" ]
-                                    , p [ A.class "hint" ] [ text "Graph regions grow into tiles; every shared border keeps its constraint." ]
+                                    , p [ A.class "hint" ] [ text "Graph regions maintain constraints." ]
                                     , model.organic |> Maybe.map (GenerativeTiling.paint ClickOrganicTile) |> Maybe.withDefault (text "")
                                     ]
                                 , div [ A.class "comparison-panel graph-panel" ]
@@ -385,7 +494,7 @@ viewPage comparison model =
                           else
                             model.mosaic |> Maybe.map (GenerativeTiling.paint ClickTile) |> Maybe.withDefault (text "")
                         , if comparison then
-                            button [ E.onClick Reseed ] [ text "Reshape organic tiles" ]
+                            button [ E.onClick Reseed ] [ text "Reshape tiles" ]
 
                           else
                             text ""
@@ -423,7 +532,7 @@ viewPage comparison model =
                         ]
                     , section [ A.class "mosaic-table" ]
                         [ h2 [] [ text "Truth table" ]
-                        , p [ A.class "hint" ] [ text "Select a row to send new inputs through the tiles." ]
+                        , p [ A.class "hint" ] [ text "Select a row to send new inputs to the tiles." ]
                         , viewTruthTable model formula
                         , p [ A.class "hint" ]
                             [ text
@@ -436,14 +545,102 @@ viewPage comparison model =
                             ]
                         ]
                     ]
-        , p [ A.class "mosaic-foot" ] [ text "These tiles encode Boolean gates using three-color constraints. Opposite edges do not connect. Settled neighbors always have different colors; OUT follows from the input pins." ]
+        , p [ A.class "mosaic-foot" ] [ text "These tiles encode Boolean gates using three-color constraints.Settled neighbors always have different colors; OUT follows from the input pins." ]
+        ]
+
+
+viewPlayback : Model -> Html Msg
+viewPlayback model =
+    let
+        pending =
+            hasPending model
+
+        total =
+            max 0 (List.length model.signalFrames - 1)
+
+        state =
+            if model.error /= "" then
+                "Invalid formula"
+
+            else if not pending then
+                if model.mosaic |> Maybe.map (.status >> String.startsWith "Settled") |> Maybe.withDefault False then
+                    "Finished"
+
+                else
+                    "Needs attention"
+
+            else if model.animateSignals then
+                model.signalPhase
+
+            else if model.signalIndex == 0 then
+                "Ready"
+
+            else
+                "Paused"
+    in
+    div [ A.class "mosaic-playback", A.attribute "aria-label" "Coloring playback" ]
+        [ div [ A.class "mosaic-playback-heading" ]
+            [ span [ A.class "mosaic-playback-state", A.attribute "role" "status", A.attribute "aria-live" "polite", A.attribute "data-state" state ] [ text state ]
+            , span [ A.class "hint" ]
+                [ text
+                    (if total == 0 then
+                        "No color changes"
+
+                     else
+                        (if state == model.signalPhase then
+                            "Step "
+
+                         else
+                            model.signalPhase ++ " · step "
+                        )
+                            ++ String.fromInt model.signalIndex
+                            ++ " of "
+                            ++ String.fromInt total
+                    )
+                ]
+            ]
+        , Html.progress
+            [ A.max (String.fromInt (max 1 total))
+            , A.value
+                (String.fromInt
+                    (if not pending then
+                        max 1 total
+
+                     else
+                        model.signalIndex
+                    )
+                )
+            , A.attribute "aria-label" "Coloring progress"
+            ]
+            []
+        , div [ A.class "mosaic-row wrap propagation-controls" ]
+            [ label [] [ input [ A.type_ "checkbox", A.checked model.animateSignals, E.onCheck AnimateSignals ] [], text " Animate coloring" ]
+            , button [ A.type_ "button", A.disabled (not pending), E.onClick (AnimateSignals (not model.animateSignals)) ]
+                [ text
+                    (if model.animateSignals then
+                        "Pause coloring"
+
+                     else
+                        "Resume coloring"
+                    )
+                ]
+            , button [ A.type_ "button", A.disabled (model.signalIndex == 0), E.onClick PreviousSignal ] [ text "Previous step" ]
+            , button [ A.type_ "button", A.disabled (not pending), E.onClick SignalStep ] [ text "Next step" ]
+            , button [ A.type_ "button", A.disabled (total == 0), E.onClick ReplaySignals ] [ text "Replay coloring" ]
+            ]
+        , div [ A.class "mosaic-speed" ]
+            [ label [ A.for "mosaic-step-delay" ] [ text "Time per step" ]
+            , input [ A.id "mosaic-step-delay", A.type_ "range", A.min "50", A.max "2500", A.step "50", A.value (String.fromInt model.signalDelay), A.attribute "aria-valuetext" (String.fromFloat (toFloat model.signalDelay / 1000) ++ " seconds per step"), E.onInput SetSignalDelay ] []
+            , Html.output [ A.for "mosaic-step-delay" ] [ text (String.fromFloat (toFloat model.signalDelay / 1000) ++ " s / step") ]
+            , span [ A.class "hint" ] [ text "Left = faster · right = slower. Stepping pauses playback." ]
+            ]
         ]
 
 
 swatch : Int -> String -> Html Msg
 swatch color name =
     span [ A.class "swatch-item" ]
-        [ span [ A.class "swatch", A.style "background" (GraphColoring.getColor color) ] []
+        [ span [ A.class "swatch", A.style "background" (MosaicPalette.getColor color) ] []
         , text name
         ]
 
@@ -502,44 +699,3 @@ viewTruthTable model formula =
                 )
             ]
         ]
-
-
-css : String
-css =
-    """
-.mosaic-lab { color: #f4efe6; background: #161310; min-height: 100vh; padding: 28px max(16px, calc((100vw - 1100px) / 2)); font: 16px/1.5 system-ui, sans-serif; }
-.mosaic-lab * { box-sizing: border-box; }
-.mosaic-hero { padding: 10px 0 18px; }
-.eyebrow { font-size: 12px; font-weight: 800; letter-spacing: .18em; color: #c9a56a; }
-.mosaic-hero h1 { font-size: clamp(34px, 6vw, 64px); line-height: 1.05; margin: 10px 0 12px; color: #fff8ec; }
-.mosaic-hero p, .hint, .mosaic-foot { color: #cbbda8; }
-.mosaic-hero p { max-width: 640px; }
-.mosaic-lab h2 { font-size: 22px; margin: 0 0 10px; color: #fff8ec; }
-.mosaic-bar, .mosaic-stage, .mosaic-table { background: #211c18; border: 1px solid #3a322b; border-radius: 16px; padding: 22px; margin: 16px 0; }
-.mosaic-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
-.mosaic-row.wrap { margin-bottom: 16px; }
-.mosaic-lab button { cursor: pointer; padding: 9px 14px; border: 1px solid #5a4c3e; border-radius: 8px; background: #2b241e; color: #fff8ec; font: inherit; }
-.mosaic-lab button:hover { background: #3a3128; }
-.mosaic-lab input:not([type=range]) { min-width: 0; flex: 1; padding: 12px; border: 1px solid #5a4c3e; border-radius: 8px; font: 18px monospace; background: #161310; color: #fff8ec; }
-.mosaic-lab label { font-weight: 700; }
-.mosaic-lab button:focus-visible, .mosaic-lab input:focus-visible, .mosaic-lab g:focus-visible { outline: 3px solid #df9b27; outline-offset: 3px; }
-.mosaic-error { padding: 12px; color: #ffd4cc; background: #4a1f1c; border-radius: 8px; }
-.mosaic-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-bottom: 8px; }
-.mosaic-tools label { display: flex; align-items: center; gap: 10px; font-weight: 650; }
-.mosaic-lab input[type=range] { width: 160px; }
-.mosaic-surface { display: block; width: 100%; aspect-ratio: 8 / 5; border-radius: 12px; background: #120e0c; }
-.mosaic-cell.is-input { cursor: pointer; }
-.mosaic-cell.is-input:focus { outline: none; }
-
-.swatches { display: flex; gap: 12px; margin-left: auto; }
-.swatch-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #cbbda8; }
-.swatch { display: inline-block; width: 14px; height: 14px; border-radius: 50%; }
-.table-scroll { overflow: auto; max-height: 420px; }
-.mosaic-lab table { border-collapse: collapse; width: 100%; text-align: center; }
-.mosaic-lab td, .mosaic-lab th { padding: 8px; border-bottom: 1px solid #3a322b; }
-.mosaic-lab th { background: #2b241e; }
-.selected-row { background: #3a2e18; }
-.mosaic-foot { font-size: 13px; }
-body { margin: 0; }
-@media (max-width: 760px) { .mosaic-bar, .mosaic-stage, .mosaic-table { padding: 16px; } .swatches { margin-left: 0; } }
-"""
