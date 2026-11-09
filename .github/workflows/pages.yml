@@ -30,8 +30,32 @@ jobs:
         run: npm ci
       - name: Install browser
         run: npx playwright install --with-deps chromium
+      # Elm fetches packages from GitHub on every cold cache; keep them around so
+      # a transient 504 from github.com/elm/* does not break the release.
+      - name: Cache Elm packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.elm
+          key: elm-${{ runner.os }}-${{ hashFiles('elm.json', '*/elm.json', 'projects/lms/demo/elm.json') }}
+          restore-keys: |
+            elm-${{ runner.os }}-
       - name: Build public artifact
-        run: npm run build:production
+        shell: bash
+        run: |
+          # github.com/elm/* tarballs are served by codeload, which occasionally
+          # returns 5xx under load. Back off and retry rather than failing red.
+          delays=(20 45 90 180)
+          for attempt in 1 2 3 4 5; do
+            if npm run build:production; then
+              exit 0
+            fi
+            if [ "$attempt" -eq 5 ]; then break; fi
+            wait_for=${delays[$((attempt-1))]}
+            echo "Build attempt ${attempt} failed; retrying in ${wait_for}s..." >&2
+            sleep "$wait_for"
+          done
+          echo 'Build failed after 5 attempts' >&2
+          exit 1
       - name: Test public artifact
         run: npm run test:production
       - name: Configure Pages
